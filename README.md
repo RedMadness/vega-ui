@@ -5,6 +5,13 @@ Vue 3 UI library for rapid prototyping.
 > **WARNING!**\
 > This package is in the early stages of development. Use it at your own risk.
 
+## Table of contents
+- 🚀 [Getting Started](#install)
+- 🏠 [Layout component](#vegalayout)
+  - 🛠 [Props](#props)
+  - 🛠 [Slots](#slots)
+- 📄 [Lorem Ipsum component](#vegaloremipsum)
+
 # Install
 ```shell
 npm install vega-ui
