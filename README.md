@@ -17,9 +17,34 @@ Vue 3 UI library for rapid prototyping.
 npm install vega-ui
 ```
 # Usage
-```vue
-import { VegaLayout, VegaLoremIpsum } from 'vega-ui'
+
+Full Import
+```js
+// main.ts
+import { createApp } from 'vue'
+import App from './App.vue'
+import VegaUI from 'vega-ui'
 import 'vega-ui/dist/style.css'
+
+const app = createApp(App)
+
+app.use(VegaUI)
+app.mount('#app')
+```
+Manually import
+```vue
+<template>
+  <div style="height: 100vh">
+    <VegaLayout :aside-left="true">
+      <VegaLoremIpsum />
+    </VegaLayout>
+  </div>
+</template>
+
+<script setup>
+  import { VegaLayout } from 'vega-ui'
+  import 'vega-ui/dist/style.css'
+</script>
 ```
 > **Note**\
 > styles.css very important. Don't forget import it!
@@ -162,6 +187,14 @@ Header background color. You can pass a string in HEX, RGB format. Default value
 Example
 ```vue
 <VegaLayout header-background="#fff" />
+```
+
+### header-shadow
+Header shadow. You can pass any valid css [box-shadow](box-shadow) value as string. Default value is 'none'.
+
+Example
+```vue
+<VegaLayout header-shadow="0 10px 20px #0000000d" />
 ```
 
 ### aside-width

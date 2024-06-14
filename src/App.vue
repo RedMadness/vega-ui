@@ -1,7 +1,6 @@
 <template>
   <div style="height: 100vh">
     <vega-layout
-        header-border="#dcdfe6"
         header-background="#005689"
         aside-border="#dcdfe6"
         aside-background="#fff"
@@ -11,7 +10,7 @@
         :aside-left="true"
     >
       <template #header>
-        <div></div>
+        <div class="header">AWESOME HEADER</div>
       </template>
       <template #aside-left>
         <div></div>
@@ -23,6 +22,9 @@
             aside-border="#dcdfe6"
             aside-background="#fff"
         >
+          <template #header>
+            <div class="header">AWESOME HEADER 2</div>
+          </template>
           <vega-lorem-ipsum />
         </vega-layout>
       </template>
@@ -35,4 +37,8 @@ import VegaLayout from "./components/VegaLayout.vue";
 import VegaLoremIpsum from "./components/VegaLoremIpsum.vue";
 </script>
 
-<style scoped></style>
+<style scoped>
+.header {
+  padding: 0 2rem
+}
+</style>

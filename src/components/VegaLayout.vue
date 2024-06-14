@@ -34,7 +34,6 @@
 </template>
 
 <script setup lang="ts">
-
 export interface Props {
   contentBackground?: string
   headerHeight?: string
@@ -46,6 +45,7 @@ export interface Props {
   asideLeft?: boolean
   asideRight?: boolean,
   headerFirst?: boolean,
+  headerShadow?: string,
 }
 
 withDefaults(defineProps<Props>(), {
@@ -59,13 +59,13 @@ withDefaults(defineProps<Props>(), {
   asideLeft: false,
   asideRight: false,
   headerFirst: false,
+  headerShadow: 'none'
 })
 </script>
 
 <style scoped>
 .vega-container {
-  --header-height: v-bind(headerHeight);
-  --aside-width: v-bind(asideWidth);
+  --vega-header-height: v-bind(headerHeight);
 
   box-sizing: border-box;
   display: flex;
@@ -81,6 +81,9 @@ withDefaults(defineProps<Props>(), {
 .vega-header {
   box-sizing: border-box;
   flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  z-index: 1;
 }
 .vega-aside {
   box-sizing: border-box;
@@ -97,12 +100,13 @@ withDefaults(defineProps<Props>(), {
 }
 
 .vega-header-config {
-  height: var(--header-height);
+  height: var(--vega-header-height);
   border-bottom: v-bind(headerBorder) 1px solid;
   background: v-bind(headerBackground);
+  box-shadow: v-bind(headerShadow);
 }
 .vega-content {
-  height: calc(100% - var(--header-height));
+  height: calc(100% - var(--vega-header-height));
   background: v-bind(contentBackground);
 }
 .vega-aside-config {
