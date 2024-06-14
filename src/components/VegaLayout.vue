@@ -81,8 +81,6 @@ withDefaults(defineProps<Props>(), {
 .vega-header {
   box-sizing: border-box;
   flex-shrink: 0;
-  display: flex;
-  align-items: center;
   z-index: 1;
 }
 .vega-aside {
@@ -101,6 +99,7 @@ withDefaults(defineProps<Props>(), {
 
 .vega-header-config {
   height: var(--vega-header-height);
+  line-height: var(--vega-header-height);
   border-bottom: v-bind(headerBorder) 1px solid;
   background: v-bind(headerBackground);
   box-shadow: v-bind(headerShadow);
