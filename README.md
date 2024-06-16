@@ -57,12 +57,12 @@ Simple example:
 <template>
   <div style="height: 100vh">
     <VegaLayout
-      header-border="#dcdfe6"
-      header-background="#005689"
-      aside-border="#dcdfe6"
-      aside-background="#fff"
-      content-background="#ececec"
       :header-first="true"
+      header-background="#005689"
+      aside-left-width="350px"
+      aside-left-border="#dcdfe6"
+      aside-left-background="#fff"
+      content-background="#ececec"
     >
       <template #header>
         <div></div>
@@ -107,11 +107,12 @@ Layouts can be nested:
 ```vue
 <div style="height: 100vh">
   <VegaLayout
-      header-background="#005689"
-      aside-border="#dcdfe6"
-      aside-background="#fff"
-      content-background="#ececec"
       :header-first="true"
+      header-background="#005689"
+      aside-left-width="350px"
+      aside-left-border="#dcdfe6"
+      aside-left-background="#fff"
+      content-background="#ececec"
   >
     <template #header>
       <div></div>
@@ -122,10 +123,8 @@ Layouts can be nested:
     <template #default>
       <VegaLayout
           header-border="#dcdfe6"
-          aside-border="#dcdfe6"
-          aside-background="#fff"
-          aside-left-width="0"
           aside-right-width="350px"
+          aside-right-border="#dcdfe6"
       >
         <VegaLoremIpsum />
       </VegaLayout>
@@ -194,34 +193,49 @@ Example
 ```
 
 ### aside-left-width
-Width of left asides. You can pass a string with valid css value. Default value is '350px'.
+Left aside width. You can pass a string with valid css value. Default value is 'initial'.
 
 Example
 ```vue
 <VegaLayout aside-left-width="200px" />
 ```
 
+### aside-left-border
+Left aside border color. You can pass a string in HEX, RGB format. Default value is 'none'.
+
+Example
+```vue
+<VegaLayout aside-left-border="#005689" />
+```
+### aside-left-background
+Left aside background. You can pass a string in HEX, RGB format. Default value is 'none'.
+
+Example
+```vue
+<VegaLayout aside-left-background="#fff" />
+```
+
 ### aside-right-width
-Width of right asides. You can pass a string with valid css value. Default value is 'unset'.
+Right aside width. You can pass a string with valid css value. Default value is 'initial'.
 
 Example
 ```vue
 <VegaLayout aside-right-width="350px" />
 ```
 
-### aside-border
-Asides (left and right) border color. You can pass a string in HEX, RGB format. Default value is 'none'.
+### aside-right-border
+Right aside border color. You can pass a string in HEX, RGB format. Default value is 'none'.
 
 Example
 ```vue
-<VegaLayout aside-border="#005689" />
+<VegaLayout aside-right-border="#005689" />
 ```
-### aside-background
-Asides (left and right) background. You can pass a string in HEX, RGB format. Default value is 'none'.
+### aside-right-background
+Right aside background. You can pass a string in HEX, RGB format. Default value is 'none'.
 
 Example
 ```vue
-<VegaLayout aside-background="#fff" />
+<VegaLayout aside-right-background="#fff" />
 ```
 
 ### header-first

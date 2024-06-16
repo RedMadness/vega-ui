@@ -40,9 +40,11 @@ export interface Props {
   headerBorder?: string,
   headerBackground?: string,
   asideLeftWidth?: string,
+  asideLeftBorder?: string,
+  asideLeftBackground?: string,
   asideRightWidth?: string,
-  asideBorder?: string,
-  asideBackground?: string,
+  asideRightBorder?: string,
+  asideRightBackground?: string,
   headerFirst?: boolean,
   headerShadow?: string,
 }
@@ -52,10 +54,12 @@ withDefaults(defineProps<Props>(), {
   headerHeight: '80px',
   headerBorder: 'none',
   headerBackground: 'none',
-  asideLeftWidth: '350px',
-  asideRightWidth: 'unset',
-  asideBorderColor: 'none',
-  asideBackground: 'none',
+  asideLeftWidth: 'initial',
+  asideLeftBorder: 'none',
+  asideLeftBackground: 'none',
+  asideRightWidth: 'initial',
+  asideRightBorder: 'none',
+  asideRightBackground: 'none',
   headerFirst: false,
   headerShadow: 'none'
 })
@@ -110,12 +114,12 @@ withDefaults(defineProps<Props>(), {
 }
 .vega-aside-left-config {
   width: v-bind(asideLeftWidth);
-  border-right: v-bind(asideBorder) 1px solid;
-  background: v-bind(asideBackground);
+  border-right: v-bind(asideLeftBorder) 1px solid;
+  background: v-bind(asideLeftBackground);
 }
 .vega-aside-right-config {
   width: v-bind(asideRightWidth);
-  border-left: v-bind(asideBorder) 1px solid;
-  background: v-bind(asideBackground);
+  border-left: v-bind(asideRightBorder) 1px solid;
+  background: v-bind(asideRightBackground);
 }
 </style>
