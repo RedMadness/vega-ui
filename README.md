@@ -126,6 +126,7 @@ Layouts can be nested:
           header-border="#dcdfe6"
           aside-border="#dcdfe6"
           aside-background="#fff"
+          aside-right-width="350px"
       >
         <VegaLoremIpsum />
       </VegaLayout>
@@ -194,7 +195,7 @@ Example
 ```
 
 ### aside-left-width
-Width of left asides. You can pass a string with valid css value. Default value is 'unset'.
+Width of left asides. You can pass a string with valid css value. Default value is '350px'.
 
 Example
 ```vue
@@ -206,7 +207,7 @@ Width of right asides. You can pass a string with valid css value. Default value
 
 Example
 ```vue
-<VegaLayout aside-right-width="200px" />
+<VegaLayout aside-right-width="350px" />
 ```
 
 ### aside-border

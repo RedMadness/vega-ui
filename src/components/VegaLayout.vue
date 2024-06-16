@@ -53,9 +53,9 @@ withDefaults(defineProps<Props>(), {
   headerBorder: 'none',
   headerBackground: 'none',
   asideLeftWidth: '350px',
-  asideRightWidth: '0',
-  asideBorderColor: 'unset',
-  asideBackground: 'unset',
+  asideRightWidth: 'unset',
+  asideBorderColor: 'none',
+  asideBackground: 'none',
   headerFirst: false,
   headerShadow: 'none'
 })
