@@ -94,6 +94,7 @@ withDefaults(defineProps<Props>(), {
   flex-basis: auto;
   overflow: auto;
   padding: 0;
+  z-index: 0;
 }
 
 .vega-header-config {
