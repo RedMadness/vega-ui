@@ -4,19 +4,19 @@
       <slot name="header" />
     </header>
     <section class="vega-container vega-content">
-      <aside v-if="asideLeft" class="vega-aside vega-aside-config">
+      <aside class="vega-aside vega-aside-left-config">
         <slot name="aside-left" />
       </aside>
       <main class="vega-main">
         <slot />
       </main>
-      <aside v-if="asideRight" class="vega-aside vega-aside-config">
+      <aside class="vega-aside vega-aside-right-config">
         <slot name="aside-right" />
       </aside>
     </section>
   </section>
   <section v-else class="vega-container">
-    <aside v-if="asideLeft" class="vega-aside vega-aside-config">
+    <aside class="vega-aside vega-aside-left-config">
       <slot name="aside-left" />
     </aside>
     <section class="vega-container vega-column">
@@ -27,7 +27,7 @@
         <slot />
       </main>
     </section>
-    <aside v-if="asideRight" class="vega-aside vega-aside-config">
+    <aside class="vega-aside vega-aside-right-config">
       <slot name="aside-right" />
     </aside>
   </section>
@@ -39,11 +39,10 @@ export interface Props {
   headerHeight?: string
   headerBorder?: string,
   headerBackground?: string,
-  asideWidth?: string,
+  asideLeftWidth?: string,
+  asideRightWidth?: string,
   asideBorder?: string,
   asideBackground?: string,
-  asideLeft?: boolean
-  asideRight?: boolean,
   headerFirst?: boolean,
   headerShadow?: string,
 }
@@ -53,11 +52,10 @@ withDefaults(defineProps<Props>(), {
   headerHeight: '80px',
   headerBorder: 'none',
   headerBackground: 'none',
-  asideWidth: '350px',
+  asideLeftWidth: '350px',
+  asideRightWidth: '0',
   asideBorderColor: 'none',
   asideBackground: 'none',
-  asideLeft: false,
-  asideRight: false,
   headerFirst: false,
   headerShadow: 'none'
 })
@@ -87,6 +85,7 @@ withDefaults(defineProps<Props>(), {
   box-sizing: border-box;
   flex-shrink: 0;
   overflow: auto;
+  z-index: 2;
 }
 .vega-main {
   box-sizing: border-box;
@@ -108,9 +107,13 @@ withDefaults(defineProps<Props>(), {
   height: calc(100% - var(--vega-header-height));
   background: v-bind(contentBackground);
 }
-.vega-aside-config {
-  width: v-bind(asideWidth);
+.vega-aside-left-config {
+  width: v-bind(asideLeftWidth);
   border-right: v-bind(asideBorder) 1px solid;
+  background: v-bind(asideBackground);
+}
+.vega-aside-right-config {
+  width: v-bind(asideRightWidth);
   border-left: v-bind(asideBorder) 1px solid;
   background: v-bind(asideBackground);
 }

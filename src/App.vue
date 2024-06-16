@@ -4,7 +4,7 @@
         header-background="#005689"
         aside-border="#dcdfe6"
         aside-background="#fff"
-        aside-width="300px"
+        aside-left-width="300px"
         content-background="#ececec"
         :header-first="true"
         :aside-left="true"
