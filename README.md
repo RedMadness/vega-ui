@@ -63,7 +63,6 @@ Simple example:
       aside-background="#fff"
       content-background="#ececec"
       :header-first="true"
-      :aside-left="true"
     >
       <template #header>
         <div></div>
@@ -115,8 +114,6 @@ Layouts can be nested:
       aside-background="#fff"
       content-background="#ececec"
       :header-first="true"
-      :aside-left="false"
-      :aside-right="false"
   >
     <template #header>
       <div></div>
@@ -126,7 +123,6 @@ Layouts can be nested:
     </template>
     <template #default>
       <VegaLayout
-          aside-right
           header-border="#dcdfe6"
           aside-border="#dcdfe6"
           aside-background="#fff"
@@ -197,12 +193,20 @@ Example
 <VegaLayout header-shadow="0 10px 20px #0000000d" />
 ```
 
-### aside-width
-Width of asides (left and right). You can pass a string with valid css value. Default value is '350px'.
+### aside-left-width
+Width of left asides. You can pass a string with valid css value. Default value is 'unset'.
 
 Example
 ```vue
-<VegaLayout aside-width="200px" />
+<VegaLayout aside-left-width="200px" />
+```
+
+### aside-right-width
+Width of right asides. You can pass a string with valid css value. Default value is 'unset'.
+
+Example
+```vue
+<VegaLayout aside-right-width="200px" />
 ```
 
 ### aside-border
@@ -219,20 +223,7 @@ Example
 ```vue
 <VegaLayout aside-background="#fff" />
 ```
-### aside-left
-Show left asides? Default value is 'false'.
 
-Example
-```vue
-<VegaLayout aside-left />
-```
-### aside-right
-Show right asides? Default value is 'false'.
-
-Example
-```vue
-<VegaLayout aside-right />
-```
 ### header-first
 Header must be on top of asides. Default value is 'false'.
 
