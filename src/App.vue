@@ -4,10 +4,8 @@
         header-background="#005689"
         aside-border="#dcdfe6"
         aside-background="#fff"
-        aside-left-width="300px"
         content-background="#ececec"
         :header-first="true"
-        :aside-left="true"
     >
       <template #header>
         <div class="header">AWESOME HEADER</div>
@@ -17,10 +15,11 @@
       </template>
       <template #default>
         <vega-layout
-            aside-right
             header-border="#dcdfe6"
             aside-border="#dcdfe6"
             aside-background="#fff"
+            aside-left-width="0"
+            aside-right-width="350px"
         >
           <template #header>
             <div class="header">AWESOME HEADER 2</div>

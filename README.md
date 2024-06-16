@@ -35,7 +35,7 @@ Manually import
 ```vue
 <template>
   <div style="height: 100vh">
-    <VegaLayout :aside-left="true">
+    <VegaLayout>
       <VegaLoremIpsum />
     </VegaLayout>
   </div>
@@ -107,8 +107,6 @@ Layouts can be nested:
 ```vue
 <div style="height: 100vh">
   <VegaLayout
-      header-height="80px"
-      header-border="#dcdfe6"
       header-background="#005689"
       aside-border="#dcdfe6"
       aside-background="#fff"
@@ -126,6 +124,7 @@ Layouts can be nested:
           header-border="#dcdfe6"
           aside-border="#dcdfe6"
           aside-background="#fff"
+          aside-left-width="0"
           aside-right-width="350px"
       >
         <VegaLoremIpsum />
