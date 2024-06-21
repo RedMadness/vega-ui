@@ -39,6 +39,7 @@ export interface Props {
   headerHeight?: string
   headerBorder?: string,
   headerBackground?: string,
+  headerPadding?: string,
   asideLeftWidth?: string,
   asideLeftBorder?: string,
   asideLeftBackground?: string,
@@ -54,6 +55,7 @@ withDefaults(defineProps<Props>(), {
   headerHeight: '80px',
   headerBorder: 'none',
   headerBackground: 'none',
+  headerPadding: '2rem',
   asideLeftWidth: 'initial',
   asideLeftBorder: 'none',
   asideLeftBackground: 'none',
@@ -107,6 +109,7 @@ withDefaults(defineProps<Props>(), {
   border-bottom: v-bind(headerBorder) 1px solid;
   background: v-bind(headerBackground);
   box-shadow: v-bind(headerShadow);
+  padding: 0 v-bind(headerPadding);
 }
 .vega-content {
   height: calc(100% - var(--vega-header-height));
