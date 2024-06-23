@@ -22,7 +22,7 @@ Vue 3 UI library for rapid prototyping.
 ```shell
 npm install vega-ui
 ```
-# Usage
+# Import
 
 Full Import
 ```js
