@@ -13,9 +13,9 @@ Vue 3 UI library for rapid prototyping.
 - 🎫 [Sidebar component](#vegasidebar)
   - 🛠 [Props](#props-1)
   - 🛠 [Slots](#slots-1)
-- 🔗 [Sidebar Toggle component](#vegasidebar)
-  - 🛠 [Props](#props-1)
-  - 🛠 [Slots](#slots-1)
+- 🔗 [Sidebar Toggle component](#vegasidebartoggle)
+  - 🛠 [Props](#props-2)
+  - 🛠 [Slots](#slots-2)
 - 🐠 [Lorem Ipsum component](#vegaloremipsum)
 
 # Install
