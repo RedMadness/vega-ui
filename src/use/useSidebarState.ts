@@ -1,4 +1,4 @@
-import { Ref, ref } from 'vue'
+import {Ref, ref, watch} from 'vue'
 
 // to achieve shared state between instances, we need to move the variable outside the composite function
 const state: { key: string, value: Ref<boolean> }[] = []
@@ -13,7 +13,8 @@ export default function useSidebarState(key: string) {
   const show = value.value
   const toggle = () => {
     show.value = !show.value
-    localStorage.setItem(key, show.value ? '1' : '0')
   }
+
+  watch(show, () => localStorage.setItem(key, show.value ? '1' : '0'))
   return { show, toggle }
 }

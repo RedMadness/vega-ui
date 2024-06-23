@@ -21,7 +21,6 @@
 <script setup lang="ts">
 import useSidebarState from '../use/useSidebarState.ts'
 import VegaSidebarToggle from "./VegaSidebarToggle.vue";
-import {watch} from "vue";
 
 export interface Props {
   name?: string,
@@ -45,10 +44,7 @@ const props =  withDefaults(defineProps<Props>(), {
   background: 'none'
 })
 
-const emit = defineEmits(['change'])
-
 const { show } = useSidebarState(props.name)
-watch(show, (payload) => emit('change', payload))
 
 </script>
 
