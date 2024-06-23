@@ -11,7 +11,9 @@
       <template #header>AWESOME HEADER</template>
 
       <template #aside-left>
-        <vega-sidebar title="SIDEBAR TITLE" />
+        <vega-sidebar title="SIDEBAR TITLE">
+          <vega-lorem-ipsum />
+        </vega-sidebar>
       </template>
 
       <template #default>

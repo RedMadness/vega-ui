@@ -50,7 +50,7 @@ const { show } = useSidebarState(props.name)
 
 <style scoped>
 .vega-sidebar-header {
-  height: v-bind(headerHeight);
+  min-height: v-bind(headerHeight);
   line-height: v-bind(headerHeight);
   display: flex;
   align-items: center;
