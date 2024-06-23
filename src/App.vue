@@ -5,34 +5,27 @@
         header-background="#005689"
         aside-left-border="#dcdfe6"
         aside-left-background="#fff"
+        aside-right-background="#fff"
         content-background="#ececec"
     >
       <template #header>AWESOME HEADER</template>
 
       <template #aside-left>
-        <vega-sidebar>
-          <template #title>
-            <div>ASIDE TITLE</div>
-          </template>
-          <div></div>
-        </vega-sidebar>
+        <vega-sidebar title="SIDEBAR TITLE" />
       </template>
 
       <template #default>
         <vega-layout header-border="#dcdfe6" aside-right-border="#dcdfe6">
-          <template #header>AWESOME HEADER 2</template>
+          <template #header>
+            AWESOME HEADER 2
+          </template>
 
           <template #default>
             <vega-lorem-ipsum />
           </template>
 
           <template #aside-right>
-            <vega-sidebar name="vega-sidebar-right">
-              <template #title>
-                <div>ASIDE TITLE 2</div>
-              </template>
-              <div>ASIDE CONTENT</div>
-            </vega-sidebar>
+            <vega-sidebar name="vega-sidebar-right" title="SIDEBAR TITLE 2" />
           </template>
         </vega-layout>
       </template>

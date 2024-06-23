@@ -1,4 +1,4 @@
-# Vega UI
+# Vega UI 🌌
 
 Vue 3 UI library for rapid prototyping.
 
@@ -10,7 +10,13 @@ Vue 3 UI library for rapid prototyping.
 - 🏠 [Layout component](#vegalayout)
   - 🛠 [Props](#props)
   - 🛠 [Slots](#slots)
-- 📄 [Lorem Ipsum component](#vegaloremipsum)
+- 🎫 [Sidebar component](#vegasidebar)
+  - 🛠 [Props](#props-1)
+  - 🛠 [Slots](#slots-1)
+- 🔗 [Sidebar Toggle component](#vegasidebar)
+  - 🛠 [Props](#props-1)
+  - 🛠 [Slots](#slots-1)
+- 🐠 [Lorem Ipsum component](#vegaloremipsum)
 
 # Install
 ```shell
@@ -298,6 +304,164 @@ Example
   <div>Bunch of awesome content</div>
 </VegaLayout>
 ```
+# VegaSidebar
+Sidebar with state memory.\
+Component out of the box provide a hide/show button. 
+By default, it is places in top right corner and uses vega icon, but you can override this.\
+In addition, the sidebar saves its show/hide state in local storage, so when page reloads, it will be in same state as before.
+
+Simple example:
+```vue
+<template>
+  <div style="height: 100vh">
+    <VegaLayout>
+      <template #aside-left>
+        <VegaSidebar name="my-sidebar" title="SIDEBAR TITLE" />
+      </template>
+      <template #default>
+        <VegaLoremIpsum />
+      </template>
+    </VegaLayout>
+  </div>
+</template>
+
+<script setup>
+  import { VegaLayout, VegaSidebar } from 'vega-ui'
+  import 'vega-ui/dist/style.css'
+</script>
+```
+
+## Props
+### name
+Name of sidebar. Used as a key to store state of sidebar in local storage. You can pass any string. Default value is 'vega-sidebar'.
+
+Example
+```vue
+<VegaSidebar name="left-sidebar-1" />
+```
+
+### title
+Sidebar title. You can pass any string. Default value is ''.
+
+Example
+```vue
+<VegaSidebar title="My title" />
+```
+
+### width
+Sidebar width in opened state. You can pass a string with valid css value. Default value is '350px'.
+
+Example
+```vue
+<VegaSidebar width="300px" />
+```
+
+### width-min
+Sidebar width in closed state. You can pass a string with valid css value. Default value is 'calc(2rem * 2 + 24px)'.
+
+Example
+```vue
+<VegaSidebar width-min="0" />
+```
+
+### header-height
+Sidebar header height. You can pass a string with valid css value. Default value is '80px'.
+
+Example
+```vue
+<VegaSidebar header-height="100px" />
+```
+
+### padding
+Sidebar left and right padding. You can pass a string with valid css value. Default value is '2rem'.
+
+Example
+```vue
+<VegaSidebar padding="20px" />
+```
+
+### gap
+Gap between header and content. You can pass a string with valid css value. Default value is '16px'.
+
+Example
+```vue
+<VegaSidebar gap="0" />
+```
+
+### background
+Sidebar background. You can pass a string in HEX, RGB format. Default value is 'none'.
+
+Example
+```vue
+<VegaSidebar background="#fff" />
+```
+
+## Slots
+
+### default
+Sidebar content
+
+Example
+```vue
+<VegaSidebar>
+  <div>My sidebar content</div>
+</VegaSidebar>
+```
+
+### header
+Header custom content.
+
+Example
+```vue
+<VegaSidebar>
+  <template #header>
+    <div>SIDEBAR HEADER</div>
+  </template>
+</VegaSidebar>
+```
+
+### toggle-button
+Custom toggle button.
+
+Example
+```vue
+<VegaSidebar>
+  <template #toggle-button>
+    <button>click me!</button>
+  </template>
+</VegaSidebar>
+```
+
+# VegaSidebarToggle
+Button to control the state of the sidebar. Associates with a specific sidebar using the "name" prop.
+
+## Props
+### name
+Name of associated sidebar. Used as a key to store state of sidebar in local storage. You can pass any string. Default value is 'vega-sidebar'.
+
+Example
+```vue
+<VegaSidebarToggle name="left-sidebar-1" />
+```
+
+### also-close
+Automatically close sidebars with given names after changing  the state of main associated sidebar.
+```vue
+<VegaSidebarToggle name="left-sidebar-1" :also-close="['right-sidebar-1', 'right-sidebar-2']" />
+```
+
+## Slots
+
+### default
+Displayed button content. By default contains vega arrow icon.
+
+Example:
+```vue
+<VegaSidebarToggle name="may-sidebar">
+  <CustomIcon />
+</VegaSidebarToggle>
+```
+
 # VegaLoremIpsum
 Simple content placeholder.
 
