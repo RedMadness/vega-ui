@@ -86,8 +86,6 @@ withDefaults(defineProps<Props>(), {
   box-sizing: border-box;
   flex-shrink: 0;
   z-index: 1;
-  display: flex;
-  align-items: center;
 }
 .vega-aside {
   box-sizing: border-box;
