@@ -4,7 +4,9 @@
       <slot name="header">
         <div class="vega-sidebar-header">
           <div v-if="show" class="vega-sidebar-header-content">
-            {{ title }}
+            <slot name="title">
+              {{ title }}
+            </slot>
           </div>
           <div>
             <slot name="toggle-button">
