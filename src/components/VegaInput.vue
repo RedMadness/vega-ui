@@ -1,32 +1,31 @@
 <template>
   <input
-      type="text"
-      class="vega-input"
-      :placeholder="placeholder"
-      :value="modelValue"
-      @input="debouncedHandleInput"
-      @focus="handleFocus"
-      @blur="handleBlur"
-  >
+    type="text"
+    class="vega-input"
+    :placeholder="placeholder"
+    :value="modelValue"
+    @input="debouncedHandleInput"
+    @focus="handleFocus"
+    @blur="handleBlur"
+  />
 </template>
 
 <script setup lang="ts">
-
 export interface Props {
-  placeholder?: string,
-  modelValue?: string;
-  fontSize?: string,
-  fontColor?: string,
-  backgroundColor?: string,
-  borderWidth?: string,
-  borderColor?: string,
-  borderRadius?: string,
-  padding?: string,
-  margin?: string,
-  width?: string,
-  height?: string,
-  fontWeight?: string,
-  textAlign?: string,
+  placeholder?: string
+  modelValue?: string
+  fontSize?: string
+  fontColor?: string
+  backgroundColor?: string
+  borderWidth?: string
+  borderColor?: string
+  borderRadius?: string
+  padding?: string
+  margin?: string
+  width?: string
+  height?: string
+  fontWeight?: string
+  textAlign?: string
 }
 
 withDefaults(defineProps<Props>(), {
@@ -57,19 +56,19 @@ function handleBlur(event: FocusEvent) {
 }
 
 function debounce(func: (...args: any[]) => void, wait: number) {
-  let timeoutId: ReturnType<typeof setTimeout> | null = null;
-  return function(...args: any[]) {
+  let timeoutId: ReturnType<typeof setTimeout> | null = null
+  return function (...args: any[]) {
     if (timeoutId !== null) {
-      clearTimeout(timeoutId);
+      clearTimeout(timeoutId)
     }
-    timeoutId = setTimeout(() => func(...args), wait);
-  };
+    timeoutId = setTimeout(() => func(...args), wait)
+  }
 }
 
 const debouncedHandleInput = debounce((event: Event) => {
-  const inputElement = event.target as HTMLInputElement;
-  emit('update:modelValue', inputElement.value);
-}, 300);
+  const inputElement = event.target as HTMLInputElement
+  emit('update:modelValue', inputElement.value)
+}, 300)
 </script>
 
 <style scoped>

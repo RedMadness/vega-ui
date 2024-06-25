@@ -5,11 +5,10 @@
 </template>
 
 <script lang="ts" setup>
-import { ref } from 'vue';
-import VegaInput from "./VegaInput.vue";
+import { ref } from 'vue'
+import VegaInput from './VegaInput.vue'
 
-const searchQuery = ref<string>( 'test1111');
-
+const searchQuery = ref<string>('test1111')
 </script>
 
 <style scoped>
