@@ -420,6 +420,18 @@ Example
 </VegaSidebar>
 ```
 
+### title
+Custom title.
+
+Example
+```vue
+<VegaSidebar>
+  <template #title>
+    <div>Custom title</div>
+  </template>
+</VegaSidebar>
+```
+
 ### toggle-button
 Custom toggle button.
 
@@ -439,9 +451,19 @@ Button to control the state of the sidebar. Associates with a specific sidebar u
 ### name
 Name of associated sidebar. Used as a key to store state of sidebar in local storage. You can pass any string. Default value is 'vega-sidebar'.
 
-Example
+Example:
 ```vue
 <VegaSidebarToggle name="left-sidebar-1" />
+```
+
+### show-if
+Show toggle button only when associated sidebar is in certain state.\
+If you want to show toggle button only when sidebar is closed, set `show-if` to "false"".\
+Default value is "null" 
+
+Example:
+```vue
+<VegaSidebarToggle :show-if="false" />
 ```
 
 ### also-close
