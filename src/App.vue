@@ -27,6 +27,11 @@
           </template>
 
           <template #aside-right>
+            <vega-base-input
+                v-model="inputValue"
+                :options="options"
+                @search="search"
+                @update:model-value="onSelected"/>
             <vega-sidebar name="vega-sidebar-right" title="SIDEBAR TITLE 2" />
           </template>
         </vega-layout>
@@ -36,9 +41,40 @@
 </template>
 
 <script setup lang="ts">
+import { ref } from 'vue';
 import VegaLayout from "./components/VegaLayout.vue";
 import VegaLoremIpsum from "./components/VegaLoremIpsum.vue";
 import VegaSidebar from "./components/VegaSidebar.vue";
+import VegaBaseInput from "./components/VegaBaseInput.vue";
+
+const inputValue = ref(null);
+
+const options = ref([
+  {value: 1, label: 'one'},
+  {value: 2, label: '2S'},
+  {value: 3, label: '3S'},
+  {value: 4, label: '4S'},
+  {value: 5, label: '5S'},
+  {value: 6, label: '6S'},
+  {value: 7, label: '7S'},
+  {value: 8, label: '8S'},
+  {value: 9, label: '9S'},
+  {value: 11, label: '10S'},
+    ]
+)
+
+interface Item {
+  value: number;
+  label: string;
+}
+
+const search = (e) => {
+  console.log(e, 'search');
+}
+
+const onSelected = (e: Item) => {
+  console.log(e, 'onSelected');
+}
 </script>
 
 <style scoped></style>
