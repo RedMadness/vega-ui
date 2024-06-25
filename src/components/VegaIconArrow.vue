@@ -14,13 +14,13 @@
 
 <script setup lang="ts">
 export interface Props {
-  color?: string,
-  rotate?: string,
+  color?: string
+  rotate?: string
 }
 
 withDefaults(defineProps<Props>(), {
   color: '#B5C7D3',
-  rotate: '90deg'
+  rotate: '90deg',
 })
 </script>
 

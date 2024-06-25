@@ -306,7 +306,7 @@ Example
 ```
 # VegaSidebar
 Sidebar with state memory.\
-Component out of the box provide a hide/show button. 
+Component out of the box provide a hide/show button.
 By default, it is places in top right corner and uses vega icon, but you can override this.\
 In addition, the sidebar saves its show/hide state in local storage, so when page reloads, it will be in same state as before.
 
@@ -459,7 +459,7 @@ Example:
 ### show-if
 Show toggle button only when associated sidebar is in certain state.\
 If you want to show toggle button only when sidebar is closed, set `show-if` to "false"".\
-Default value is "null" 
+Default value is "null"
 
 Example:
 ```vue

@@ -1,12 +1,12 @@
-import {Ref, ref, watch} from 'vue'
+import { Ref, ref, watch } from 'vue'
 
 // to achieve shared state between instances, we need to move the variable outside the composite function
-const state: { key: string, value: Ref<boolean> }[] = []
+const state: { key: string; value: Ref<boolean> }[] = []
 
 export default function useSidebarState(key: string) {
-  let value = state.find(item => item.key === key)
+  let value = state.find((item) => item.key === key)
   if (value === undefined) {
-    value = { key: key, value: ref(localStorage.getItem(key) === '1')}
+    value = { key: key, value: ref(localStorage.getItem(key) === '1') }
     state.push(value)
   }
 

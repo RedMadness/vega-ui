@@ -22,20 +22,20 @@
 
 <script setup lang="ts">
 import useSidebarState from '../use/useSidebarState.ts'
-import VegaSidebarToggle from "./VegaSidebarToggle.vue";
+import VegaSidebarToggle from './VegaSidebarToggle.vue'
 
 export interface Props {
-  name?: string,
-  title?: string,
-  width?: string,
-  widthMin?: string,
-  headerHeight?: string,
-  padding?: string,
-  gap?: string,
-  background?: string,
+  name?: string
+  title?: string
+  width?: string
+  widthMin?: string
+  headerHeight?: string
+  padding?: string
+  gap?: string
+  background?: string
 }
 
-const props =  withDefaults(defineProps<Props>(), {
+const props = withDefaults(defineProps<Props>(), {
   name: 'vega-sidebar',
   title: '',
   width: '350px',
@@ -43,11 +43,10 @@ const props =  withDefaults(defineProps<Props>(), {
   headerHeight: '80px',
   padding: '2rem',
   gap: '16px',
-  background: 'none'
+  background: 'none',
 })
 
 const { show } = useSidebarState(props.name)
-
 </script>
 
 <style scoped>

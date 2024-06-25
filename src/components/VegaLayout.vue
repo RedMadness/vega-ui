@@ -37,17 +37,17 @@
 export interface Props {
   contentBackground?: string
   headerHeight?: string
-  headerBorder?: string,
-  headerBackground?: string,
-  headerPadding?: string,
-  asideLeftWidth?: string,
-  asideLeftBorder?: string,
-  asideLeftBackground?: string,
-  asideRightWidth?: string,
-  asideRightBorder?: string,
-  asideRightBackground?: string,
-  headerFirst?: boolean,
-  headerShadow?: string,
+  headerBorder?: string
+  headerBackground?: string
+  headerPadding?: string
+  asideLeftWidth?: string
+  asideLeftBorder?: string
+  asideLeftBackground?: string
+  asideRightWidth?: string
+  asideRightBorder?: string
+  asideRightBackground?: string
+  headerFirst?: boolean
+  headerShadow?: string
 }
 
 withDefaults(defineProps<Props>(), {
@@ -63,7 +63,7 @@ withDefaults(defineProps<Props>(), {
   asideRightBorder: 'none',
   asideRightBackground: 'none',
   headerFirst: false,
-  headerShadow: 'none'
+  headerShadow: 'none',
 })
 </script>
 
