@@ -27,11 +27,12 @@
           </template>
 
           <template #aside-right>
-            <vega-base-input
+            <vega-select
                 v-model="inputValue"
                 :options="options"
                 @search="search"
-                @update:model-value="onSelected"/>
+                @update:model-value="onSelected"
+            />
             <vega-sidebar name="vega-sidebar-right" title="SIDEBAR TITLE 2" />
           </template>
         </vega-layout>
@@ -45,7 +46,7 @@ import { ref } from 'vue';
 import VegaLayout from "./components/VegaLayout.vue";
 import VegaLoremIpsum from "./components/VegaLoremIpsum.vue";
 import VegaSidebar from "./components/VegaSidebar.vue";
-import VegaBaseInput from "./components/VegaBaseInput.vue";
+import VegaSelect from "./components/VegaSelect.vue";
 
 const inputValue = ref(null);
 
