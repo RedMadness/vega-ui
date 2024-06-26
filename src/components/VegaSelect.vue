@@ -4,9 +4,27 @@
       v-if="searchable"
       v-model="searchQuery"
       placeholder="Select option"
+      label="label"
       @blur="closeDropdown"
       @focus="openDropdown"
-    />
+    >
+      <!-- тестовый режим для инпута как компонента-->
+      <!-- Лабел -->
+      <template #label>
+        <label>Лейбл</label>
+      </template>
+      <!-- Префикс -->
+      <template #prefix>
+        <VegaIconArrow />
+      </template>
+
+      <!-- Постфикс -->
+      <template #postfix>
+        <VegaIconArrow />
+      </template>
+    </vega-input>
+
+    <!-- тестовый режим для инпута как компонента-->
 
     <!-- Отображение выбранного значения, когда searchable === false -->
     <div v-else class="selected-value" @click="toggleDropdown">
@@ -31,9 +49,14 @@
 <script lang="ts" setup>
 import { ref, computed, PropType } from 'vue'
 import VegaInput from './VegaInput.vue'
+import VegaIconArrow from './VegaIconArrow.vue'
 
 const props = defineProps({
   searchable: {
+    type: Boolean,
+    default: false,
+  },
+  localSearch: {
     type: Boolean,
     default: false,
   },
@@ -48,11 +71,13 @@ const selected = ref<number | null>(null)
 const dropdownOpen = ref(false)
 
 const filteredItems = computed(() => {
-  if (props.searchable && searchQuery.value) {
+  // Фильтрация только если включен localSearch и есть значение в searchQuery
+  if (props.searchable && props.localSearch && searchQuery.value) {
     return props.options.filter((item) =>
       item.label.toLowerCase().includes(searchQuery.value.toLowerCase())
     )
   }
+  // Если localSearch не активен, возвращаем все опции
   return props.options
 })
 

@@ -1,13 +1,20 @@
 <template>
-  <input
-    type="text"
-    class="vega-input"
-    :placeholder="placeholder"
-    :value="modelValue"
-    @input="debouncedHandleInput"
-    @focus="handleFocus"
-    @blur="handleBlur"
-  />
+  <div class="input-container">
+    <slot name="label"></slot>
+    <label class="input-wrapper">
+      <slot name="prefix"></slot>
+      <input
+        type="text"
+        class="vega-input"
+        :placeholder="placeholder"
+        :value="modelValue"
+        @input="debouncedHandleInput"
+        @focus="handleFocus"
+        @blur="handleBlur"
+      />
+      <slot name="postfix"></slot>
+    </label>
+  </div>
 </template>
 
 <script setup lang="ts">
@@ -17,34 +24,28 @@ export interface Props {
   fontSize?: string
   fontColor?: string
   backgroundColor?: string
-  borderWidth?: string
   borderColor?: string
   borderRadius?: string
   padding?: string
-  margin?: string
   width?: string
   height?: string
-  fontWeight?: string
-  textAlign?: string,
+  textAlign?: string
   delayDebounce?: number
 }
 
 const props = withDefaults(defineProps<Props>(), {
-  placeholder: 'input text',
+  placeholder: '',
   modelValue: '',
-  fontSize: '12px',
-  fontColor: 'black',
-  backgroundColor: 'transparent',
-  borderWidth: '2px',
-  borderColor: 'red',
+  fontSize: 'inherit',
+  fontColor: 'var(--vega-text-color)',
+  backgroundColor: 'none',
+  borderColor: 'var(--vega-border-color)',
   borderRadius: '4px',
-  padding: '4px',
-  margin: '0px',
+  padding: '10px',
   width: '100%',
-  height: '100%',
-  fontWeight: '400',
+  height: 'auto',
   textAlign: 'left',
-  delayDebounce: 300
+  delayDebounce: 300,
 })
 
 const emit = defineEmits(['focus', 'blur', 'update:modelValue'])
@@ -80,13 +81,9 @@ const debouncedHandleInput = debounce((event: Event) => {
   font-size: v-bind(fontSize);
   color: v-bind(fontColor);
   background-color: v-bind(backgroundColor);
-  box-shadow: 0 0 0 v-bind(borderWidth) v-bind(borderColor);
-  border-radius: v-bind(borderRadius);
   padding: v-bind(padding);
-  margin: v-bind(margin);
   width: v-bind(width);
   height: v-bind(height);
-  font-weight: v-bind(fontWeight);
   text-align: v-bind(textAlign);
 }
 
@@ -94,4 +91,18 @@ const debouncedHandleInput = debounce((event: Event) => {
   outline: none;
 }
 
+.input-wrapper {
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+  gap: 8px;
+  box-shadow: 0 0 0 1px v-bind(borderColor);
+  border-radius: v-bind(borderRadius);
+}
+
+.input-container {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
 </style>

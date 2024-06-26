@@ -41,7 +41,7 @@ import VegaSidebar from './components/VegaSidebar.vue'
 import VegaSelect from './components/VegaSelect.vue'
 import { ref } from 'vue'
 
-const inputValue = ref(null)
+const inputValue = ref({ value: null, label: 'Выберите опцию' })
 
 const options = ref([
   { value: 1, label: 'one' },
