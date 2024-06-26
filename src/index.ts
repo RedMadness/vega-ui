@@ -7,6 +7,7 @@ import VegaSidebar from './components/VegaSidebar.vue'
 import VegaSidebarToggle from './components/VegaSidebarToggle.vue'
 import VegaIconArrow from './components/VegaIconArrow.vue'
 import useSidebarState from './use/useSidebarState.ts'
+import './assets/css/variables.css'
 
 export {
   VegaLayout,

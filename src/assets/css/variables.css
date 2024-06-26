@@ -1,0 +1,7 @@
+:root {
+  --vega-text-color: var(--vega-black);
+  --vega-border-color: var(--vega-gray);
+
+  --vega-black: #2A2A35;
+  --vega-gray: #DCDFE6;
+}
