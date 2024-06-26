@@ -8,30 +8,30 @@
       @blur="closeDropdown"
       @focus="openDropdown"
     >
-      <!-- тестовый режим для инпута как компонента-->
-      <!-- Лабел -->
+      <!-- test slots for input component-->
+      <!-- label -->
       <template #label>
         <label>Лейбл</label>
       </template>
-      <!-- Префикс -->
+      <!-- prefix -->
       <template #prefix>
         <VegaIconArrow />
       </template>
 
-      <!-- Постфикс -->
+      <!-- postfix -->
       <template #postfix>
         <VegaIconArrow />
       </template>
     </vega-input>
 
-    <!-- тестовый режим для инпута как компонента-->
+    <!-- test slots for input component -->
 
-    <!-- Отображение выбранного значения, когда searchable === false -->
+    <!-- display the selected value when searchable === false -->
     <div v-else class="selected-value" @click="toggleDropdown">
       {{ selectedLabel }}
     </div>
 
-    <!-- Кастомный выпадающий список -->
+    <!-- dropdown -->
     <div class="dropdown" v-show="dropdownOpen" @blur="closeDropdown" tabindex="-1">
       <div
         v-for="item in filteredItems"
@@ -71,13 +71,13 @@ const selected = ref<number | null>(null)
 const dropdownOpen = ref(false)
 
 const filteredItems = computed(() => {
-  // Фильтрация только если включен localSearch и есть значение в searchQuery
+  // filtering with available localSearch and have value in searchQuery
   if (props.searchable && props.localSearch && searchQuery.value) {
     return props.options.filter((item) =>
       item.label.toLowerCase().includes(searchQuery.value.toLowerCase())
     )
   }
-  // Если localSearch не активен, возвращаем все опции
+  // return all options
   return props.options
 })
 
