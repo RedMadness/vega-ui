@@ -25,12 +25,7 @@
           </template>
 
           <template #aside-right>
-            <vega-select
-              v-model="inputValue"
-              :options="options"
-              @search="search"
-              @update:model-value="onSelected"
-            />
+            <vega-select v-model="inputValue" :options="options" searchable />
             <vega-sidebar name="vega-sidebar-right" title="SIDEBAR TITLE 2" />
           </template>
         </vega-layout>
@@ -60,19 +55,6 @@ const options = ref([
   { value: 9, label: '9S' },
   { value: 11, label: '10S' },
 ])
-
-interface Item {
-  value: number
-  label: string
-}
-
-const search = (e) => {
-  console.log(e, 'search')
-}
-
-const onSelected = (e: Item) => {
-  console.log(e, 'onSelected')
-}
 </script>
 
 <style scoped></style>

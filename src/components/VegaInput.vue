@@ -25,10 +25,11 @@ export interface Props {
   width?: string
   height?: string
   fontWeight?: string
-  textAlign?: string
+  textAlign?: string,
+  delayDebounce?: number
 }
 
-withDefaults(defineProps<Props>(), {
+const props = withDefaults(defineProps<Props>(), {
   placeholder: 'input text',
   modelValue: '',
   fontSize: '12px',
@@ -43,6 +44,7 @@ withDefaults(defineProps<Props>(), {
   height: '100%',
   fontWeight: '400',
   textAlign: 'left',
+  delayDebounce: 300
 })
 
 const emit = defineEmits(['focus', 'blur', 'update:modelValue'])
@@ -68,7 +70,7 @@ function debounce(func: (...args: any[]) => void, wait: number) {
 const debouncedHandleInput = debounce((event: Event) => {
   const inputElement = event.target as HTMLInputElement
   emit('update:modelValue', inputElement.value)
-}, 300)
+}, props.delayDebounce)
 </script>
 
 <style scoped>
@@ -78,7 +80,7 @@ const debouncedHandleInput = debounce((event: Event) => {
   font-size: v-bind(fontSize);
   color: v-bind(fontColor);
   background-color: v-bind(backgroundColor);
-  outline: v-bind(borderWidth) solid v-bind(borderColor);
+  box-shadow: 0 0 0 v-bind(borderWidth) v-bind(borderColor);
   border-radius: v-bind(borderRadius);
   padding: v-bind(padding);
   margin: v-bind(margin);
@@ -87,4 +89,9 @@ const debouncedHandleInput = debounce((event: Event) => {
   font-weight: v-bind(fontWeight);
   text-align: v-bind(textAlign);
 }
+
+.vega-input:focus {
+  outline: none;
+}
+
 </style>
