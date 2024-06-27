@@ -11,7 +11,7 @@
       <!-- test slots for input component-->
       <!-- label -->
       <template #label>
-        <label>Лейбл</label>
+        <label>Label</label>
       </template>
       <!-- prefix -->
       <template #prefix>
