@@ -4,7 +4,7 @@
     <label class="input-wrapper">
       <slot name="prefix"></slot>
       <input
-        type="text"
+        :type="type"
         class="vega-input"
         :placeholder="placeholder"
         :value="modelValue"
@@ -19,11 +19,14 @@
 
 <script setup lang="ts">
 export interface Props {
+  type?: string
   placeholder?: string
   modelValue?: string
   fontSize?: string
   fontColor?: string
   backgroundColor?: string
+  hoverBorderColor?: string
+  focusBorderColor?: string
   borderColor?: string
   borderRadius?: string
   padding?: string
@@ -34,12 +37,15 @@ export interface Props {
 }
 
 const props = withDefaults(defineProps<Props>(), {
+  type: 'text',
   placeholder: '',
   modelValue: '',
   fontSize: 'inherit',
   fontColor: 'var(--vega-text-color)',
   backgroundColor: 'none',
   borderColor: 'var(--vega-border-color)',
+  hoverBorderColor: 'var(--vega-border-color)',
+  focusBorderColor: 'var(--vega-border-color)',
   borderRadius: '4px',
   padding: '10px',
   width: '100%',
@@ -80,9 +86,7 @@ const debouncedHandleInput = debounce((event: Event) => {
   box-sizing: border-box;
   font-size: v-bind(fontSize);
   color: v-bind(fontColor);
-  background-color: v-bind(backgroundColor);
-  width: v-bind(width);
-  height: v-bind(height);
+
   text-align: v-bind(textAlign);
 }
 
@@ -97,12 +101,23 @@ const debouncedHandleInput = debounce((event: Event) => {
   gap: 8px;
   box-shadow: 0 0 0 1px v-bind(borderColor);
   border-radius: v-bind(borderRadius);
+  background-color: v-bind(backgroundColor);
   padding: v-bind(padding);
+  height: v-bind(height);
+}
+
+.input-wrapper:hover {
+  box-shadow: 0 0 0 1px v-bind(hoverBorderColor);
+}
+
+.input-wrapper:focus-within {
+  box-shadow: 0 0 0 1px v-bind(focusBorderColor);
 }
 
 .input-container {
   display: flex;
   flex-direction: column;
   gap: 8px;
+  width: v-bind(width);
 }
 </style>
