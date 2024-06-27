@@ -24,6 +24,7 @@ export interface Props {
   modelValue?: string
   fontSize?: string
   fontColor?: string
+  placeholderColor?: string
   backgroundColor?: string
   hoverBorderColor?: string
   focusBorderColor?: string
@@ -42,6 +43,7 @@ const props = withDefaults(defineProps<Props>(), {
   modelValue: '',
   fontSize: 'inherit',
   fontColor: 'var(--vega-text-color)',
+  placeholderColor: 'var(--vega-gray)',
   backgroundColor: 'none',
   borderColor: 'var(--vega-border-color)',
   hoverBorderColor: 'var(--vega-border-color)',
@@ -92,6 +94,10 @@ const debouncedHandleInput = debounce((event: Event) => {
 
 .vega-input:focus {
   outline: none;
+}
+
+.vega-input::placeholder {
+  color: v-bind(placeholderColor);
 }
 
 .input-wrapper {
