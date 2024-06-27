@@ -198,6 +198,14 @@ Example
 <VegaLayout header-shadow="0 10px 20px #0000000d" />
 ```
 
+### header-padding
+Header left and right padding. You can pass a string with valid css value. Default value is '2rem'.
+
+Example
+```vue
+<VegaLayout header-padding="40px" />
+```
+
 ### aside-left-width
 Left aside width. You can pass a string with valid css value. Default value is 'initial'.
 
