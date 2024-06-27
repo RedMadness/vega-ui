@@ -1,6 +1,6 @@
 # Vega UI 🌌
 
-Vue 3 UI library for rapid prototyping.
+Vue 3 UI library for easy development.
 
 > **WARNING!**\
 > This package is in the early stages of development. Use it at your own risk.

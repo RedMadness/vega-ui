@@ -22,3 +22,7 @@ dist-ssr
 *.njsproj
 *.sln
 *.sw?
+
+# VitePress ignore files
+docs/.vitepress/dist
+docs/.vitepress/cache
