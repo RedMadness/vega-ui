@@ -17,6 +17,9 @@ Vue 3 UI library for rapid prototyping.
   - 🛠 [Props](#props-2)
   - 🛠 [Slots](#slots-2)
 - 🐠 [Lorem Ipsum component](#vegaloremipsum)
+- 🖥️ [Input component](#VegaInput)
+  - 🛠 [Props](#props-3)
+  - 🛠 [Slots](#slots-3)
 
 # Install
 ```shell
@@ -565,3 +568,12 @@ The component emits the following events:
 | `blur`             | Emitted when the input field loses focus.                     |
 | `update:modelValue`| Emitted with the current value of the input when it changes.  |
 
+### Slots
+
+The component provides slots that allow for the insertion of custom content at various points within the component.
+
+| Slot Name | Description                                           |
+|-----------|-------------------------------------------------------|
+| `label`   | Slot for inserting a custom label above the input.    |
+| `prefix`  | Slot for adding content before the input field.       |
+| `postfix` | Slot for adding content after the input field.        |
