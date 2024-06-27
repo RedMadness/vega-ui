@@ -88,7 +88,9 @@ const debouncedHandleInput = debounce((event: Event) => {
   box-sizing: border-box;
   font-size: v-bind(fontSize);
   color: v-bind(fontColor);
-
+  width: 100%;
+  height: 100%;
+  background-color: inherit;
   text-align: v-bind(textAlign);
 }
 
