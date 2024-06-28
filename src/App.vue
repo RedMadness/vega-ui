@@ -26,7 +26,7 @@
 
           <template #aside-right>
             <vega-sidebar name="vega-sidebar-right" title="SIDEBAR TITLE 2">
-              <vega-select v-model="inputValue" :options="options">
+              <vega-select v-model="inputValue" :options="options" searchable>
                 <template #label>
                   <label>Label</label>
                 </template>

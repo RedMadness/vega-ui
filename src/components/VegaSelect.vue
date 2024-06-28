@@ -8,15 +8,22 @@
       v-model="searchQuery"
       placeholder="Select option"
       label="label"
+      :readonly="!searchable"
       @blur="closeDropdown"
       @focus="openDropdown"
     >
+      <template v-slot:prefix>
+        <slot name="prefix"></slot>
+      </template>
+      <template v-slot:postfix>
+        <slot name="postfix"></slot>
+      </template>
     </vega-input>
 
     <!-- display the selected value when searchable === false -->
-    <div v-else class="select-no-searchable-wrapper">
+    <div v-else class="select-no-searchable-wrapper" @click="toggleDropdown">
       <slot name="prefix"></slot>
-      <div class="selected-value" @click="toggleDropdown">
+      <div class="selected-value">
         {{ selectedLabel }}
       </div>
       <div class="postfix">
@@ -121,6 +128,7 @@ const selectItem = (item: { value: number; label: string }) => {
   display: flex;
   align-items: center;
   padding: 10px;
+  cursor: pointer;
 }
 
 .postfix {
