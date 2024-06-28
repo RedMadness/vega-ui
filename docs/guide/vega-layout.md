@@ -40,8 +40,8 @@ Code above will give you a following result:
 
 ::: info
 
-If you want to create a full-page layout with a fixed header, you need to set `height: 100vh` for the parent DOM element.\
-With this setup, only the content inside `<template #default>` will be scrollable.
+To achieve the effect that only the part in the `default` slot is scrollable, you need to set a fixed height for the parent DOM element.\
+For example, if you want to create a full-page layout you can to set `height: 100vh` for the parent `<div>`.
 
 :::
 
@@ -107,6 +107,14 @@ Content background. You can pass a string in HEX, RGB format. Default value is '
 Example
 ```html
 <VegaLayout content-background="#005689" />
+```
+
+### header-first
+Header must be on top of asides. Default value is 'false'.
+
+Example
+```html
+<VegaLayout header-first />
 ```
 
 ### header-height
@@ -195,13 +203,6 @@ Example
 <VegaLayout aside-right-background="#fff" />
 ```
 
-### header-first
-Header must be on top of asides. Default value is 'false'.
-
-Example
-```html
-<VegaLayout header-first />
-```
 ## Slots
 ### header
 Header custom content

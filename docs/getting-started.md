@@ -22,7 +22,7 @@ app.use(VegaUI)
 app.mount('#app')
 ```
 Manually import
-```vue
+```html
 <template>
   <div style="height: 100vh">
     <VegaLayout>
@@ -36,5 +36,6 @@ Manually import
   import 'vega-ui/dist/style.css'
 </script>
 ```
-> **Note**\
-> styles.css very important. Don't forget import it!
+::: info
+`styles.css` very important. Don't forget import it!
+:::

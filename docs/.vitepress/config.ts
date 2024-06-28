@@ -5,11 +5,12 @@ export default defineConfig({
   title: "Vega UI 🌌",
   base: '/vega-ui/',
   description: "Vue 3 UI library for rapid prototyping.",
+  cleanUrls: true,
   themeConfig: {
     // https://vitepress.dev/reference/default-theme-config
     nav: [
       { text: 'Home', link: '/' },
-      { text: 'Guide', link: '/guide/vega-layout' },
+      { text: 'Guide', link: '/getting-started' },
     ],
 
     sidebar: [
@@ -22,7 +23,10 @@ export default defineConfig({
       {
         text: 'Components',
         items: [
-          { text: 'Layout', link: '/guide/vega-layout' },
+          {
+            text: 'Layout',
+            link: '/guide/vega-layout',
+          },
           { text: 'Sidebar', link: '/guide/vega-sidebar' },
           { text: 'Sidebar Toggle', link: '/guide/vega-sidebar-toggle' },
           { text: 'Lorem Ipsum', link: '/guide/vega-lorem-ipsum' }
@@ -32,6 +36,14 @@ export default defineConfig({
 
     socialLinks: [
       { icon: 'github', link: 'https://github.com/RedMadness/vega-ui' }
-    ]
+    ],
+
+    outline: {
+      level: [2, 3]
+    },
+
+    search: {
+      provider: 'local'
+    }
   }
 })
