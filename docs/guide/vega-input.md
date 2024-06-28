@@ -32,13 +32,15 @@ Simple example:
 
 Code above will give you a following result:
 
-<div style="height: 300px">
+<div style="height: 80px">
   <vega-input
       placeholder="input"
       label="label"
       background-color="var(--vp-custom-block-info-bg)"
       :delay-debounce="800"
-      padding="0 7px"
+      padding="0 8px 0 8px"
+      width="420px"
+      height="32px"
     >
       <template v-slot:prefix>
         <slot name="prefix"></slot>
