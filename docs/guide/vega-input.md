@@ -34,14 +34,11 @@ Code above will give you a following result:
 
 <div style="height: 300px">
   <vega-input
-      v-if="searchable"
-      v-model="searchQuery"
       placeholder="input"
       label="label"
       background-color="var(--vp-custom-block-info-bg)"
       :delay-debounce="800"
-      @blur="closeDropdown"
-      @focus="openDropdown"
+      padding="0 7px"
     >
       <template v-slot:prefix>
         <slot name="prefix"></slot>

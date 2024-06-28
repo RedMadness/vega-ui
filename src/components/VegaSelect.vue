@@ -2,13 +2,12 @@
   <div class="select-container">
     <slot name="label"></slot>
 
-    <!--    TODO над подумать как слоты расположить в селекте-->
     <vega-input
-      v-if="searchable"
       v-model="searchQuery"
       placeholder="Select option"
       label="label"
       :readonly="!searchable"
+      :onClick="!searchable ? toggleDropdown : undefined"
       @blur="closeDropdown"
       @focus="openDropdown"
     >
@@ -20,19 +19,8 @@
       </template>
     </vega-input>
 
-    <!-- display the selected value when searchable === false -->
-    <div v-else class="select-no-searchable-wrapper" @click="toggleDropdown">
-      <slot name="prefix"></slot>
-      <div class="selected-value">
-        {{ selectedLabel }}
-      </div>
-      <div class="postfix">
-        <slot name="postfix"></slot>
-      </div>
-    </div>
-
     <!-- dropdown -->
-    <div class="dropdown" v-show="dropdownOpen" @blur="closeDropdown" tabindex="-1">
+    <div class="dropdown" :class="{ open: dropdownOpen }" @blur="closeDropdown" tabindex="-1">
       <div
         v-for="item in filteredItems"
         :key="item.value"
@@ -80,11 +68,6 @@ const filteredItems = computed(() => {
   return props.options
 })
 
-const selectedLabel = computed(() => {
-  const selectedItem = props.options.find((option) => option.value === selected.value)
-  return selectedItem ? selectedItem.label : 'Select option'
-})
-
 const openDropdown = () => {
   dropdownOpen.value = true
 }
@@ -94,6 +77,7 @@ const closeDropdown = () => {
 }
 
 const toggleDropdown = () => {
+  console.log('+')
   dropdownOpen.value = !dropdownOpen.value
 }
 
@@ -105,12 +89,24 @@ const selectItem = (item: { value: number; label: string }) => {
 </script>
 
 <style scoped>
+.select-container {
+  position: relative;
+}
+
 .dropdown {
   position: absolute;
+  top: 100%;
+  left: 0;
+  right: 0;
   border: 1px solid #ccc;
   border-radius: 4px;
   width: 100%;
   z-index: 100;
+  box-sizing: border-box;
+  overflow: hidden;
+  max-height: 0;
+  opacity: 0;
+  transition: all 0.3s ease-in-out;
 }
 
 .dropdown-item {
@@ -123,15 +119,8 @@ const selectItem = (item: { value: number; label: string }) => {
   background-color: #f0f0f0;
 }
 
-.select-no-searchable-wrapper {
-  background: white;
-  display: flex;
-  align-items: center;
-  padding: 10px;
-  cursor: pointer;
-}
-
-.postfix {
-  margin-left: auto;
+.dropdown.open {
+  max-height: 200px;
+  opacity: 1;
 }
 </style>
