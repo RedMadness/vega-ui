@@ -26,7 +26,20 @@
 
           <template #aside-right>
             <vega-sidebar name="vega-sidebar-right" title="SIDEBAR TITLE 2">
-              <vega-select v-model="inputValue" :options="options" searchable />
+              <vega-select v-model="inputValue" :options="options">
+                <template #label>
+                  <label>Label</label>
+                </template>
+                <!-- prefix -->
+                <template #prefix>
+                  <VegaIconArrow />
+                </template>
+
+                <!-- postfix -->
+                <template #postfix>
+                  <VegaIconArrow />
+                </template>
+              </vega-select>
             </vega-sidebar>
           </template>
         </vega-layout>
@@ -41,6 +54,7 @@ import VegaLoremIpsum from './components/VegaLoremIpsum.vue'
 import VegaSidebar from './components/VegaSidebar.vue'
 import VegaSelect from './components/VegaSelect.vue'
 import { ref } from 'vue'
+import VegaIconArrow from './components/VegaIconArrow.vue'
 
 const inputValue = ref({ value: null, label: 'Select option' })
 
