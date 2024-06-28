@@ -20,6 +20,7 @@
 <script setup lang="ts">
 export interface Props {
   type?: string
+  readonly?: boolean
   placeholder?: string
   modelValue?: string
   fontSize?: string
@@ -39,6 +40,7 @@ export interface Props {
 
 const props = withDefaults(defineProps<Props>(), {
   type: 'text',
+  readonly: false,
   placeholder: '',
   modelValue: '',
   fontSize: 'inherit',

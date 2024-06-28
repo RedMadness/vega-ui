@@ -29,7 +29,8 @@ export default defineConfig({
           },
           { text: 'Sidebar', link: '/guide/vega-sidebar' },
           { text: 'Sidebar Toggle', link: '/guide/vega-sidebar-toggle' },
-          { text: 'Lorem Ipsum', link: '/guide/vega-lorem-ipsum' }
+          { text: 'Lorem Ipsum', link: '/guide/vega-lorem-ipsum' },
+          { text: 'Input', link: '/guide/vega-input' },
         ]
       }
     ],

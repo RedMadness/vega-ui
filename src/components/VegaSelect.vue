@@ -1,34 +1,34 @@
 <template>
-  <div class="autocomplete">
+  <div class="select-container">
+    <slot name="label"></slot>
+
+    <!--    TODO над подумать как слоты расположить в селекте-->
     <vega-input
       v-if="searchable"
       v-model="searchQuery"
       placeholder="Select option"
       label="label"
+      :readonly="!searchable"
       @blur="closeDropdown"
       @focus="openDropdown"
     >
-      <!-- test slots for input component-->
-      <!-- label -->
-      <template #label>
-        <label>Label</label>
+      <template v-slot:prefix>
+        <slot name="prefix"></slot>
       </template>
-      <!-- prefix -->
-      <template #prefix>
-        <VegaIconArrow />
-      </template>
-
-      <!-- postfix -->
-      <template #postfix>
-        <VegaIconArrow />
+      <template v-slot:postfix>
+        <slot name="postfix"></slot>
       </template>
     </vega-input>
 
-    <!-- test slots for input component -->
-
     <!-- display the selected value when searchable === false -->
-    <div v-else class="selected-value" @click="toggleDropdown">
-      {{ selectedLabel }}
+    <div v-else class="select-no-searchable-wrapper" @click="toggleDropdown">
+      <slot name="prefix"></slot>
+      <div class="selected-value">
+        {{ selectedLabel }}
+      </div>
+      <div class="postfix">
+        <slot name="postfix"></slot>
+      </div>
     </div>
 
     <!-- dropdown -->
@@ -49,7 +49,6 @@
 <script lang="ts" setup>
 import { ref, computed, PropType } from 'vue'
 import VegaInput from './VegaInput.vue'
-import VegaIconArrow from './VegaIconArrow.vue'
 
 const props = defineProps({
   searchable: {
@@ -124,7 +123,15 @@ const selectItem = (item: { value: number; label: string }) => {
   background-color: #f0f0f0;
 }
 
-.selected-value {
+.select-no-searchable-wrapper {
   background: white;
+  display: flex;
+  align-items: center;
+  padding: 10px;
+  cursor: pointer;
+}
+
+.postfix {
+  margin-left: auto;
 }
 </style>
