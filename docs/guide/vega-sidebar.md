@@ -29,86 +29,75 @@ Simple example:
 ```
 
 ## Props
-### name
-Name of sidebar. Used as a key to store state of sidebar in local storage. You can pass any string. Default value is 'vega-sidebar'.
+| Prop          | Type   | Default                       | Description                                   |
+|---------------|--------|-------------------------------|-----------------------------------------------|
+| `name`        | String | 'vega-sidebar'                | Name of the sidebar, used as a key for storing the state in local storage. |
+| `title`       | String | ''                            | The title of the sidebar.                     |
+| `width`       | String | '350px'                       | Width of the sidebar in its opened state.     |
+| `width-min`   | String | 'calc(2rem * 2 + 24px)'       | Width of the sidebar in its closed state.     |
+| `header-height` | String | '80px'                      | Height of the sidebar's header.               |
+| `padding`     | String | '2rem'                        | Left and right padding of the sidebar.        |
+| `gap`         | String | '16px'                        | Gap between the sidebar's header and content. |
+| `background`  | String | 'none'                        | Background of the sidebar. Accepts HEX, RGB values. |
 
-Example
+
+Example name:
 ```html
 <VegaSidebar name="left-sidebar-1" />
 ```
 
-### title
-Sidebar title. You can pass any string. Default value is ''.
-
-Example
+Example title:
 ```html
 <VegaSidebar title="My title" />
 ```
 
-### width
-Sidebar width in opened state. You can pass a string with valid css value. Default value is '350px'.
-
-Example
+Example width:
 ```html
 <VegaSidebar width="300px" />
 ```
 
-### width-min
-Sidebar width in closed state. You can pass a string with valid css value. Default value is 'calc(2rem * 2 + 24px)'.
-
-Example
+Example width-min:
 ```html
 <VegaSidebar width-min="0" />
 ```
 
-### header-height
-Sidebar header height. You can pass a string with valid css value. Default value is '80px'.
-
-Example
+Example header-height:
 ```html
 <VegaSidebar header-height="100px" />
 ```
 
-### padding
-Sidebar left and right padding. You can pass a string with valid css value. Default value is '2rem'.
-
-Example
+Example padding:
 ```html
 <VegaSidebar padding="20px" />
 ```
 
-### gap
-Gap between header and content. You can pass a string with valid css value. Default value is '16px'.
-
-Example
+Example gap:
 ```html
 <VegaSidebar gap="0" />
 ```
 
-### background
-Sidebar background. You can pass a string in HEX, RGB format. Default value is 'none'.
-
-Example
+Example background:
 ```html
 <VegaSidebar background="#fff" />
 ```
 
 ## Slots
 
-### default
-Sidebar content
+| Slot           | Description                     |
+|----------------|---------------------------------|
+| `default`      | Content of the sidebar.         |
+| `header`       | Custom content for the sidebar header. |
+| `title`        | Custom title content.           |
+| `toggle-button`| Custom toggle button content.   |
 
-Example
+Example default:
 ```html
 <VegaSidebar>
   <div>My sidebar content</div>
 </VegaSidebar>
 ```
 
-### header
-Header custom content.
-
-Example
+Example header:
 ```html
 <VegaSidebar>
   <template #header>
@@ -117,10 +106,7 @@ Example
 </VegaSidebar>
 ```
 
-### title
-Custom title.
-
-Example
+Example title:
 ```html
 <VegaSidebar>
   <template #title>
@@ -129,10 +115,7 @@ Example
 </VegaSidebar>
 ```
 
-### toggle-button
-Custom toggle button.
-
-Example
+Example toggle-button:
 ```html
 <VegaSidebar>
   <template #toggle-button>
