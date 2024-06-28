@@ -8,8 +8,7 @@ Simple content placeholder.
 
 ## Props
 
-### font-size
-Set font size. Default `20px`
-
-### padding
-Set content padding. Default `0`
+| Prop      | Type    | Default  | Description                   |
+|-----------|---------|----------|-------------------------------|
+| `font-size` | String | `20px`   | Set the font size of the content. |
+| `padding`   | String | `0`      | Set the padding of the content.   |

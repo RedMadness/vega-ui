@@ -31,26 +31,24 @@ To achieve a link between the sidebar and the toggle button, you must specify th
 ```
 
 ## Props
-### name
-Name of associated sidebar. Used as a key to store state of sidebar in local storage. You can pass any string. Default value is 'vega-sidebar'.
+| Prop       | Type    | Default      | Description |
+|------------|---------|--------------|-------------|
+| `name`     | String  | 'vega-sidebar' | Name of the associated sidebar. Used as a key to store the state of the sidebar in local storage. |
+| `show-if`  | Boolean | `null`       | Show toggle button only when the associated sidebar is in a certain state. Set to `false` to show when the sidebar is closed. |
+| `also-close` | Array | `undefined` | Automatically close sidebars with given names after changing the state of the main associated sidebar. |
 
-Example:
+
+Example name:
 ```html
 <VegaSidebarToggle name="left-sidebar-1" />
 ```
 
-### show-if
-Show toggle button only when associated sidebar is in certain state.\
-If you want to show toggle button only when sidebar is closed, set `show-if` to "false"".\
-Default value is "null"
-
-Example:
+Example show-if:
 ```html
 <VegaSidebarToggle :show-if="false" />
 ```
 
-### also-close
-Automatically close sidebars with given names after changing  the state of main associated sidebar.
+Example also-close:
 ```html
 <VegaSidebarToggle
   name="left-sidebar-1"
@@ -59,11 +57,12 @@ Automatically close sidebars with given names after changing  the state of main 
 ```
 
 ## Slots
+| Slot     | Description                                 |
+|----------|---------------------------------------------|
+| `default` | Displays the button content, by default contains a vega arrow icon. |
 
-### default
-Displayed button content. By default contains vega arrow icon.
 
-Example:
+Example default:
 ```html
 <VegaSidebarToggle name="may-sidebar">
   <CustomIcon />

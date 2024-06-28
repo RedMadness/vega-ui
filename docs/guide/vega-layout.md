@@ -101,113 +101,100 @@ Example above will give you a following structure:
 </div>
 
 ## Props
-### content-background
-Content background. You can pass a string in HEX, RGB format. Default value is 'none'.
+| Prop                  | Type   | Default                    | Description                                                                                           |
+|-----------------------|--------|----------------------------|-------------------------------------------------------------------------------------------------------|
+| `content-background`  | String | 'none'                     | Background color of the content area. Accepts HEX, RGB values.                                        |
+| `header-first`        | Boolean| 'false'                    | Determines if the header should be on top of asides.                                                  |
+| `header-height`       | String | '80px'                     | Height of the header. Accepts a valid CSS value.                                                      |
+| `header-border`       | String | 'none'                     | Color of the header border. Accepts HEX, RGB values.                                                  |
+| `header-background`   | String | 'none'                     | Background color of the header. Accepts HEX, RGB values.                                              |
+| `header-shadow`       | String | 'none'                     | CSS box-shadow value for the header. [box-shadow](https://developer.mozilla.org/ru/docs/Web/CSS/box-shadow)                                                                 |
+| `header-padding`      | String | '2rem'                     | Left and right padding of the header. Accepts a valid CSS value.                                      |
+| `aside-left-width`    | String | 'initial'                  | Width of the left aside. Accepts a valid CSS value.                                                   |
+| `aside-left-border`   | String | 'none'                     | Border color of the left aside. Accepts HEX, RGB values.                                              |
+| `aside-left-background` | String | 'none'                   | Background color of the left aside. Accepts HEX, RGB values.                                          |
+| `aside-right-width`   | String | 'initial'                  | Width of the right aside. Accepts a valid CSS value.                                                  |
+| `aside-right-border`  | String | 'none'                     | Border color of the right aside. Accepts HEX, RGB values.                                             |
+| `aside-right-background` | String | 'none'                  | Background color of the right aside. Accepts HEX, RGB values.                                         |
 
-Example
+
+Example content-background:
 ```html
 <VegaLayout content-background="#005689" />
 ```
 
-### header-first
-Header must be on top of asides. Default value is 'false'.
 
-Example
+Example header-first:
 ```html
+<!-- Не уверен в описании -->
 <VegaLayout header-first />
 ```
 
-### header-height
-Header height. You can pass a string with valid css value. Default value is '80px'.
-
-Example
+Example header-height:
 ```html
 <VegaLayout header-height="100px" />
 ```
 
-### header-border
-Header border color. You can pass a string in HEX, RGB format. Default value is 'none'.
-
-Example
+Example header-border:
 ```html
 <VegaLayout header-border="#005689" />
 ```
 
-### header-background
-Header background color. You can pass a string in HEX, RGB format. Default value is 'none'.
-
-Example
+Example header-background:
 ```html
 <VegaLayout header-background="#fff" />
 ```
 
-### header-shadow
-Header shadow. You can pass any valid css [box-shadow](https://developer.mozilla.org/ru/docs/Web/CSS/box-shadow) value as string. Default value is 'none'.
-
-Example
+Example header-shadow:
 ```html
 <VegaLayout header-shadow="0 10px 20px #0000000d" />
 ```
 
-### header-padding
-Header left and right padding. You can pass a string with valid css value. Default value is '2rem'.
-
-Example
+Example header-padding:
 ```html
 <VegaLayout header-padding="40px" />
 ```
 
-### aside-left-width
-Left aside width. You can pass a string with valid css value. Default value is 'initial'.
-
-Example
+Example aside-left-width:
 ```html
 <VegaLayout aside-left-width="200px" />
 ```
 
-### aside-left-border
-Left aside border color. You can pass a string in HEX, RGB format. Default value is 'none'.
-
-Example
+Example aside-left-border:
 ```html
 <VegaLayout aside-left-border="#005689" />
 ```
-### aside-left-background
-Left aside background. You can pass a string in HEX, RGB format. Default value is 'none'.
 
-Example
+Example aside-left-background:
 ```html
 <VegaLayout aside-left-background="#fff" />
 ```
 
-### aside-right-width
-Right aside width. You can pass a string with valid css value. Default value is 'initial'.
-
-Example
+Example aside-right-width:
 ```html
 <VegaLayout aside-right-width="350px" />
 ```
 
-### aside-right-border
-Right aside border color. You can pass a string in HEX, RGB format. Default value is 'none'.
-
-Example
+Example aside-right-border:
 ```html
 <VegaLayout aside-right-border="#005689" />
 ```
-### aside-right-background
-Right aside background. You can pass a string in HEX, RGB format. Default value is 'none'.
 
-Example
+Example aside-right-background:
 ```html
 <VegaLayout aside-right-background="#fff" />
 ```
 
 ## Slots
-### header
-Header custom content
+| Slot         | Description                   |
+|--------------|-------------------------------|
+| `header`     | Custom content for the header.|
+| `aside-left` | Custom content for the left aside. |
+| `aside-right`| Custom content for the right aside. |
+| `default`    | Main content of the page.     |
 
-Example
+
+Example header:
 ```html
 <VegaLayout>
   <template #header>
@@ -215,10 +202,8 @@ Example
   </template>
 </VegaLayout>
 ```
-### aside-left
-Left aside custom content
 
-Example
+Example aside-left:
 ```html
 <VegaLayout>
   <template #aside-left>
@@ -230,10 +215,8 @@ Example
   </template>
 </VegaLayout>
 ```
-### aside-right
-Right aside custom content
 
-Example
+Example aside-right:
 ```html
 <VegaLayout>
   <template #aside-right>
@@ -247,10 +230,8 @@ Example
   </template>
 </VegaLayout>
 ```
-### default
-Content on page
 
-Example
+Example default:
 ```html
 <VegaLayout>
   <div>Bunch of awesome content</div>
