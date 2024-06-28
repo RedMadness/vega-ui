@@ -31,23 +31,19 @@
     </vega-input>
 
     <!-- dropdown -->
-    <div class="dropdown" :class="{ open: dropdownOpen }" @blur="closeDropdown" tabindex="-1">
-      <div
-        v-for="item in filteredItems"
-        :key="item.value"
-        class="dropdown-item"
-        @click="selectItem(item)"
-        @mousedown.prevent
-      >
-        {{ item.label }}
-      </div>
-    </div>
+    <vega-dropdown
+      :items="filteredItems"
+      :isOpen="dropdownOpen"
+      @select="selectItem"
+      @close="closeDropdown"
+    />
   </div>
 </template>
 
 <script lang="ts" setup>
 import { ref, computed } from 'vue'
 import VegaInput from './VegaInput.vue'
+import VegaDropdown from './VegaDropdown.vue'
 
 export interface Option {
   value: number
@@ -104,9 +100,7 @@ const toggleDropdown = () => {
 }
 
 const handleInputClick = () => {
-  if (!props.searchable) {
-    toggleDropdown()
-  }
+  toggleDropdown()
 }
 
 const selectItem = (item: Option) => {
@@ -119,36 +113,5 @@ const selectItem = (item: Option) => {
 <style scoped>
 .select-container {
   position: relative;
-}
-
-.dropdown {
-  position: absolute;
-  top: 100%;
-  left: 0;
-  right: 0;
-  border: 1px solid #ccc;
-  border-radius: 4px;
-  width: 100%;
-  z-index: 100;
-  box-sizing: border-box;
-  overflow: hidden;
-  max-height: 0;
-  opacity: 0;
-  transition: all 0.3s ease-in-out;
-}
-
-.dropdown-item {
-  padding: 8px 12px;
-  cursor: pointer;
-  background-color: white;
-}
-
-.dropdown-item:hover {
-  background-color: #f0f0f0;
-}
-
-.dropdown.open {
-  max-height: 200px;
-  opacity: 1;
 }
 </style>
