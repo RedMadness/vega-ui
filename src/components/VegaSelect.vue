@@ -1,15 +1,26 @@
 <template>
   <div class="select-container">
     <slot name="label"></slot>
-
     <vega-input
       v-model="searchQuery"
-      placeholder="Select option"
       label="label"
+      :placeholder="placeholder"
       :readonly="!searchable"
+      :font-size="fontSize"
+      :font-color="fontColor"
+      :placeholder-color="placeholderColor"
+      :background-color="backgroundColor"
+      :hover-border-color="hoverBorderColor"
+      :focus-border-color="focusBorderColor"
+      :border-color="borderColor"
+      :border-radius="borderRadius"
+      :padding="padding"
+      :width="width"
+      :height="height"
+      :text-align="textAlign"
+      :delay-debounce="delayDebounce"
       @click="handleInputClick"
       @blur="closeDropdown"
-      @focus="openDropdown"
     >
       <template v-slot:prefix>
         <slot name="prefix"></slot>
@@ -35,22 +46,38 @@
 </template>
 
 <script lang="ts" setup>
-import { ref, computed, PropType } from 'vue'
+import { ref, computed } from 'vue'
 import VegaInput from './VegaInput.vue'
 
-const props = defineProps({
-  searchable: {
-    type: Boolean,
-    default: false,
-  },
-  localSearch: {
-    type: Boolean,
-    default: false,
-  },
-  options: {
-    type: Array as PropType<Array<{ value: number; label: string }>>,
-    required: true,
-  },
+export interface Option {
+  value: number
+  label: string
+}
+export interface Props {
+  searchable?: boolean
+  localSearch?: boolean
+  options?: Option[]
+  placeholder?: string
+  fontSize?: string
+  fontColor?: string
+  placeholderColor?: string
+  backgroundColor?: string
+  hoverBorderColor?: string
+  focusBorderColor?: string
+  borderColor?: string
+  borderRadius?: string
+  padding?: string
+  width?: string
+  height?: string
+  textAlign?: string
+  delayDebounce?: number
+}
+
+const props = withDefaults(defineProps<Props>(), {
+  searchable: false,
+  localSearch: false,
+  options: () => [] as Option[],
+  placeholder: 'select',
 })
 
 const searchQuery = ref('')
@@ -68,10 +95,6 @@ const filteredItems = computed(() => {
   return props.options
 })
 
-const openDropdown = () => {
-  dropdownOpen.value = true
-}
-
 const closeDropdown = () => {
   dropdownOpen.value = false
 }
@@ -86,7 +109,7 @@ const handleInputClick = () => {
   }
 }
 
-const selectItem = (item: { value: number; label: string }) => {
+const selectItem = (item: Option) => {
   selected.value = item.value
   searchQuery.value = item.label
   closeDropdown()
