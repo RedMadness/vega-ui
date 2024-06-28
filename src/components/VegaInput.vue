@@ -5,6 +5,7 @@
       <slot name="prefix"></slot>
       <input
         :type="type"
+        :readonly="readonly"
         class="vega-input"
         :placeholder="placeholder"
         :value="modelValue"
