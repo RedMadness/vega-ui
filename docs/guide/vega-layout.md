@@ -6,24 +6,14 @@ Page layout component.
 Simple example:
 ```html
 <template>
-  <div style="height: 100vh">
+  <div style="height: 400px">
     <VegaLayout
-      :header-first="true"
-      header-background="#005689"
-      aside-left-width="350px"
-      aside-left-border="#dcdfe6"
-      aside-left-background="#fff"
-      content-background="#ececec"
+      header-first
+      header-background="#646CFF23"
+      aside-left-width="80px"
+      aside-left-background="#8E96AA23"
     >
-      <template #header>
-        <div></div>
-      </template>
-      <template #aside-left>
-        <div></div>
-      </template>
-      <template #default>
-        <VegaLoremIpsum />
-      </template>
+      <VegaLoremIpsum font-size="14px" padding="0 15px" />
     </VegaLayout>
   </div>
 </template>
@@ -34,6 +24,20 @@ Simple example:
 </script>
 ```
 
+Code above will give you a following result:
+
+<div style="height: 400px">
+  <VegaLayout
+    header-first
+    header-background="var(--vp-custom-block-tip-bg)"
+    aside-left-width="80px"
+    aside-left-background="var(--vp-custom-block-info-bg)"
+  >
+    <VegaLoremIpsum font-size="14px" padding="0 15px" />
+  </VegaLayout>
+</div>
+
+
 ::: info
 
 If you want to create a full-page layout with a fixed header, you need to set `height: 100vh` for the parent DOM element.\
@@ -41,69 +45,60 @@ With this setup, only the content inside `<template #default>` will be scrollabl
 
 :::
 
-Example above will give you a following structure:
-```
-+-------------------------------------+
-| HEADER                              |
-|                                     |
-|------------------------------------++
-|       |                            ||
-| ASIDE | CONTENT                    ||
-|       |                            ||
-|       |                            ||
-|       |                            ||
-|       |                            ||
-|       |             scroll ------->||
-+------------------------------------++
-```
-
 Layouts can be nested:
 ```html
-<div style="height: 100vh">
-  <VegaLayout
-    :header-first="true"
-    header-background="#005689"
-    aside-left-width="350px"
-    aside-left-border="#dcdfe6"
-    aside-left-background="#fff"
-    content-background="#ececec"
-  >
-    <template #header>
-      <div></div>
-    </template>
-    <template #aside-left>
-      <div></div>
-    </template>
-    <template #default>
+<template>
+  <div style="height: 400px">
+    <VegaLayout
+      header-first
+      header-height="50px"
+      header-background="#646CFF23"
+      header-border="#8E96AA23"
+      aside-left-width="80px"
+      aside-left-background="#8E96AA23"
+      aside-left-border="#8E96AA23"
+    >
       <VegaLayout
-        header-border="#dcdfe6"
-        aside-right-width="350px"
-        aside-right-border="#dcdfe6"
+        header-background="#646CFF23"
+        header-height="50px"
+        aside-right-width="80px"
+        aside-right-background="#8E96AA23"
+        aside-right-border="#8E96AA23"
       >
-        <VegaLoremIpsum />
+        <VegaLoremIpsum font-size="14px" padding="0 15px" />
       </VegaLayout>
-    </template>
-  </VegaLayout>
-</div>
+    </VegaLayout>
+  </div>
+</template>
+
+<script setup>
+  import { VegaLayout } from 'vega-ui'
+  import 'vega-ui/dist/style.css'
+</script>
 ```
 Example above will give you a following structure:
-```
-+-----------------------------------------------------------------+
-| HEADER 1                                                        |
-|                                                                 |
-|---------+-------------------------------------------------------|
-| ASIDE 1 | HEADER 2                                    | ASIDE 2 |
-|         |                                             |         |
-|         |---------------------------------------------+         |
-|         | CONTENT 2                                   |         |
-|         |                                             |         |
-|         |                                             |         |
-|         |                                             |         |
-|         |                                             |         |
-|         |                                             |         |
-|         |                                             |         |
-+---------|---------------------------------------------|---------+
-```
+
+<div style="height: 400px">
+  <VegaLayout
+    header-first
+    header-background="var(--vp-custom-block-tip-bg)"
+    header-border="var(--vp-custom-block-info-bg)"
+    header-height="50px"
+    aside-left-width="80px"
+    aside-left-background="var(--vp-custom-block-info-bg)"
+    aside-left-border="var(--vp-custom-block-info-bg)"
+  >
+    <VegaLayout
+      header-background="var(--vp-custom-block-tip-bg)"
+      header-height="50px"
+      aside-right-width="80px"
+      aside-right-background="var(--vp-custom-block-info-bg)"
+      aside-right-border="var(--vp-custom-block-info-bg)"
+    >
+      <VegaLoremIpsum font-size="14px" padding="0 15px" />
+    </VegaLayout>
+  </VegaLayout>
+</div>
 
 ## Props
 ### content-background
@@ -260,3 +255,8 @@ Example
   <div>Bunch of awesome content</div>
 </VegaLayout>
 ```
+
+<script setup>
+import VegaLayout from '../../src/components/VegaLayout.vue'
+import VegaLoremIpsum from '../../src/components/VegaLoremIpsum.vue'
+</script>

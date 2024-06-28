@@ -47,11 +47,22 @@
   </div>
 </template>
 
-<script setup lang="ts"></script>
+<script setup lang="ts">
+export interface Props {
+  fontSize?: string
+  padding?: string
+}
+
+withDefaults(defineProps<Props>(), {
+  fontSize: '20px',
+  padding: '0',
+})
+</script>
 
 <style scoped>
 .text {
   line-height: 40px;
-  font-size: 20px;
+  font-size: v-bind(fontSize);
+  padding: v-bind(padding);
 }
 </style>
