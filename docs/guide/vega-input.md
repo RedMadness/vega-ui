@@ -6,21 +6,20 @@ By default, it uses a text input type, but you can specify other types as needed
 Simple example:
 ```vue
 <vega-input
-  v-model="modelValue"
-  placeholder="Search here"
-  padding="0 7px"
+  placeholder="input"
+  label="label"
+  background-color="var(--vp-custom-block-info-bg)"
   :delay-debounce="800"
-  @focus="focusInput"
-  @blur="blurInput"
+  padding="0 8px 0 8px"
+  width="420px"
+  height="32px"
 >
-  <template #label>
-    <label>Search:</label>
+  <template v-slot:prefix>
+    <slot name="prefix"></slot>
+    <span>prefix</span>
   </template>
-  <template #prefix>
-    <span>🔍</span>
-  </template>
-  <template #postfix>
-    <button @click="clearSearch">Clear</button>
+  <template v-slot:postfix>
+    <span>postfix</span>
   </template>
 </vega-input>
 

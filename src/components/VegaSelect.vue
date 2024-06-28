@@ -7,7 +7,7 @@
       placeholder="Select option"
       label="label"
       :readonly="!searchable"
-      :onClick="!searchable ? toggleDropdown : undefined"
+      @click="handleInputClick"
       @blur="closeDropdown"
       @focus="openDropdown"
     >
@@ -77,8 +77,13 @@ const closeDropdown = () => {
 }
 
 const toggleDropdown = () => {
-  console.log('+')
   dropdownOpen.value = !dropdownOpen.value
+}
+
+const handleInputClick = () => {
+  if (!props.searchable) {
+    toggleDropdown()
+  }
 }
 
 const selectItem = (item: { value: number; label: string }) => {
