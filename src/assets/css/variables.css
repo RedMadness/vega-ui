@@ -3,5 +3,5 @@
   --vega-border-color: var(--vega-gray);
 
   --vega-black: #2A2A35;
-  --vega-gray: #DCDFE6;
+  --vega-gray: rgba(100, 108, 255, .14);
 }
