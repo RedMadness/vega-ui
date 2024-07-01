@@ -68,7 +68,15 @@ const options = ref([
   { value: 7, label: '7S' },
   { value: 8, label: '8S' },
   { value: 9, label: '9S' },
-  { value: 11, label: '10S' },
+  { value: 12, label: '10S' },
+  { value: 13, label: '11S' },
+  { value: 14, label: '12S' },
+  { value: 15, label: '13S' },
+  { value: 16, label: '14S' },
+  { value: 17, label: '15S' },
+  { value: 18, label: '16S' },
+  { value: 19, label: '17S' },
+  { value: 20, label: '18S' },
 ])
 </script>
 

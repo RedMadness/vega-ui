@@ -21,11 +21,27 @@ export interface Option {
 export interface Props {
   items?: Option[]
   isOpen?: boolean
+  backgroundColorDropdown?: string
+  hoverColorDropdown?: string
+  textColorDropdown?: string
+  borderColorDropdown?: string
+  borderRadiusDropdown?: string
+  fontSizeDropdown?: string
+  optionPaddingDropdown?: string
+  transitionDurationDropdown?: string
 }
 
 withDefaults(defineProps<Props>(), {
   items: () => [] as Option[],
   isOpen: false,
+  backgroundColorDropdown: 'transparent',
+  hoverColorDropdown: 'transparent',
+  textColorDropdown: 'inherit',
+  borderColorDropdown: 'inherit',
+  borderRadiusDropdown: '4px',
+  fontSizeDropdown: 'inherit',
+  optionPaddingDropdown: '8px 12px',
+  transitionDurationDropdown: '0.3s',
 })
 
 const emits = defineEmits(['select', 'close'])
@@ -44,26 +60,27 @@ const selectItem = (item: Option) => {
   position: absolute;
   top: 100%;
   left: 0;
-  right: 0;
-  border: 1px solid #ccc;
-  border-radius: 4px;
+  box-shadow: 0 0 0 1px v-bind(borderColorDropdown);
+  border-radius: v-bind(borderRadiusDropdown);
   width: 100%;
-  z-index: 100;
+  z-index: 1;
   box-sizing: border-box;
-  overflow: hidden;
   max-height: 0;
   opacity: 0;
-  transition: all 0.3s ease-in-out;
+  transition: all v-bind(transitionDurationDropdown) ease-in-out;
+  overflow: auto;
+  color: v-bind(textColorDropdown);
+  font-size: v-bind(fontSizeDropdown);
 }
 
 .dropdown-item {
-  padding: 8px 12px;
+  padding: v-bind(optionPaddingDropdown);
   cursor: pointer;
-  background-color: white;
+  background-color: v-bind(backgroundColorDropdown);
 }
 
 .dropdown-item:hover {
-  background-color: #f0f0f0;
+  background-color: v-bind(hoverColorDropdown);
 }
 
 .dropdown.open {

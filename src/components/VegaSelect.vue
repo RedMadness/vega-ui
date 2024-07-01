@@ -34,6 +34,7 @@
     <vega-dropdown
       :items="filteredItems"
       :isOpen="dropdownOpen"
+      background-color-dropdown="white"
       @select="selectItem"
       @close="closeDropdown"
     />
@@ -67,6 +68,16 @@ export interface Props {
   height?: string
   textAlign?: string
   delayDebounce?: number
+  //select
+  isOpen?: boolean
+  backgroundColorDropdown?: string
+  hoverColorDropdown?: string
+  textColorDropdown?: string
+  borderColorDropdown?: string
+  borderRadiusDropdown?: string
+  fontSizeDropdown?: string
+  optionPaddingDropdown?: string
+  transitionDurationDropdown?: string
 }
 
 const props = withDefaults(defineProps<Props>(), {
