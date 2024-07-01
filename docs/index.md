@@ -12,11 +12,11 @@ hero:
       link: /getting-started
 
 features:
-  - title: Feature A
-    details: Lorem ipsum dolor sit amet, consectetur adipiscing elit
-  - title: Feature B
-    details: Lorem ipsum dolor sit amet, consectetur adipiscing elit
-  - title: Feature C
-    details: Lorem ipsum dolor sit amet, consectetur adipiscing elit
+  - title: Lightweight
+    details: No other internal dependency
+  - title: Written in TypeScript
+    details: All components written in TypeScript.
+  - title: State memory
+    details: Components can automatically save their state to local storage.
 ---
 
