@@ -31,26 +31,38 @@ To achieve a link between the sidebar and the toggle button, you must specify th
 ```
 
 ## Props
-### name
-Name of associated sidebar. Used as a key to store state of sidebar in local storage. You can pass any string. Default value is 'vega-sidebar'.
+| Prop                      | Type          | Default        | Description                                                                                            |
+|---------------------------|---------------|----------------|--------------------------------------------------------------------------------------------------------|
+| [name](#name)             | String        | `vega-sidebar` | Name of the associated sidebar. Used as a key to store the state of the sidebar in local storage.      |
+| [show-if](#show-if)       | Boolean\|null | `null`         | Show toggle button only when the associated sidebar is in a certain state.                             |
+| [also-close](#also-close) | Array         | `undefined`    | Automatically close sidebars with given names after changing the state of the main associated sidebar. |
 
-Example:
+### name
+Name of the associated sidebar. Used as a key to store the state of the sidebar in local storage.
+- Type: `String`
+- Default: `vega-sidebar`
+
 ```html
 <VegaSidebarToggle name="left-sidebar-1" />
 ```
 
 ### show-if
+- Type: `Boolean|null`
+- Default: `null`
+
 Show toggle button only when associated sidebar is in certain state.\
 If you want to show toggle button only when sidebar is closed, set `show-if` to "false"".\
-Default value is "null"
 
-Example:
 ```html
 <VegaSidebarToggle :show-if="false" />
 ```
 
 ### also-close
-Automatically close sidebars with given names after changing  the state of main associated sidebar.
+- Type: `Array`
+- Default: `undefined`
+
+Automatically close sidebars with given names after changing the state of main associated sidebar.
+
 ```html
 <VegaSidebarToggle
   name="left-sidebar-1"
@@ -59,6 +71,9 @@ Automatically close sidebars with given names after changing  the state of main 
 ```
 
 ## Slots
+| Slot                | Description                                                         |
+|---------------------|---------------------------------------------------------------------|
+| [default](#default) | Displays the button content, by default contains a vega arrow icon. |
 
 ### default
 Displayed button content. By default contains vega arrow icon.
