@@ -1,6 +1,6 @@
 {
   "name": "vega-ui",
-  "version": "0.2.6",
+  "version": "0.2.7",
   "description": "Vue 3 UI library for rapid prototyping.",
   "keywords": [
     "vue",
