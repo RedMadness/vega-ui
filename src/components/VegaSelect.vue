@@ -46,13 +46,14 @@ import { ref, computed } from 'vue'
 import VegaInput from './VegaInput.vue'
 import VegaDropdown from './VegaDropdown.vue'
 
-export interface Option {
-  [key: string]: any
+export interface Option<T = any> {
+  [key: string]: T
 }
-export interface Props {
+export interface Props<T> {
   searchable?: boolean
   localSearch?: boolean
-  options?: Option[]
+
+  options?: (Option<T> | T)[]
 
   valueField?: string
   labelField?: string
@@ -71,7 +72,7 @@ export interface Props {
   height?: string
   textAlign?: string
   delayDebounce?: number
-  //select props
+
   isOpen?: boolean
   backgroundColorDropdown?: string
   hoverColorDropdown?: string
@@ -83,10 +84,10 @@ export interface Props {
   transitionDurationDropdown?: string
 }
 
-const props = withDefaults(defineProps<Props>(), {
+const props = withDefaults(defineProps<Props<number | string>>(), {
   searchable: false,
   localSearch: false,
-  options: () => [] as Option[],
+  options: () => [] as Option<number | string>[],
 
   valueField: 'value',
   labelField: 'label',
@@ -98,12 +99,22 @@ const searchQuery = ref('')
 const selected = ref<number | null>(null)
 const dropdownOpen = ref(false)
 
-const adaptedOptions = computed(() => {
-  return props.options.map((option) => ({
-    value: option[props.valueField],
-    label: option[props.labelField],
-  }))
-})
+const createOption = (option: Option<number | string> | number | string) => {
+  // Если option не является объектом или равен null, обработка как примитив
+  if (typeof option !== 'object' || option === null) {
+    return { value: option, label: String(option) }
+  }
+
+  // Если option является объектом и содержит необходимые поля
+  if (props.valueField in option && props.labelField in option) {
+    return { value: option[props.valueField], label: option[props.labelField] }
+  }
+
+  // Обработка объектов без необходимых полей или некорректных объектов
+  return { value: '', label: '[Invalid object]' }
+}
+
+const adaptedOptions = computed(() => props.options.map(createOption))
 
 const closeDropdown = () => {
   dropdownOpen.value = false
