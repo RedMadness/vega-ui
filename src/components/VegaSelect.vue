@@ -46,17 +46,17 @@ import { ref, computed } from 'vue'
 import VegaInput from './VegaInput.vue'
 import VegaDropdown from './VegaDropdown.vue'
 
-export interface Option<T = any> {
+export interface Option<T> {
   [key: string]: T
 }
 export interface Props<T> {
   searchable?: boolean
   localSearch?: boolean
 
-  options?: (Option<T> | T)[]
+  options: Array<Option<T> | T>
 
-  valueField?: string
-  labelField?: string
+  valueField?: keyof Option<T>
+  labelField?: keyof Option<T>
 
   placeholder?: string
   fontSize?: string
@@ -87,8 +87,7 @@ export interface Props<T> {
 const props = withDefaults(defineProps<Props<number | string>>(), {
   searchable: false,
   localSearch: false,
-  options: () => [] as Option<number | string>[],
-
+  options: () => [] as (Option<number | string> | number | string)[],
   valueField: 'value',
   labelField: 'label',
 
@@ -96,22 +95,18 @@ const props = withDefaults(defineProps<Props<number | string>>(), {
 })
 
 const searchQuery = ref('')
-const selected = ref<number | null>(null)
+const selected = ref<number | string | null>(null)
 const dropdownOpen = ref(false)
 
 const createOption = (option: Option<number | string> | number | string) => {
-  // Если option не является объектом или равен null, обработка как примитив
-  if (typeof option !== 'object' || option === null) {
+  if (typeof option !== 'object') {
     return { value: option, label: String(option) }
   }
 
-  // Если option является объектом и содержит необходимые поля
-  if (props.valueField in option && props.labelField in option) {
-    return { value: option[props.valueField], label: option[props.labelField] }
-  }
+  const value = option[props.valueField] ?? '[Undefined value]'
+  const label = option[props.labelField] ?? '[Undefined label]'
 
-  // Обработка объектов без необходимых полей или некорректных объектов
-  return { value: '', label: '[Invalid object]' }
+  return { value, label }
 }
 
 const adaptedOptions = computed(() => props.options.map(createOption))
@@ -128,7 +123,7 @@ const handleInputClick = () => {
   toggleDropdown()
 }
 
-const selectItem = (item: Option) => {
+const selectItem = (item: { value: number | string; label: string }) => {
   selected.value = item.value
   searchQuery.value = item.label
   closeDropdown()
