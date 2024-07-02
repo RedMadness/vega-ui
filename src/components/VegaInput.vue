@@ -14,6 +14,7 @@
         @input="debouncedHandleInput"
         @focus="handleFocus"
         @blur="handleBlur"
+        :autocomplete="type === 'password' ? 'on' : 'off'"
       />
       <slot name="postfix"></slot>
     </label>
@@ -22,7 +23,7 @@
 
 <script setup lang="ts">
 export interface Props {
-  type?: string
+  type?: 'text' | 'password' | 'date' | 'datetime-local' | 'email' | 'number' | 'url'
   label?: string
   readonly?: boolean
   placeholder?: string
