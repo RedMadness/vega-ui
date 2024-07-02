@@ -55,24 +55,25 @@ Code above will give you a following result:
 
 Here are the props available for the component. Each prop allows you to customize the input field in various ways, enhancing its functionality and style.
 
-| Prop Name          | Type    | Default                      | Description                                                |
-|--------------------|---------|------------------------------|------------------------------------------------------------|
-| `type`             | String  | `"text"`                     | Specifies the type of input.                               |
-| `placeholder`      | String  | `""`                         | Text to display when the input is empty.                   |
-| `modelValue`       | String  | `""`                         | Value bound to the input and updated via v-model.          |
-| `fontSize`         | String  | `"inherit"`                  | Font size of the input text.                               |
-| `fontColor`        | String  | `"var(--vega-text-color)"`   | Text color of the input.                                   |
-| `placeholderColor` | String  | `"var(--vega-gray)"`         | Color of the placeholder text.                             |
-| `backgroundColor`  | String  | `"none"`                     | Background color of the input.                             |
-| `borderColor`      | String  | `"var(--vega-border-color)"` | Color of the input border.                                 |
-| `hoverBorderColor` | String  | `"var(--vega-border-color)"` | Border color of the input on hover.                        |
-| `focusBorderColor` | String  | `"var(--vega-border-color)"` | Border color of the input when focused.                    |
-| `borderRadius`     | String  | `"4px"`                      | Border radius of the input field.                          |
-| `padding`          | String  | `"10px"`                     | Padding inside the input field.                            |
-| `width`            | String  | `"100%"`                     | Width of the input field.                                  |
-| `height`           | String  | `"auto"`                     | Height of the input field.                                 |
-| `textAlign`        | String  | `"left"`                     | Text alignment within the input field.                     |
-| `delayDebounce`    | Number  | `300`                        | Milliseconds to delay the input event for debouncing.      |
+| Prop Name          | Type   | Default                      | Description                                           |
+|--------------------|--------|------------------------------|-------------------------------------------------------|
+| `type`             | String | `"text"`                     | Specifies the type of input.                          |
+| `placeholder`      | String | `""`                         | Text to display when the input is empty.              |
+| `label`            | String | `''`                         | Label above the input.                                |
+| `modelValue`       | String | `""`                         | Value bound to the input and updated via v-model.     |
+| `fontSize`         | String | `"inherit"`                  | Font size of the input text.                          |
+| `fontColor`        | String | `"var(--vega-text-color)"`   | Text color of the input.                              |
+| `placeholderColor` | String | `"var(--vega-gray)"`         | Color of the placeholder text.                        |
+| `backgroundColor`  | String | `"none"`                     | Background color of the input.                        |
+| `borderColor`      | String | `"var(--vega-border-color)"` | Color of the input border.                            |
+| `hoverBorderColor` | String | `"var(--vega-border-color)"` | Border color of the input on hover.                   |
+| `focusBorderColor` | String | `"var(--vega-border-color)"` | Border color of the input when focused.               |
+| `borderRadius`     | String | `"4px"`                      | Border radius of the input field.                     |
+| `padding`          | String | `"10px"`                     | Padding inside the input field.                       |
+| `width`            | String | `"100%"`                     | Width of the input field.                             |
+| `height`           | String | `"auto"`                     | Height of the input field.                            |
+| `textAlign`        | String | `"left"`                     | Text alignment within the input field.                |
+| `delayDebounce`    | Number | `300`                        | Milliseconds to delay the input event for debouncing. |
 
 ### Events
 

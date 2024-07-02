@@ -1,6 +1,8 @@
 <template>
   <div class="input-container">
-    <slot name="label"></slot>
+    <slot name="label">
+      <span v-if="label">{{ label }}</span>
+    </slot>
     <label class="input-wrapper">
       <slot name="prefix"></slot>
       <input
@@ -21,6 +23,7 @@
 <script setup lang="ts">
 export interface Props {
   type?: string
+  label?: string
   readonly?: boolean
   placeholder?: string
   modelValue?: string
@@ -41,6 +44,7 @@ export interface Props {
 
 const props = withDefaults(defineProps<Props>(), {
   type: 'text',
+  label: '',
   readonly: false,
   placeholder: '',
   modelValue: '',
