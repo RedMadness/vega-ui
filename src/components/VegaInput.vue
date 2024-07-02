@@ -23,7 +23,7 @@
 
 <script setup lang="ts">
 export interface Props {
-  type?: 'text' | 'password' | 'date' | 'datetime-local' | 'email' | 'number' | 'url'
+  type?: 'text' | 'password' | 'date' | 'email' | 'number' | 'url'
   label?: string
   readonly?: boolean
   placeholder?: string
