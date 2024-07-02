@@ -1,15 +1,26 @@
 <template>
   <div class="select-container">
     <slot name="label"></slot>
-
     <vega-input
       v-model="searchQuery"
-      placeholder="Select option"
       label="label"
+      :placeholder="placeholder"
       :readonly="!searchable"
+      :font-size="fontSize"
+      :font-color="fontColor"
+      :placeholder-color="placeholderColor"
+      :background-color="backgroundColor"
+      :hover-border-color="hoverBorderColor"
+      :focus-border-color="focusBorderColor"
+      :border-color="borderColor"
+      :border-radius="borderRadius"
+      :padding="padding"
+      :width="width"
+      :height="height"
+      :text-align="textAlign"
+      :delay-debounce="delayDebounce"
       @click="handleInputClick"
       @blur="closeDropdown"
-      @focus="openDropdown"
     >
       <template v-slot:prefix>
         <slot name="prefix"></slot>
@@ -20,37 +31,60 @@
     </vega-input>
 
     <!-- dropdown -->
-    <div class="dropdown" :class="{ open: dropdownOpen }" @blur="closeDropdown" tabindex="-1">
-      <div
-        v-for="item in filteredItems"
-        :key="item.value"
-        class="dropdown-item"
-        @click="selectItem(item)"
-        @mousedown.prevent
-      >
-        {{ item.label }}
-      </div>
-    </div>
+    <vega-dropdown
+      :items="filteredItems"
+      :isOpen="dropdownOpen"
+      background-color-dropdown="white"
+      @select="selectItem"
+      @close="closeDropdown"
+    />
   </div>
 </template>
 
 <script lang="ts" setup>
-import { ref, computed, PropType } from 'vue'
+import { ref, computed } from 'vue'
 import VegaInput from './VegaInput.vue'
+import VegaDropdown from './VegaDropdown.vue'
 
-const props = defineProps({
-  searchable: {
-    type: Boolean,
-    default: false,
-  },
-  localSearch: {
-    type: Boolean,
-    default: false,
-  },
-  options: {
-    type: Array as PropType<Array<{ value: number; label: string }>>,
-    required: true,
-  },
+export interface Option {
+  value: number
+  label: string
+}
+export interface Props {
+  searchable?: boolean
+  localSearch?: boolean
+  options?: Option[]
+  placeholder?: string
+  fontSize?: string
+  fontColor?: string
+  placeholderColor?: string
+  backgroundColor?: string
+  hoverBorderColor?: string
+  focusBorderColor?: string
+  borderColor?: string
+  borderRadius?: string
+  padding?: string
+  width?: string
+  height?: string
+  textAlign?: string
+  delayDebounce?: number
+  //select
+  isOpen?: boolean
+  backgroundColorDropdown?: string
+  hoverColorDropdown?: string
+  textColorDropdown?: string
+  borderColorDropdown?: string
+  borderRadiusDropdown?: string
+  fontSizeDropdown?: string
+  optionPaddingDropdown?: string
+  transitionDurationDropdown?: string
+}
+
+const props = withDefaults(defineProps<Props>(), {
+  searchable: false,
+  localSearch: false,
+  options: () => [] as Option[],
+  placeholder: 'select',
 })
 
 const searchQuery = ref('')
@@ -68,10 +102,6 @@ const filteredItems = computed(() => {
   return props.options
 })
 
-const openDropdown = () => {
-  dropdownOpen.value = true
-}
-
 const closeDropdown = () => {
   dropdownOpen.value = false
 }
@@ -81,12 +111,10 @@ const toggleDropdown = () => {
 }
 
 const handleInputClick = () => {
-  if (!props.searchable) {
-    toggleDropdown()
-  }
+  toggleDropdown()
 }
 
-const selectItem = (item: { value: number; label: string }) => {
+const selectItem = (item: Option) => {
   selected.value = item.value
   searchQuery.value = item.label
   closeDropdown()
@@ -96,36 +124,5 @@ const selectItem = (item: { value: number; label: string }) => {
 <style scoped>
 .select-container {
   position: relative;
-}
-
-.dropdown {
-  position: absolute;
-  top: 100%;
-  left: 0;
-  right: 0;
-  border: 1px solid #ccc;
-  border-radius: 4px;
-  width: 100%;
-  z-index: 100;
-  box-sizing: border-box;
-  overflow: hidden;
-  max-height: 0;
-  opacity: 0;
-  transition: all 0.3s ease-in-out;
-}
-
-.dropdown-item {
-  padding: 8px 12px;
-  cursor: pointer;
-  background-color: white;
-}
-
-.dropdown-item:hover {
-  background-color: #f0f0f0;
-}
-
-.dropdown.open {
-  max-height: 200px;
-  opacity: 1;
 }
 </style>
