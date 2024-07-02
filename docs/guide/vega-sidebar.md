@@ -43,8 +43,9 @@ Demo
 </div>
 
 <script setup>
-  import { VegaLayout, VegaSidebar } from 'vega-ui'
   import VegaLoremIpsum from '../../src/components/VegaLoremIpsum.vue'
+  import VegaSidebar from '../../src/components/VegaSidebar.vue'
+  import VegaLayout from '../../src/components/VegaLayout.vue'
   import 'vega-ui/dist/style.css'
 </script>
 
