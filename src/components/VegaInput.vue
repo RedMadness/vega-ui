@@ -1,6 +1,8 @@
 <template>
   <div class="input-container">
-    <slot name="label"></slot>
+    <slot name="label">
+      <span v-if="label">{{ label }}</span>
+    </slot>
     <label class="input-wrapper">
       <slot name="prefix"></slot>
       <input
@@ -12,6 +14,7 @@
         @input="debouncedHandleInput"
         @focus="handleFocus"
         @blur="handleBlur"
+        :autocomplete="type === 'password' ? 'on' : 'off'"
       />
       <slot name="postfix"></slot>
     </label>
@@ -20,7 +23,8 @@
 
 <script setup lang="ts">
 export interface Props {
-  type?: string
+  type?: 'text' | 'password' | 'date' | 'email' | 'number' | 'url'
+  label?: string
   readonly?: boolean
   placeholder?: string
   modelValue?: string
@@ -41,6 +45,7 @@ export interface Props {
 
 const props = withDefaults(defineProps<Props>(), {
   type: 'text',
+  label: '',
   readonly: false,
   placeholder: '',
   modelValue: '',
