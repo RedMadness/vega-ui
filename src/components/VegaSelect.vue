@@ -32,7 +32,7 @@
 
     <!-- dropdown -->
     <vega-dropdown
-      :items="filteredItems"
+      :items="adaptedOptions"
       :isOpen="dropdownOpen"
       background-color-dropdown="white"
       @select="selectItem"
@@ -47,13 +47,16 @@ import VegaInput from './VegaInput.vue'
 import VegaDropdown from './VegaDropdown.vue'
 
 export interface Option {
-  value: number
-  label: string
+  [key: string]: any
 }
 export interface Props {
   searchable?: boolean
   localSearch?: boolean
   options?: Option[]
+
+  valueField?: string
+  labelField?: string
+
   placeholder?: string
   fontSize?: string
   fontColor?: string
@@ -68,7 +71,7 @@ export interface Props {
   height?: string
   textAlign?: string
   delayDebounce?: number
-  //select
+  //select props
   isOpen?: boolean
   backgroundColorDropdown?: string
   hoverColorDropdown?: string
@@ -84,6 +87,10 @@ const props = withDefaults(defineProps<Props>(), {
   searchable: false,
   localSearch: false,
   options: () => [] as Option[],
+
+  valueField: 'value',
+  labelField: 'label',
+
   placeholder: 'select',
 })
 
@@ -91,15 +98,11 @@ const searchQuery = ref('')
 const selected = ref<number | null>(null)
 const dropdownOpen = ref(false)
 
-const filteredItems = computed(() => {
-  // filtering with available localSearch and have value in searchQuery
-  if (props.searchable && props.localSearch && searchQuery.value) {
-    return props.options.filter((item) =>
-      item.label.toLowerCase().includes(searchQuery.value.toLowerCase())
-    )
-  }
-  // return all options
-  return props.options
+const adaptedOptions = computed(() => {
+  return props.options.map((option) => ({
+    value: option[props.valueField],
+    label: option[props.labelField],
+  }))
 })
 
 const closeDropdown = () => {
