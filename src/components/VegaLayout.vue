@@ -101,6 +101,7 @@ withDefaults(defineProps<Props>(), {
   overflow: auto;
   padding: 0;
   z-index: 0;
+  background: v-bind(contentBackground);
 }
 
 .vega-header-config {
@@ -113,7 +114,6 @@ withDefaults(defineProps<Props>(), {
 }
 .vega-content {
   height: calc(100% - var(--vega-header-height));
-  background: v-bind(contentBackground);
 }
 .vega-aside-left-config {
   width: v-bind(asideLeftWidth);
