@@ -29,5 +29,6 @@ svg {
   display: block;
   cursor: pointer;
   transform: rotate(v-bind(rotate));
+  transition: transform 150ms ease-in;
 }
 </style>

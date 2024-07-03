@@ -3,7 +3,6 @@
     <slot name="label"></slot>
     <vega-input
       v-model="searchQuery"
-      label="label"
       :placeholder="placeholder"
       :readonly="!searchable"
       :font-size="fontSize"

@@ -10,7 +10,9 @@
           </div>
           <div>
             <slot name="toggle-button">
-              <vega-sidebar-toggle :name="name" />
+              <vega-sidebar-toggle :name="name">
+                <slot name="toggle-icon" />
+              </vega-sidebar-toggle>
             </slot>
           </div>
         </div>

@@ -142,6 +142,7 @@ Background of the sidebar. Accepts HEX, RGB values.
 | [header](#header)               | Custom content for the sidebar header. |
 | [title](#title)                 | Custom title content.                  |
 | [toggle-button](#toggle-button) | Custom toggle button content.          |
+| [toggle-icon](#toggle-icon)     | Custom toggle button icon.             |
 
 ### default
 Sidebar content
@@ -185,6 +186,18 @@ Example
 <VegaSidebar>
   <template #toggle-button>
     <button>click me!</button>
+  </template>
+</VegaSidebar>
+```
+
+### toggle-icon
+Custom toggle icon.
+
+Example
+```html
+<VegaSidebar>
+  <template #toggle-button-icon>
+    <MyCustomIcon />
   </template>
 </VegaSidebar>
 ```

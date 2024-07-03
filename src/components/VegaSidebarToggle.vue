@@ -1,8 +1,7 @@
 <template>
   <div class="vega-sidebar-toggle" @click="onClick" v-if="displayed">
     <slot :show="show">
-      <div v-if="show"><vega-icon-arrow /></div>
-      <div v-else><vega-icon-arrow rotate="-90deg" /></div>
+      <vega-icon-arrow :rotate="show ? '90deg' : '-90deg'" />
     </slot>
   </div>
 </template>
