@@ -35,6 +35,7 @@
       :items="adaptedOptions"
       :isOpen="dropdownOpen"
       @select="selectItem"
+      @loadMoreItems="loadMoreItems"
       @close="closeDropdown"
     />
   </div>
@@ -130,6 +131,10 @@ const selectItem = (item: { value: number | string; label: string }) => {
   closeDropdown()
 
   // emits('update:modelValue', item) // под вопросом, а надо ли объект целый эмитить?
+}
+
+const loadMoreItems = () => {
+  console.log('vega-select loadMore')
 }
 </script>
 
