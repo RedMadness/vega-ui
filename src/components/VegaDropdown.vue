@@ -13,13 +13,15 @@
 </template>
 
 <script lang="ts" setup>
-export interface Option {
-  value: number
-  label: string
+export interface Option<T> {
+  [key: string]: T
 }
 
-export interface Props {
-  items?: Option[]
+export interface Props<T> {
+  items?: Array<Option<T>>
+  valueField?: keyof Option<T>
+  labelField?: keyof Option<T>
+
   isOpen?: boolean
   backgroundColorDropdown?: string
   hoverColorDropdown?: string
@@ -31,8 +33,10 @@ export interface Props {
   transitionDurationDropdown?: string
 }
 
-withDefaults(defineProps<Props>(), {
-  items: () => [] as Option[],
+const props = withDefaults(defineProps<Props<number | string>>(), {
+  items: () => [] as Option<number | string>[],
+  valueField: 'value',
+  labelField: 'label',
   isOpen: false,
   backgroundColorDropdown: 'transparent',
   hoverColorDropdown: 'transparent',
@@ -50,8 +54,8 @@ const closeDropdown = () => {
   emits('close')
 }
 
-const selectItem = (item: Option) => {
-  emits('select', item)
+const selectItem = (item: Option<number | string>) => {
+  emits('select', { value: item[props.valueField], label: item[props.labelField] })
 }
 </script>
 

@@ -32,7 +32,7 @@
 
     <!-- dropdown -->
     <vega-dropdown
-      :items="filteredItems"
+      :items="adaptedOptions"
       :isOpen="dropdownOpen"
       background-color-dropdown="white"
       @select="selectItem"
@@ -46,14 +46,18 @@ import { ref, computed } from 'vue'
 import VegaInput from './VegaInput.vue'
 import VegaDropdown from './VegaDropdown.vue'
 
-export interface Option {
-  value: number
-  label: string
+export interface Option<T> {
+  [key: string]: T
 }
-export interface Props {
+export interface Props<T> {
   searchable?: boolean
   localSearch?: boolean
-  options?: Option[]
+
+  options: Array<Option<T> | T>
+
+  valueField?: keyof Option<T>
+  labelField?: keyof Option<T>
+
   placeholder?: string
   fontSize?: string
   fontColor?: string
@@ -68,7 +72,7 @@ export interface Props {
   height?: string
   textAlign?: string
   delayDebounce?: number
-  //select
+
   isOpen?: boolean
   backgroundColorDropdown?: string
   hoverColorDropdown?: string
@@ -80,27 +84,32 @@ export interface Props {
   transitionDurationDropdown?: string
 }
 
-const props = withDefaults(defineProps<Props>(), {
+const props = withDefaults(defineProps<Props<number | string>>(), {
   searchable: false,
   localSearch: false,
-  options: () => [] as Option[],
+  options: () => [] as (Option<number | string> | number | string)[],
+  valueField: 'value',
+  labelField: 'label',
+
   placeholder: 'select',
 })
 
 const searchQuery = ref('')
-const selected = ref<number | null>(null)
+const selected = ref<number | string | null>(null)
 const dropdownOpen = ref(false)
 
-const filteredItems = computed(() => {
-  // filtering with available localSearch and have value in searchQuery
-  if (props.searchable && props.localSearch && searchQuery.value) {
-    return props.options.filter((item) =>
-      item.label.toLowerCase().includes(searchQuery.value.toLowerCase())
-    )
+const createOption = (option: Option<number | string> | number | string) => {
+  if (typeof option !== 'object') {
+    return { value: option, label: String(option) }
   }
-  // return all options
-  return props.options
-})
+
+  const value = option[props.valueField] ?? '[Undefined value]'
+  const label = option[props.labelField] ?? '[Undefined label]'
+
+  return { value, label }
+}
+
+const adaptedOptions = computed(() => props.options.map(createOption))
 
 const closeDropdown = () => {
   dropdownOpen.value = false
@@ -114,7 +123,7 @@ const handleInputClick = () => {
   toggleDropdown()
 }
 
-const selectItem = (item: Option) => {
+const selectItem = (item: { value: number | string; label: string }) => {
   selected.value = item.value
   searchQuery.value = item.label
   closeDropdown()

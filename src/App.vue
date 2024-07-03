@@ -26,15 +26,20 @@
 
           <template #aside-right>
             <vega-sidebar name="vega-sidebar-right" title="SIDEBAR TITLE 2">
-              <form>
-                <vega-input type="password" />
-              </form>
-              <vega-select v-model="inputValue" :options="options" searchable>
+              <vega-select
+                v-model="inputValue"
+                :options="options"
+                :searchable="true"
+                value-field="id"
+                label-field="text"
+              >
                 <template #label>
                   <label>Label</label>
                 </template>
                 <!-- prefix -->
-                <template #prefix> pref </template>
+                <template #prefix>
+                  <VegaIconArrow />
+                </template>
 
                 <!-- postfix -->
                 <template #postfix>
@@ -56,30 +61,38 @@ import VegaSidebar from './components/VegaSidebar.vue'
 import VegaSelect from './components/VegaSelect.vue'
 import { ref } from 'vue'
 import VegaIconArrow from './components/VegaIconArrow.vue'
-import VegaInput from './components/VegaInput.vue'
 
-const inputValue = ref({ value: null, label: 'Select option' })
+const inputValue = ref('')
+
+// const options = ref([
+//   { value: 1, label: 'one' },
+//   { value: 2, label: '2S' },
+//   { value: 3, label: '3S' },
+//   { value: 4, label: '4S' },
+//   { value: 5, label: '5S' },
+//   { value: 6, label: '6S' },
+//   { value: 7, label: '7S' },
+//   { value: 8, label: '8S' },
+//   { value: 9, label: '9S' },
+//   { value: 12, label: '10S' },
+//   { value: 13, label: '11S' },
+//   { value: 14, label: '12S' },
+//   { value: 15, label: '13S' },
+//   { value: 16, label: '14S' },
+//   { value: 17, label: '15S' },
+//   { value: 18, label: '16S' },
+//   { value: 19, label: '17S' },
+//   { value: 20, label: '18S' },
+// ])
 
 const options = ref([
-  { value: 1, label: 'one' },
-  { value: 2, label: '2S' },
-  { value: 3, label: '3S' },
-  { value: 4, label: '4S' },
-  { value: 5, label: '5S' },
-  { value: 6, label: '6S' },
-  { value: 7, label: '7S' },
-  { value: 8, label: '8S' },
-  { value: 9, label: '9S' },
-  { value: 12, label: '10S' },
-  { value: 13, label: '11S' },
-  { value: 14, label: '12S' },
-  { value: 15, label: '13S' },
-  { value: 16, label: '14S' },
-  { value: 17, label: '15S' },
-  { value: 18, label: '16S' },
-  { value: 19, label: '17S' },
-  { value: 20, label: '18S' },
+  { id: 1, text: 'one', color: '#005689' },
+  { id: 2, text: '2S', color: 'red' },
 ])
+
+// const options = ref([0, 1])
+
+// const options = ref(['option1', 'option2', 'option3'])
 </script>
 
 <style scoped></style>
