@@ -7,7 +7,7 @@
       @click="selectItem(item)"
       @mousedown.prevent
     >
-      {{ item.label }}
+      {{ item[labelField] }}
     </div>
   </div>
 </template>
@@ -38,7 +38,7 @@ const props = withDefaults(defineProps<Props<number | string>>(), {
   valueField: 'value',
   labelField: 'label',
   isOpen: false,
-  backgroundColorDropdown: 'transparent',
+  backgroundColorDropdown: 'white', //заменить на транспарент
   hoverColorDropdown: 'transparent',
   textColorDropdown: 'inherit',
   borderColorDropdown: 'inherit',

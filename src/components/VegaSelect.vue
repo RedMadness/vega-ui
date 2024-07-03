@@ -34,7 +34,6 @@
     <vega-dropdown
       :items="adaptedOptions"
       :isOpen="dropdownOpen"
-      background-color-dropdown="white"
       @select="selectItem"
       @close="closeDropdown"
     />
@@ -94,6 +93,8 @@ const props = withDefaults(defineProps<Props<number | string>>(), {
   placeholder: 'select',
 })
 
+// const emits = defineEmits(['update:modelValue']) //под вопросом а надо ли
+
 const searchQuery = ref('')
 const selected = ref<number | string | null>(null)
 const dropdownOpen = ref(false)
@@ -127,6 +128,8 @@ const selectItem = (item: { value: number | string; label: string }) => {
   selected.value = item.value
   searchQuery.value = item.label
   closeDropdown()
+
+  // emits('update:modelValue', item) // под вопросом, а надо ли объект целый эмитить?
 }
 </script>
 

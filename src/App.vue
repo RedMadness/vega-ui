@@ -33,9 +33,6 @@
                 value-field="id"
                 label-field="text"
               >
-                <template #label>
-                  <label>Label</label>
-                </template>
                 <!-- prefix -->
                 <template #prefix>
                   <VegaIconArrow />
