@@ -2,7 +2,7 @@
   <div class="select-container">
     <slot name="label"></slot>
     <vega-input
-      v-model="searchQuery"
+      v-model="inputModel"
       label="label"
       :placeholder="placeholder"
       :readonly="!searchable"
@@ -20,7 +20,8 @@
       :text-align="textAlign"
       :delay-debounce="delayDebounce"
       @click="handleInputClick"
-      @blur="closeDropdown"
+      @focus="handleFocus"
+      @blur="handleBlur"
     >
       <template v-slot:prefix>
         <slot name="prefix"></slot>
@@ -31,6 +32,7 @@
     </vega-input>
 
     <!-- dropdown -->
+    <!-- TODO add props for dropdown from select -->
     <vega-dropdown
       :items="adaptedOptions"
       :isOpen="dropdownOpen"
@@ -42,7 +44,7 @@
 </template>
 
 <script lang="ts" setup>
-import { ref, computed } from 'vue'
+import { ref, computed, watch } from 'vue'
 import VegaInput from './VegaInput.vue'
 import VegaDropdown from './VegaDropdown.vue'
 
@@ -51,7 +53,6 @@ export interface Option<T> {
 }
 export interface Props<T> {
   searchable?: boolean
-  localSearch?: boolean
 
   options: Array<Option<T> | T>
 
@@ -86,7 +87,6 @@ export interface Props<T> {
 
 const props = withDefaults(defineProps<Props<number | string>>(), {
   searchable: false,
-  localSearch: false,
   options: () => [] as (Option<number | string> | number | string)[],
   valueField: 'value',
   labelField: 'label',
@@ -94,9 +94,10 @@ const props = withDefaults(defineProps<Props<number | string>>(), {
   placeholder: 'select',
 })
 
-// const emits = defineEmits(['update:modelValue']) //под вопросом а надо ли
-
 const searchQuery = ref('')
+const displayValue = ref('')
+const inputModel = ref('')
+const isFocused = ref(false)
 const selected = ref<number | string | null>(null)
 const dropdownOpen = ref(false)
 
@@ -121,17 +122,43 @@ const toggleDropdown = () => {
   dropdownOpen.value = !dropdownOpen.value
 }
 
+const handleFocus = () => {
+  isFocused.value = true
+}
+
+const handleBlur = () => {
+  isFocused.value = false
+  dropdownOpen.value = false
+  if (!searchQuery.value || !props.searchable) {
+    inputModel.value = displayValue.value
+  }
+}
+
 const handleInputClick = () => {
   toggleDropdown()
 }
 
 const selectItem = (item: { value: number | string; label: string }) => {
   selected.value = item.value
-  searchQuery.value = item.label
-  closeDropdown()
-
-  // emits('update:modelValue', item) // под вопросом, а надо ли объект целый эмитить?
+  displayValue.value = item.label
+  if (props.searchable) {
+    searchQuery.value = ''
+  } else {
+    searchQuery.value = item.label
+  }
+  handleBlur()
 }
+
+watch(isFocused, (newVal) => {
+  console.log(newVal, 'newVal isFocused')
+  inputModel.value = newVal && props.searchable ? searchQuery.value : displayValue.value
+})
+
+watch(searchQuery, (newVal) => {
+  if (isFocused.value && props.searchable) {
+    inputModel.value = newVal
+  }
+})
 
 const loadMoreItems = () => {
   console.log('vega-select loadMore')

@@ -48,7 +48,7 @@ const props = withDefaults(defineProps<Props<number | string>>(), {
   valueField: 'value',
   labelField: 'label',
   isOpen: false,
-  backgroundColorDropdown: 'white', //заменить на транспарент
+  backgroundColorDropdown: 'white', //TODO change transparent
   hoverColorDropdown: 'transparent',
   textColorDropdown: 'inherit',
   borderColorDropdown: 'inherit',
@@ -57,7 +57,7 @@ const props = withDefaults(defineProps<Props<number | string>>(), {
   optionPaddingDropdown: '8px 12px',
   transitionDurationDropdown: '0.3s',
 
-  infiniteScroll: true, //заменить на фалсе
+  infiniteScroll: true, //TODO change false
 })
 
 const emits = defineEmits(['select', 'close', 'loadMoreItems'])
