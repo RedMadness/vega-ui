@@ -145,13 +145,13 @@ const handleInputClick = () => {
 const selectItem = (item: { value: number | string; label: string }) => {
   selected.value = item.value
   displayValue.value = item.label
-  isBlur.value = true
   if (props.searchable) {
     searchQuery.value = ''
   } else {
     searchQuery.value = item.label
   }
   handleBlur()
+  isBlur.value = true
 }
 
 watch(isFocused, (newVal) => {
