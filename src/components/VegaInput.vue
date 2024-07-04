@@ -3,7 +3,7 @@
     <slot name="label">
       <span v-if="label">{{ label }}</span>
     </slot>
-    <label class="input-wrapper">
+    <div class="input-wrapper">
       <slot name="prefix"></slot>
       <input
         ref="inputRef"
@@ -18,12 +18,12 @@
         :autocomplete="type === 'password' ? 'on' : 'off'"
       />
       <slot name="postfix"></slot>
-    </label>
+    </div>
   </div>
 </template>
 
 <script setup lang="ts">
-import { watch, ref } from 'vue'
+import { ref } from 'vue'
 
 export interface Props {
   type?: 'text' | 'password' | 'date' | 'email' | 'number' | 'url'
@@ -44,8 +44,6 @@ export interface Props {
   height?: string
   textAlign?: string
   delayDebounce?: number
-
-  isBlur?: boolean
 }
 
 const props = withDefaults(defineProps<Props>(), {
@@ -94,15 +92,6 @@ const debouncedHandleInput = debounce((event: Event) => {
   const inputElement = event.target as HTMLInputElement
   emit('update:modelValue', inputElement.value)
 }, props.delayDebounce)
-
-watch(
-  () => props.isBlur,
-  (newVal) => {
-    if (newVal) {
-      inputRef.value?.blur()
-    }
-  }
-)
 </script>
 
 <style scoped>
