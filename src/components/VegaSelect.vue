@@ -127,11 +127,13 @@ const handleFocus = () => {
 }
 
 const handleBlur = () => {
+  //нужно чтобы после выбора опции срабатывал внутри компонента input
   isFocused.value = false
   dropdownOpen.value = false
   if (!searchQuery.value || !props.searchable) {
     inputModel.value = displayValue.value
   }
+  console.log('VegaSelect.vue handleBlur')
 }
 
 const handleInputClick = () => {
@@ -146,11 +148,10 @@ const selectItem = (item: { value: number | string; label: string }) => {
   } else {
     searchQuery.value = item.label
   }
-  handleBlur()
+  handleBlur() //тут убрать прямой вызов метода, нужно сделать через инпут
 }
 
 watch(isFocused, (newVal) => {
-  console.log(newVal, 'newVal isFocused')
   inputModel.value = newVal && props.searchable ? searchQuery.value : displayValue.value
 })
 

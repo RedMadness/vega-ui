@@ -70,9 +70,12 @@ function handleFocus(event: FocusEvent) {
   emit('focus', event)
 }
 
-function handleBlur(event: FocusEvent) {
+function handleBlur(event?: FocusEvent) {
   emit('blur', event)
+  console.log('VegaInput.vue handleBlur')
 }
+
+defineExpose({ handleBlur })
 
 function debounce(func: (...args: any[]) => void, wait: number) {
   let timeoutId: ReturnType<typeof setTimeout> | null = null
