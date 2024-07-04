@@ -6,13 +6,7 @@
     @blur="closeDropdown"
     tabindex="-1"
   >
-    <div
-      v-for="item in items"
-      :key="item.value"
-      class="dropdown-item"
-      @click="selectItem(item)"
-      @mousedown.prevent
-    >
+    <div v-for="item in items" :key="item.value" class="dropdown-item" @click="selectItem(item)">
       {{ item[labelField] }}
     </div>
   </div>

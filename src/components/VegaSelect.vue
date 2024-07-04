@@ -19,7 +19,6 @@
       :height="height"
       :text-align="textAlign"
       :delay-debounce="delayDebounce"
-      :isBlur="isBlur"
       @click="handleInputClick"
       @focus="handleFocus"
       @blur="handleBlur"
@@ -31,7 +30,6 @@
         <slot name="postfix"></slot>
       </template>
     </vega-input>
-
     <!-- dropdown -->
     <!-- TODO add props for dropdown from select -->
     <vega-dropdown
@@ -102,8 +100,6 @@ const isFocused = ref(false)
 const selected = ref<number | string | null>(null)
 const dropdownOpen = ref(false)
 
-const isBlur = ref(false)
-
 const createOption = (option: Option<number | string> | number | string) => {
   if (typeof option !== 'object') {
     return { value: option, label: String(option) }
@@ -117,6 +113,10 @@ const createOption = (option: Option<number | string> | number | string) => {
 
 const adaptedOptions = computed(() => props.options.map(createOption))
 
+const updateInputModel = () => {
+  inputModel.value = isFocused.value && props.searchable ? searchQuery.value : displayValue.value
+}
+
 const closeDropdown = () => {
   dropdownOpen.value = false
 }
@@ -127,15 +127,16 @@ const toggleDropdown = () => {
 
 const handleFocus = () => {
   isFocused.value = true
+  updateInputModel()
 }
 
 const handleBlur = () => {
   isFocused.value = false
   dropdownOpen.value = false
+  updateInputModel()
   if (!searchQuery.value || !props.searchable) {
     inputModel.value = displayValue.value
   }
-  isBlur.value = false
 }
 
 const handleInputClick = () => {
@@ -147,16 +148,9 @@ const selectItem = (item: { value: number | string; label: string }) => {
   displayValue.value = item.label
   if (props.searchable) {
     searchQuery.value = ''
-  } else {
-    searchQuery.value = item.label
   }
   handleBlur()
-  isBlur.value = true
 }
-
-watch(isFocused, (newVal) => {
-  inputModel.value = newVal && props.searchable ? searchQuery.value : displayValue.value
-})
 
 watch(searchQuery, (newVal) => {
   if (isFocused.value && props.searchable) {
