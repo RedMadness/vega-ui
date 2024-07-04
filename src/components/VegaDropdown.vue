@@ -1,5 +1,11 @@
 <template>
-  <div class="dropdown" :class="{ open: isOpen }" @blur="closeDropdown" tabindex="-1">
+  <div
+    class="dropdown"
+    :class="{ open: isOpen }"
+    @scroll="handleScroll"
+    @blur="closeDropdown"
+    tabindex="-1"
+  >
     <div
       v-for="item in items"
       :key="item.value"
@@ -7,12 +13,14 @@
       @click="selectItem(item)"
       @mousedown.prevent
     >
-      {{ item.label }}
+      {{ item[labelField] }}
     </div>
   </div>
 </template>
 
 <script lang="ts" setup>
+import { ref } from 'vue'
+
 export interface Option<T> {
   [key: string]: T
 }
@@ -31,6 +39,8 @@ export interface Props<T> {
   fontSizeDropdown?: string
   optionPaddingDropdown?: string
   transitionDurationDropdown?: string
+
+  infiniteScroll?: boolean
 }
 
 const props = withDefaults(defineProps<Props<number | string>>(), {
@@ -38,7 +48,7 @@ const props = withDefaults(defineProps<Props<number | string>>(), {
   valueField: 'value',
   labelField: 'label',
   isOpen: false,
-  backgroundColorDropdown: 'transparent',
+  backgroundColorDropdown: 'white', //TODO change transparent
   hoverColorDropdown: 'transparent',
   textColorDropdown: 'inherit',
   borderColorDropdown: 'inherit',
@@ -46,16 +56,56 @@ const props = withDefaults(defineProps<Props<number | string>>(), {
   fontSizeDropdown: 'inherit',
   optionPaddingDropdown: '8px 12px',
   transitionDurationDropdown: '0.3s',
+
+  infiniteScroll: true, //TODO change false
 })
 
-const emits = defineEmits(['select', 'close'])
+const emits = defineEmits(['select', 'close', 'loadMoreItems'])
+
+const loading = ref(false)
+const reachedBottom = ref(false)
 
 const closeDropdown = () => {
+  resetScrollState()
   emits('close')
 }
 
 const selectItem = (item: Option<number | string>) => {
   emits('select', { value: item[props.valueField], label: item[props.labelField] })
+}
+
+function resetScrollState() {
+  reachedBottom.value = false
+  loading.value = false
+}
+
+function checkScrollPosition(
+  scrollTop: number,
+  clientHeight: number,
+  scrollHeight: number
+): boolean {
+  return scrollTop + clientHeight >= scrollHeight - 10
+}
+
+function triggerDataLoad() {
+  if (props.infiniteScroll && !loading.value) {
+    loading.value = true
+    emits('loadMoreItems')
+  }
+}
+
+const handleScroll = (event: Event) => {
+  const { scrollTop, clientHeight, scrollHeight } = event.target as HTMLElement
+
+  if (!checkScrollPosition(scrollTop, clientHeight, scrollHeight)) {
+    resetScrollState()
+    return
+  }
+
+  if (reachedBottom.value) return
+
+  reachedBottom.value = true
+  triggerDataLoad()
 }
 </script>
 

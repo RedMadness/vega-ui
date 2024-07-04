@@ -6,6 +6,7 @@
     <label class="input-wrapper">
       <slot name="prefix"></slot>
       <input
+        ref="inputRef"
         :type="type"
         :readonly="readonly"
         class="vega-input"
@@ -22,6 +23,8 @@
 </template>
 
 <script setup lang="ts">
+import { watch, ref } from 'vue'
+
 export interface Props {
   type?: 'text' | 'password' | 'date' | 'email' | 'number' | 'url'
   label?: string
@@ -41,6 +44,8 @@ export interface Props {
   height?: string
   textAlign?: string
   delayDebounce?: number
+
+  isBlur?: boolean
 }
 
 const props = withDefaults(defineProps<Props>(), {
@@ -70,7 +75,8 @@ function handleFocus(event: FocusEvent) {
   emit('focus', event)
 }
 
-function handleBlur(event: FocusEvent) {
+const inputRef = ref<HTMLElement | null>(null)
+function handleBlur(event?: FocusEvent) {
   emit('blur', event)
 }
 
@@ -88,6 +94,15 @@ const debouncedHandleInput = debounce((event: Event) => {
   const inputElement = event.target as HTMLInputElement
   emit('update:modelValue', inputElement.value)
 }, props.delayDebounce)
+
+watch(
+  () => props.isBlur,
+  (newVal) => {
+    if (newVal) {
+      inputRef.value?.blur()
+    }
+  }
+)
 </script>
 
 <style scoped>
