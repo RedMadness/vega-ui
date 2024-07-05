@@ -3,7 +3,7 @@
     <slot name="label">
       <span v-if="label">{{ label }}</span>
     </slot>
-    <div class="input-wrapper">
+    <div class="input-wrapper" @click="clickWrapper">
       <slot name="prefix"></slot>
       <input
         ref="inputRef"
@@ -67,10 +67,14 @@ const props = withDefaults(defineProps<Props>(), {
   delayDebounce: 300,
 })
 
-const emit = defineEmits(['focus', 'blur', 'update:modelValue'])
+const emit = defineEmits(['focus', 'blur', 'update:modelValue', 'clickWrapper'])
 
 function handleFocus(event: FocusEvent) {
   emit('focus', event)
+}
+
+function clickWrapper() {
+  emit('clickWrapper')
 }
 
 const inputRef = ref<HTMLElement | null>(null)

@@ -19,7 +19,7 @@
       :height="height"
       :text-align="textAlign"
       :delay-debounce="delayDebounce"
-      @click="handleInputClick"
+      @clickWrapper="handleInputClick"
       @focus="handleFocus"
       @blur="handleBlur"
     >
@@ -61,7 +61,6 @@ export interface Option<T> {
 }
 export interface Props<T> {
   searchable?: boolean
-  // options: Array<Option<T> | T>
   valueField?: keyof Option<T>
   labelField?: keyof Option<T>
   placeholder?: string
@@ -202,6 +201,13 @@ watch(searchQuery, (newVal) => {
 const loadMoreItems = () => {
   console.log('vega-select loadMore')
 }
+
+watch(inputModel, (newVal, oldVal) => {
+  console.log('inputModel changed:', newVal)
+  if (isFocused.value && props.searchable && newVal !== oldVal) {
+    callApi()
+  }
+})
 </script>
 
 <style scoped>
