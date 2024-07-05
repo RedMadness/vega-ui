@@ -47,17 +47,23 @@ import { ref, computed, watch } from 'vue'
 import VegaInput from './VegaInput.vue'
 import VegaDropdown from './VegaDropdown.vue'
 
+interface ApiResponse<T> {
+  data: {
+    data: T[]
+    meta: {
+      total: number
+    }
+  }
+}
+
 export interface Option<T> {
   [key: string]: T
 }
 export interface Props<T> {
   searchable?: boolean
-
-  options: Array<Option<T> | T>
-
+  // options: Array<Option<T> | T>
   valueField?: keyof Option<T>
   labelField?: keyof Option<T>
-
   placeholder?: string
   fontSize?: string
   fontColor?: string
@@ -72,7 +78,6 @@ export interface Props<T> {
   height?: string
   textAlign?: string
   delayDebounce?: number
-
   isOpen?: boolean
   backgroundColorDropdown?: string
   hoverColorDropdown?: string
@@ -82,16 +87,19 @@ export interface Props<T> {
   fontSizeDropdown?: string
   optionPaddingDropdown?: string
   transitionDurationDropdown?: string
+
+  remoteHandler?: (params: any) => Promise<ApiResponse<Option<string | number> | string | number>>
 }
 
 const props = withDefaults(defineProps<Props<number | string>>(), {
   searchable: false,
-  options: () => [] as (Option<number | string> | number | string)[],
   valueField: 'value',
   labelField: 'label',
 
   placeholder: 'select',
 })
+
+const emits = defineEmits(['update:modelValue'])
 
 const searchQuery = ref('')
 const displayValue = ref('')
@@ -100,18 +108,50 @@ const isFocused = ref(false)
 const selected = ref<number | string | null>(null)
 const dropdownOpen = ref(false)
 
-const createOption = (option: Option<number | string> | number | string) => {
-  if (typeof option !== 'object') {
+const loading = ref(false)
+const total = ref(0)
+const page = ref(1)
+
+const options = ref<(Option<string | number> | string | number)[]>([])
+
+const createOption = (option: Option<string | number> | number | string) => {
+  if (typeof option === 'object') {
+    return {
+      value: option[props.valueField] ?? '[Undefined value]',
+      label: option[props.labelField] ?? '[Undefined label]',
+    }
+  } else {
     return { value: option, label: String(option) }
   }
-
-  const value = option[props.valueField] ?? '[Undefined value]'
-  const label = option[props.labelField] ?? '[Undefined label]'
-
-  return { value, label }
 }
 
-const adaptedOptions = computed(() => props.options.map(createOption))
+const adaptedOptions = computed(() => options.value.map(createOption))
+
+function callApi() {
+  if (props.remoteHandler) {
+    loading.value = true
+    props
+      .remoteHandler({
+        search: inputModel.value,
+        page: page.value,
+      })
+      .then((response) => {
+        options.value = response.data.data ?? []
+        console.log(options.value, 'response.data.data')
+
+        total.value = response.data.meta?.total || 0
+        console.log(total.value, 'total.data.meta')
+      })
+      .catch((error) => {
+        console.error('API call failed:', error)
+      })
+      .finally(() => {
+        loading.value = false
+      })
+  }
+}
+
+callApi() //запилить на повторный фокус
 
 const updateInputModel = () => {
   inputModel.value = isFocused.value && props.searchable ? searchQuery.value : displayValue.value
@@ -150,6 +190,7 @@ const selectItem = (item: { value: number | string; label: string }) => {
     searchQuery.value = ''
   }
   handleBlur()
+  emits('update:modelValue', item)
 }
 
 watch(searchQuery, (newVal) => {

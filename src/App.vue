@@ -26,7 +26,12 @@
 
           <template #aside-right>
             <vega-sidebar name="vega-sidebar-right" title="SIDEBAR TITLE 2">
-              <vega-select v-model="inputValue" :options="options" :searchable="true">
+              <vega-select
+                v-model="inputValue"
+                :options="options"
+                :searchable="true"
+                :remoteHandler="testOptionsApi"
+              >
                 <!-- prefix -->
                 <template #prefix>
                   <VegaIconArrow />
@@ -84,6 +89,51 @@ const options = ref([
 // const options = ref([0, 1])
 
 // const options = ref(['option1', 'option2', 'option3'])
+interface ApiResponse<T> {
+  data: {
+    data: T[]
+    meta: {
+      total: number
+    }
+  }
+}
+
+export interface Option<T> {
+  [key: string]: T
+}
+
+const testOptionsApi = (): Promise<ApiResponse<number | string | Option<number | string>>> => {
+  return new Promise((resolve) => {
+    setTimeout(() => {
+      const dataType = Math.random()
+      if (dataType < 0.33) {
+        resolve({
+          data: {
+            data: [
+              { label: 'test1', value: 1 },
+              { label: 'test2', value: 2 },
+            ],
+            meta: { total: 2 },
+          },
+        })
+      } else if (dataType < 0.66) {
+        resolve({
+          data: {
+            data: [0, 1],
+            meta: { total: 2 },
+          },
+        })
+      } else {
+        resolve({
+          data: {
+            data: ['option1', 'option2', 'option3'],
+            meta: { total: 2 },
+          },
+        })
+      }
+    }, 1000)
+  })
+}
 </script>
 
 <style scoped></style>
