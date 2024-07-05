@@ -150,8 +150,6 @@ function callApi() {
   }
 }
 
-callApi() //запилить на повторный фокус
-
 const updateInputModel = () => {
   inputModel.value = isFocused.value && props.searchable ? searchQuery.value : displayValue.value
 }
@@ -167,6 +165,7 @@ const toggleDropdown = () => {
 const handleFocus = () => {
   isFocused.value = true
   updateInputModel()
+  callApi()
 }
 
 const handleBlur = () => {
