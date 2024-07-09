@@ -1,6 +1,13 @@
 <template>
   <div>
-    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <svg
+      :class="{ transition: transition }"
+      width="24"
+      height="24"
+      viewBox="0 0 24 24"
+      fill="none"
+      xmlns="http://www.w3.org/2000/svg"
+    >
       <path
         d="M16 10L12 14L8 10"
         :stroke="color"
@@ -16,11 +23,13 @@
 export interface Props {
   color?: string
   rotate?: string
+  transition?: boolean
 }
 
 withDefaults(defineProps<Props>(), {
   color: '#B5C7D3',
   rotate: '90deg',
+  transition: true,
 })
 </script>
 
@@ -29,6 +38,8 @@ svg {
   display: block;
   cursor: pointer;
   transform: rotate(v-bind(rotate));
+}
+.transition {
   transition: transform 150ms ease-in;
 }
 </style>
