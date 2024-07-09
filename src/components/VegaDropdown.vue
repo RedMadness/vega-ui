@@ -6,7 +6,13 @@
     @blur="closeDropdown"
     tabindex="-1"
   >
-    <div v-for="item in items" :key="item.value" class="dropdown-item" @click="selectItem(item)">
+    <div
+      v-for="(item, index) in items"
+      v-show="!props.infiniteScroll || index < maxVisibleOptions"
+      :key="item.value"
+      class="dropdown-item"
+      @click="selectItem(item)"
+    >
       {{ item[labelField] }}
     </div>
   </div>
@@ -35,6 +41,8 @@ export interface Props<T> {
   transitionDurationDropdown?: string
 
   infiniteScroll?: boolean
+
+  maxVisibleOptions?: number
 }
 
 const props = withDefaults(defineProps<Props<number | string>>(), {
@@ -42,7 +50,7 @@ const props = withDefaults(defineProps<Props<number | string>>(), {
   valueField: 'value',
   labelField: 'label',
   isOpen: false,
-  backgroundColorDropdown: 'white', //TODO change transparent
+  backgroundColorDropdown: 'transparent', //TODO change transparent
   hoverColorDropdown: 'transparent',
   textColorDropdown: 'inherit',
   borderColorDropdown: 'inherit',
@@ -52,12 +60,15 @@ const props = withDefaults(defineProps<Props<number | string>>(), {
   transitionDurationDropdown: '0.3s',
 
   infiniteScroll: true, //TODO change false
+
+  maxVisibleOptions: 25,
 })
 
-const emits = defineEmits(['select', 'close', 'loadMoreItems'])
+const emits = defineEmits(['select', 'close', 'loadMoreItems', 'loadPreviousItems'])
 
 const loading = ref(false)
 const reachedBottom = ref(false)
+const reachedTop = ref(false)
 
 const closeDropdown = () => {
   resetScrollState()
@@ -65,41 +76,44 @@ const closeDropdown = () => {
 }
 
 const selectItem = (item: Option<number | string>) => {
-  emits('select', { value: item[props.valueField], label: item[props.labelField] })
+  emits('select', {
+    [props.valueField]: item[props.valueField],
+    [props.labelField]: item[props.labelField],
+  })
 }
 
 function resetScrollState() {
-  reachedBottom.value = false
+  reachedBottom.value = reachedTop.value = loading.value = false
   loading.value = false
 }
 
-function checkScrollPosition(
-  scrollTop: number,
-  clientHeight: number,
-  scrollHeight: number
-): boolean {
-  return scrollTop + clientHeight >= scrollHeight - 10
+const handleUpperBoundary = (scrollTop: number) => {
+  if (scrollTop !== 0 || loading.value || reachedTop.value) return
+
+  reachedTop.value = true
+  loading.value = true
+  emits('loadPreviousItems')
 }
 
-function triggerDataLoad() {
-  if (props.infiniteScroll && !loading.value) {
-    loading.value = true
-    emits('loadMoreItems')
-  }
+const handleLowerBoundary = (scrollTop: number, clientHeight: number, scrollHeight: number) => {
+  const isBottomReached = scrollTop + clientHeight >= scrollHeight - 10
+  if (!isBottomReached || loading.value || reachedBottom.value) return
+
+  reachedBottom.value = true
+  loading.value = true
+  emits('loadMoreItems')
 }
 
 const handleScroll = (event: Event) => {
+  if (!props.infiniteScroll) return
+
   const { scrollTop, clientHeight, scrollHeight } = event.target as HTMLElement
+  handleUpperBoundary(scrollTop)
+  handleLowerBoundary(scrollTop, clientHeight, scrollHeight)
 
-  if (!checkScrollPosition(scrollTop, clientHeight, scrollHeight)) {
+  if (scrollTop > 0 && scrollTop + clientHeight < scrollHeight - 10) {
     resetScrollState()
-    return
   }
-
-  if (reachedBottom.value) return
-
-  reachedBottom.value = true
-  triggerDataLoad()
 }
 </script>
 

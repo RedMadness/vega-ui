@@ -35,9 +35,14 @@
     <vega-dropdown
       :items="adaptedOptions"
       :isOpen="dropdownOpen"
+      :max-visible-options="perPage"
+      :backgroundColorDropdown="backgroundColorDropdown"
+      @load-more-items="loadMoreItems"
+      @load-previous-items="loadPreviousItems"
       @select="selectItem"
-      @loadMoreItems="loadMoreItems"
       @close="closeDropdown"
+      :value-field="valueField"
+      :label-field="labelField"
     />
   </div>
 </template>
@@ -110,14 +115,15 @@ const dropdownOpen = ref(false)
 const loading = ref(false)
 const total = ref(0)
 const page = ref(1)
+const perPage = ref(10)
 
 const options = ref<(Option<string | number> | string | number)[]>([])
 
 const createOption = (option: Option<string | number> | number | string) => {
   if (typeof option === 'object') {
     return {
-      value: option[props.valueField] ?? '[Undefined value]',
-      label: option[props.labelField] ?? '[Undefined label]',
+      [props.valueField]: option[props.valueField] ?? '[Undefined value]',
+      [props.labelField]: option[props.labelField] ?? '[Undefined label]',
     }
   } else {
     return { value: option, label: String(option) }
@@ -128,18 +134,18 @@ const adaptedOptions = computed(() => options.value.map(createOption))
 
 function callApi() {
   if (props.remoteHandler) {
+    console.log(page.value, 'callApi')
     loading.value = true
     props
       .remoteHandler({
         search: inputModel.value,
         page: page.value,
+        perPage: perPage.value,
       })
       .then((response) => {
         options.value = response.data.data ?? []
-        console.log(options.value, 'response.data.data')
 
         total.value = response.data.meta?.total || 0
-        console.log(total.value, 'total.data.meta')
       })
       .catch((error) => {
         console.error('API call failed:', error)
@@ -181,14 +187,29 @@ const handleInputClick = () => {
   toggleDropdown()
 }
 
-const selectItem = (item: { value: number | string; label: string }) => {
-  selected.value = item.value
-  displayValue.value = item.label
+const selectItem = (item: Option<number | string>) => {
+  selected.value = item[props.valueField]
+  displayValue.value = `${item[props.labelField]}`
+
   if (props.searchable) {
     searchQuery.value = ''
   }
   handleBlur()
   emits('update:modelValue', item)
+}
+
+const loadMoreItems = () => {
+  if (total.value > page.value * perPage.value) {
+    page.value += 1
+    callApi()
+  }
+}
+
+const loadPreviousItems = () => {
+  if (page.value > 1) {
+    page.value -= 1
+    callApi()
+  }
 }
 
 watch(searchQuery, (newVal) => {
@@ -197,12 +218,7 @@ watch(searchQuery, (newVal) => {
   }
 })
 
-const loadMoreItems = () => {
-  console.log('vega-select loadMore')
-}
-
 watch(inputModel, (newVal, oldVal) => {
-  console.log('inputModel changed:', newVal)
   if (isFocused.value && props.searchable && newVal !== oldVal) {
     callApi()
   }

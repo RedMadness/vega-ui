@@ -28,9 +28,9 @@
             <vega-sidebar name="vega-sidebar-right" title="SIDEBAR TITLE 2">
               <vega-select
                 v-model="inputValue"
-                :options="options"
                 :searchable="true"
                 :remoteHandler="testOptionsApi"
+                background-color-dropdown="green"
               >
                 <!-- prefix -->
                 <template #prefix>
@@ -60,26 +60,26 @@ import VegaIconArrow from './components/VegaIconArrow.vue'
 
 const inputValue = ref('')
 
-const options = ref([
-  { value: 1, label: 'one' },
-  { value: 2, label: '2S' },
-  { value: 3, label: '3S' },
-  { value: 4, label: '4S' },
-  { value: 5, label: '5S' },
-  { value: 6, label: '6S' },
-  { value: 7, label: '7S' },
-  { value: 8, label: '8S' },
-  { value: 9, label: '9S' },
-  { value: 12, label: '10S' },
-  { value: 13, label: '11S' },
-  { value: 14, label: '12S' },
-  { value: 15, label: '13S' },
-  { value: 16, label: '14S' },
-  { value: 17, label: '15S' },
-  { value: 18, label: '16S' },
-  { value: 19, label: '17S' },
-  { value: 20, label: '18S' },
-])
+// const options = ref([
+//   { id: 1, title: 'one' },
+//   { id: 2, title: '2S' },
+//   { id: 3, title: '3S' },
+//   { id: 4, title: '4S' },
+//   { id: 5, title: '5S' },
+//   { id: 6, title: '6S' },
+//   { id: 7, title: '7S' },
+//   { id: 8, title: '8S' },
+//   { id: 9, title: '9S' },
+//   { id: 12, title: '10S' },
+//   { id: 13, title: '11S' },
+//   { id: 14, title: '12S' },
+//   { id: 15, title: '13S' },
+//   { id: 16, title: '14S' },
+//   { id: 17, title: '15S' },
+//   { id: 18, title: '16S' },
+//   { id: 19, title: '17S' },
+//   { id: 20, title: '18S' },
+// ])
 
 // const options = ref([
 //   { id: 1, text: 'one', color: '#005689' },
@@ -102,6 +102,7 @@ export interface Option<T> {
   [key: string]: T
 }
 
+// test types data
 const testOptionsApi = (): Promise<ApiResponse<number | string | Option<number | string>>> => {
   return new Promise((resolve) => {
     setTimeout(() => {
@@ -110,8 +111,24 @@ const testOptionsApi = (): Promise<ApiResponse<number | string | Option<number |
         resolve({
           data: {
             data: [
-              { label: 'test1', value: 1 },
-              { label: 'test2', value: 2 },
+              { value: 1, label: 'one' },
+              { value: 2, label: '2S' },
+              { value: 3, label: '3S' },
+              { value: 4, label: '4S' },
+              { value: 5, label: '5S' },
+              { value: 6, label: '6S' },
+              { value: 7, label: '7S' },
+              { value: 8, label: '8S' },
+              { value: 9, label: '9S' },
+              { value: 12, label: '10S' },
+              { value: 13, label: '11S' },
+              { value: 14, label: '12S' },
+              { value: 15, label: '13S' },
+              { value: 16, label: '14S' },
+              { value: 17, label: '15S' },
+              { value: 18, label: '16S' },
+              { value: 19, label: '17S' },
+              { value: 20, label: '18S' },
             ],
             meta: { total: 2 },
           },
@@ -120,20 +137,63 @@ const testOptionsApi = (): Promise<ApiResponse<number | string | Option<number |
         resolve({
           data: {
             data: [0, 1],
-            meta: { total: 2 },
+            meta: { total: 1 },
           },
         })
       } else {
         resolve({
           data: {
             data: ['option1', 'option2', 'option3'],
-            meta: { total: 2 },
+            meta: { total: 1 },
           },
         })
       }
     }, 1000)
   })
 }
+
+//test infinity scroll
+// const testOptionsApi = (params: {
+//   page: number
+//   perPage: number
+// }): Promise<ApiResponse<Option<number | string>>> => {
+//   const data = [
+//     { id: 1, title: 'one' },
+//     { id: 2, title: '2S' },
+//     { id: 3, title: '3S' },
+//     { id: 4, title: '4S' },
+//     { id: 5, title: '5S' },
+//     { id: 6, title: '6S' },
+//     { id: 7, title: '7S' },
+//     { id: 8, title: '8S' },
+//     { id: 9, title: '9S' },
+//     { id: 12, title: '10S' },
+//     { id: 13, title: '11S' },
+//     { id: 14, title: '12S' },
+//     { id: 15, title: '13S' },
+//     { id: 16, title: '14S' },
+//     { id: 17, title: '15S' },
+//     { id: 18, title: '16S' },
+//     { id: 19, title: '17S' },
+//     { id: 20, title: '18S' },
+//   ]
+//
+//   return new Promise((resolve) => {
+//     setTimeout(() => {
+//       const page = params.page - 1
+//       const perPage = params.perPage
+//       const offset = page * perPage
+//       const paginatedData = data.slice(offset, offset + perPage)
+//
+//       resolve({
+//         data: {
+//           data: paginatedData,
+//           meta: { total: data.length },
+//         },
+//       })
+//     }, 1000)
+//   })
+// }
 </script>
 
 <style scoped></style>
