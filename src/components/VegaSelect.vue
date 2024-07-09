@@ -37,6 +37,7 @@
       :isOpen="dropdownOpen"
       :max-visible-options="perPage"
       :backgroundColorDropdown="backgroundColorDropdown"
+      :hover-color-dropdown="hoverColorDropdown"
       @load-more-items="loadMoreItems"
       @load-previous-items="loadPreviousItems"
       @select="selectItem"
@@ -115,7 +116,7 @@ const dropdownOpen = ref(false)
 const loading = ref(false)
 const total = ref(0)
 const page = ref(1)
-const perPage = ref(10)
+const perPage = ref(25)
 
 const options = ref<(Option<string | number> | string | number)[]>([])
 
@@ -134,13 +135,12 @@ const adaptedOptions = computed(() => options.value.map(createOption))
 
 function callApi() {
   if (props.remoteHandler) {
-    console.log(page.value, 'callApi')
     loading.value = true
     props
       .remoteHandler({
         search: inputModel.value,
         page: page.value,
-        perPage: perPage.value,
+        per_page: perPage.value,
       })
       .then((response) => {
         options.value = response.data.data ?? []
@@ -220,6 +220,7 @@ watch(searchQuery, (newVal) => {
 
 watch(inputModel, (newVal, oldVal) => {
   if (isFocused.value && props.searchable && newVal !== oldVal) {
+    page.value = 1
     callApi()
   }
 })

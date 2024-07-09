@@ -125,7 +125,9 @@ const handleScroll = (event: Event) => {
   box-shadow: 0 0 0 1px v-bind(borderColorDropdown);
   border-radius: v-bind(borderRadiusDropdown);
   width: 100%;
+
   z-index: 1;
+
   box-sizing: border-box;
   max-height: 0;
   opacity: 0;
