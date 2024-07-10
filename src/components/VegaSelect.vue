@@ -184,7 +184,6 @@ const handleFocus = () => {
   const previousValue = inputModel.value
   updateInputModel()
   if (inputModel.value === previousValue) {
-    console.log('handleFocus')
     callApi()
   }
 }
@@ -216,7 +215,6 @@ const selectItem = (item: Option<number | string>) => {
 const loadMoreItems = () => {
   if (total.value > page.value * perPage.value) {
     page.value += 1
-    console.log('loadMoreItems')
     callApi()
   }
 }
@@ -228,21 +226,21 @@ watch(searchQuery, (newVal) => {
 })
 
 watch(inputModel, (newVal, oldVal) => {
-  if (isFocused.value && props.searchable && newVal !== oldVal) {
-    if (!staticOptions || staticOptions.length === 0) {
-      // Очистка и загрузка данных только если статические опции отсутствуют
-      options.value = []
-      page.value = 1
-      console.log('inputModel watch')
-      callApi()
-    }
+  if (
+    isFocused.value &&
+    props.searchable &&
+    newVal !== oldVal &&
+    (!staticOptions || staticOptions.length === 0)
+  ) {
+    options.value = []
+    page.value = 1
+    callApi()
   }
 })
 
-onMounted(loadOptions)
-
-// Следите за изменениями статических опций или функции удаленного вызова
 watch([() => props.staticOptions, () => props.remoteHandler], loadOptions)
+
+onMounted(loadOptions)
 </script>
 
 <style scoped>
