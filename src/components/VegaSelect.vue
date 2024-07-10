@@ -35,11 +35,9 @@
     <vega-dropdown
       :items="adaptedOptions"
       :isOpen="dropdownOpen"
-      :max-visible-options="perPage"
       :backgroundColorDropdown="backgroundColorDropdown"
       :hover-color-dropdown="hoverColorDropdown"
       @load-more-items="loadMoreItems"
-      @load-previous-items="loadPreviousItems"
       @select="selectItem"
       @close="closeDropdown"
       :value-field="valueField"
@@ -143,7 +141,8 @@ function callApi() {
         per_page: perPage.value,
       })
       .then((response) => {
-        options.value = response.data.data ?? []
+        const newOptions = response.data.data ?? []
+        options.value = [...options.value, ...newOptions]
 
         total.value = response.data.meta?.total || 0
       })
@@ -162,6 +161,7 @@ const updateInputModel = () => {
 
 const closeDropdown = () => {
   dropdownOpen.value = false
+  options.value = []
 }
 
 const toggleDropdown = () => {
@@ -170,8 +170,11 @@ const toggleDropdown = () => {
 
 const handleFocus = () => {
   isFocused.value = true
+  const previousValue = inputModel.value
   updateInputModel()
-  callApi()
+  if (inputModel.value === previousValue) {
+    callApi()
+  }
 }
 
 const handleBlur = () => {
@@ -205,13 +208,6 @@ const loadMoreItems = () => {
   }
 }
 
-const loadPreviousItems = () => {
-  if (page.value > 1) {
-    page.value -= 1
-    callApi()
-  }
-}
-
 watch(searchQuery, (newVal) => {
   if (isFocused.value && props.searchable) {
     inputModel.value = newVal
@@ -220,6 +216,7 @@ watch(searchQuery, (newVal) => {
 
 watch(inputModel, (newVal, oldVal) => {
   if (isFocused.value && props.searchable && newVal !== oldVal) {
+    options.value = []
     page.value = 1
     callApi()
   }

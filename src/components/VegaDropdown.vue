@@ -6,13 +6,7 @@
     @blur="closeDropdown"
     tabindex="-1"
   >
-    <div
-      v-for="(item, index) in items"
-      v-show="!props.infiniteScroll || index < maxVisibleOptions"
-      :key="item.value"
-      class="dropdown-item"
-      @click="selectItem(item)"
-    >
+    <div v-for="item in items" :key="item.value" class="dropdown-item" @click="selectItem(item)">
       {{ item[labelField] }}
     </div>
   </div>
@@ -42,7 +36,7 @@ export interface Props<T> {
 
   infiniteScroll?: boolean
 
-  maxVisibleOptions?: number
+  // maxVisibleOptions?: number
 }
 
 const props = withDefaults(defineProps<Props<number | string>>(), {
@@ -61,7 +55,7 @@ const props = withDefaults(defineProps<Props<number | string>>(), {
 
   infiniteScroll: true, //TODO change false
 
-  maxVisibleOptions: 25,
+  // maxVisibleOptions: 25,
 })
 
 const emits = defineEmits(['select', 'close', 'loadMoreItems', 'loadPreviousItems'])
