@@ -47,7 +47,7 @@
 </template>
 
 <script lang="ts" setup>
-import { ref, computed, watch } from 'vue'
+import { ref, computed, watch, onMounted } from 'vue'
 import VegaInput from './VegaInput.vue'
 import VegaDropdown from './VegaDropdown.vue'
 
@@ -92,6 +92,8 @@ export interface Props<T> {
   transitionDurationDropdown?: string
 
   remoteHandler?: (params: any) => Promise<ApiResponse<Option<string | number> | string | number>>
+
+  staticOptions?: Option<T>[]
 }
 
 const props = withDefaults(defineProps<Props<number | string>>(), {
@@ -117,6 +119,14 @@ const page = ref(1)
 const perPage = ref(25)
 
 const options = ref<(Option<string | number> | string | number)[]>([])
+
+const { staticOptions } = props
+
+const loadOptions = () => {
+  if (staticOptions && staticOptions.length > 0) {
+    options.value = staticOptions.map(createOption)
+  }
+}
 
 const createOption = (option: Option<string | number> | number | string) => {
   if (typeof option === 'object') {
@@ -162,6 +172,7 @@ const updateInputModel = () => {
 const closeDropdown = () => {
   dropdownOpen.value = false
   options.value = []
+  loadOptions()
 }
 
 const toggleDropdown = () => {
@@ -173,6 +184,7 @@ const handleFocus = () => {
   const previousValue = inputModel.value
   updateInputModel()
   if (inputModel.value === previousValue) {
+    console.log('handleFocus')
     callApi()
   }
 }
@@ -204,6 +216,7 @@ const selectItem = (item: Option<number | string>) => {
 const loadMoreItems = () => {
   if (total.value > page.value * perPage.value) {
     page.value += 1
+    console.log('loadMoreItems')
     callApi()
   }
 }
@@ -216,11 +229,20 @@ watch(searchQuery, (newVal) => {
 
 watch(inputModel, (newVal, oldVal) => {
   if (isFocused.value && props.searchable && newVal !== oldVal) {
-    options.value = []
-    page.value = 1
-    callApi()
+    if (!staticOptions || staticOptions.length === 0) {
+      // Очистка и загрузка данных только если статические опции отсутствуют
+      options.value = []
+      page.value = 1
+      console.log('inputModel watch')
+      callApi()
+    }
   }
 })
+
+onMounted(loadOptions)
+
+// Следите за изменениями статических опций или функции удаленного вызова
+watch([() => props.staticOptions, () => props.remoteHandler], loadOptions)
 </script>
 
 <style scoped>

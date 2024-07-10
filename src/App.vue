@@ -44,6 +44,25 @@
                   <VegaIconArrow />
                 </template>
               </vega-select>
+
+              <vega-select
+                v-model="inputValue2"
+                :searchable="true"
+                :static-options="options"
+                background-color-dropdown="green"
+                value-field="id"
+                label-field="title"
+              >
+                <!-- prefix -->
+                <template #prefix>
+                  <VegaIconArrow />
+                </template>
+
+                <!-- postfix -->
+                <template #postfix>
+                  <VegaIconArrow />
+                </template>
+              </vega-select>
             </vega-sidebar>
           </template>
         </vega-layout>
@@ -61,6 +80,7 @@ import { ref } from 'vue'
 import VegaIconArrow from './components/VegaIconArrow.vue'
 
 const inputValue = ref('')
+const inputValue2 = ref('')
 
 // const options = ref([
 //   { id: 1, title: 'one' },
@@ -83,10 +103,10 @@ const inputValue = ref('')
 //   { id: 20, title: '18S' },
 // ])
 
-// const options = ref([
-//   { id: 1, text: 'one', color: '#005689' },
-//   { id: 2, text: '2S', color: 'red' },
-// ])
+const options = ref([
+  { id: 1, title: 'one', color: '#005689' },
+  { id: 2, title: '2S', color: 'red' },
+])
 
 // const options = ref([0, 1])
 
