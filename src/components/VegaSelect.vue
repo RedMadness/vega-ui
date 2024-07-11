@@ -4,7 +4,7 @@
     <vega-input
       v-model="inputModel"
       :label="label"
-      :placeholder="placeholder"
+      :placeholder="dynamicPlaceholder"
       :readonly="!searchable"
       :font-size="fontSize"
       :font-color="fontColor"
@@ -82,7 +82,9 @@ export interface Props<T> {
   searchable?: boolean
   valueField?: keyof Option<T>
   labelField?: keyof Option<T>
+
   placeholder?: string
+
   fontSize?: string
   fontColor?: string
   placeholderColor?: string
@@ -117,7 +119,7 @@ const props = withDefaults(defineProps<Props<number | string>>(), {
   valueField: 'value',
   labelField: 'label',
 
-  placeholder: 'select',
+  placeholder: 'Select value',
   label: '',
 })
 
@@ -138,6 +140,8 @@ const perPage = ref(25)
 const options = ref<(Option<string | number> | string | number)[]>([])
 
 const { staticOptions } = props
+
+const dynamicPlaceholder = ref(props.placeholder)
 
 const loadOptions = () => {
   if (staticOptions && staticOptions.length > 0) {
@@ -191,6 +195,8 @@ const updateInputModel = () => {
 
 const handleInputClear = () => {
   inputModel.value = ''
+  displayValue.value = ''
+  dynamicPlaceholder.value = props.placeholder
   emits('update:modelValue', '')
 }
 
@@ -207,6 +213,7 @@ const toggleDropdown = () => {
 const handleFocus = () => {
   isFocused.value = true
   const previousValue = inputModel.value
+  dynamicPlaceholder.value = displayValue.value || props.placeholder
   updateInputModel()
   if (inputModel.value === previousValue) {
     callApi()
@@ -217,8 +224,8 @@ const handleBlur = () => {
   isFocused.value = false
   dropdownOpen.value = false
   updateInputModel()
-  if (!searchQuery.value || !props.searchable) {
-    inputModel.value = displayValue.value
+  if (!inputModel.value) {
+    dynamicPlaceholder.value = props.placeholder
   }
 }
 

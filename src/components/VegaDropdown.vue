@@ -111,7 +111,7 @@ const handleScroll = (event: Event) => {
 <style scoped>
 .dropdown {
   position: absolute;
-  top: 100%;
+  top: 115%;
   left: 0;
   box-shadow: 0 0 0 1px v-bind(borderColorDropdown);
   border-radius: v-bind(borderRadiusDropdown);

@@ -28,7 +28,7 @@
             <vega-sidebar name="vega-sidebar-right" title="SIDEBAR TITLE 2" width-min="350px">
               <vega-select
                 v-model="inputValue"
-                :searchable="true"
+                :searchable="false"
                 :remoteHandler="testOptionsApi"
                 background-color-dropdown="green"
                 value-field="id"
