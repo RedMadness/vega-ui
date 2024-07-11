@@ -17,6 +17,9 @@
         @blur="handleBlur"
         :autocomplete="type === 'password' ? 'on' : 'off'"
       />
+      <span v-if="clearable && modelValue" class="clear-button" @click.stop="clearInput"
+        ><slot name="clear-icon">&#10005;</slot>
+      </span>
       <slot name="postfix"></slot>
     </div>
   </div>
@@ -44,6 +47,8 @@ export interface Props {
   height?: string
   textAlign?: string
   delayDebounce?: number
+
+  clearable?: boolean
 }
 
 const props = withDefaults(defineProps<Props>(), {
@@ -65,9 +70,11 @@ const props = withDefaults(defineProps<Props>(), {
   height: 'auto',
   textAlign: 'left',
   delayDebounce: 300,
+
+  clearable: true,
 })
 
-const emit = defineEmits(['focus', 'blur', 'update:modelValue', 'clickWrapper'])
+const emit = defineEmits(['focus', 'blur', 'update:modelValue', 'clickWrapper', 'clear'])
 
 function handleFocus(event: FocusEvent) {
   emit('focus', event)
@@ -80,6 +87,11 @@ function clickWrapper() {
 const inputRef = ref<HTMLElement | null>(null)
 function handleBlur(event?: FocusEvent) {
   emit('blur', event)
+}
+
+function clearInput() {
+  // event.stopPropagation()
+  emit('clear')
 }
 
 function debounce(func: (...args: any[]) => void, wait: number) {
@@ -143,5 +155,20 @@ const debouncedHandleInput = debounce((event: Event) => {
   flex-direction: column;
   gap: 8px;
   width: v-bind(width);
+}
+
+.clear-button {
+  cursor: pointer;
+  background-color: transparent;
+  border: none;
+  position: absolute;
+  right: 40px;
+  top: 50%;
+  transform: translateY(-50%);
+  color: #ccc;
+  font-size: 16px;
+}
+.clear-button:hover {
+  color: #999;
 }
 </style>

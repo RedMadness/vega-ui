@@ -34,13 +34,12 @@
                 value-field="id"
                 label-field="title"
               >
+                <!-- clear-icon -->
+                <!-- <template #clear-icon>-->
+                <!--  <span>+</span>-->
+                <!-- </template>-->
                 <!-- prefix -->
                 <template #prefix>
-                  <VegaIconArrow />
-                </template>
-
-                <!-- postfix -->
-                <template #postfix>
                   <VegaIconArrow />
                 </template>
               </vega-select>
@@ -55,11 +54,6 @@
                 <template #prefix>
                   <VegaIconArrow />
                 </template>
-
-                <!-- postfix -->
-                <template #postfix>
-                  <VegaIconArrow />
-                </template>
               </vega-select>
 
               <vega-select
@@ -70,11 +64,6 @@
               >
                 <!-- prefix -->
                 <template #prefix>
-                  <VegaIconArrow />
-                </template>
-
-                <!-- postfix -->
-                <template #postfix>
                   <VegaIconArrow />
                 </template>
               </vega-select>

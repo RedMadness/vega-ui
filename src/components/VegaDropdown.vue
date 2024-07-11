@@ -35,8 +35,6 @@ export interface Props<T> {
   transitionDurationDropdown?: string
 
   infiniteScroll?: boolean
-
-  // maxVisibleOptions?: number
 }
 
 const props = withDefaults(defineProps<Props<number | string>>(), {
@@ -44,7 +42,7 @@ const props = withDefaults(defineProps<Props<number | string>>(), {
   valueField: 'value',
   labelField: 'label',
   isOpen: false,
-  backgroundColorDropdown: 'transparent', //TODO change transparent
+  backgroundColorDropdown: 'transparent',
   hoverColorDropdown: 'transparent',
   textColorDropdown: 'inherit',
   borderColorDropdown: 'inherit',
@@ -53,9 +51,7 @@ const props = withDefaults(defineProps<Props<number | string>>(), {
   optionPaddingDropdown: '8px 12px',
   transitionDurationDropdown: '0.3s',
 
-  infiniteScroll: true, //TODO change false
-
-  // maxVisibleOptions: 25,
+  infiniteScroll: false,
 })
 
 const emits = defineEmits(['select', 'close', 'loadMoreItems', 'loadPreviousItems'])

@@ -19,29 +19,42 @@
       :height="height"
       :text-align="textAlign"
       :delay-debounce="delayDebounce"
+      :clearable="true"
       @clickWrapper="handleInputClick"
       @focus="handleFocus"
       @blur="handleBlur"
+      @clear="handleInputClear"
     >
+      <template v-slot:clear-icon>
+        <slot name="clear-icon"></slot>
+      </template>
       <template v-slot:prefix>
         <slot name="prefix"></slot>
       </template>
       <template v-slot:postfix>
-        <slot name="postfix"></slot>
+        <slot name="postfix">
+          <VegaIconArrow :rotate="dropdownOpen ? '180deg' : '0deg'" />
+        </slot>
       </template>
     </vega-input>
     <!-- dropdown -->
-    <!-- TODO add props for dropdown from select -->
     <vega-dropdown
       :items="adaptedOptions"
+      :value-field="valueField"
+      :label-field="labelField"
       :isOpen="dropdownOpen"
       :backgroundColorDropdown="backgroundColorDropdown"
       :hover-color-dropdown="hoverColorDropdown"
+      :text-color-dropdown="textColorDropdown"
+      :border-color-dropdown="borderColorDropdown"
+      :border-radius-dropdown="borderRadiusDropdown"
+      :font-size-dropdown="fontSizeDropdown"
+      :option-padding-dropdown="optionPaddingDropdown"
+      :transitionDuration-dropdown="transitionDurationDropdown"
+      :infinite-scroll="infiniteScroll"
       @load-more-items="loadMoreItems"
       @select="selectItem"
       @close="closeDropdown"
-      :value-field="valueField"
-      :label-field="labelField"
     />
   </div>
 </template>
@@ -50,6 +63,7 @@
 import { ref, computed, watch, onMounted } from 'vue'
 import VegaInput from './VegaInput.vue'
 import VegaDropdown from './VegaDropdown.vue'
+import VegaIconArrow from './VegaIconArrow.vue'
 
 interface ApiResponse<T> {
   data: {
@@ -64,6 +78,7 @@ export interface Option<T> {
   [key: string]: T
 }
 export interface Props<T> {
+  label?: string
   searchable?: boolean
   valueField?: keyof Option<T>
   labelField?: keyof Option<T>
@@ -82,6 +97,7 @@ export interface Props<T> {
   textAlign?: string
   delayDebounce?: number
   isOpen?: boolean
+
   backgroundColorDropdown?: string
   hoverColorDropdown?: string
   textColorDropdown?: string
@@ -90,10 +106,9 @@ export interface Props<T> {
   fontSizeDropdown?: string
   optionPaddingDropdown?: string
   transitionDurationDropdown?: string
-  label?: string
+  infiniteScroll?: boolean
 
   remoteHandler?: (params: any) => Promise<ApiResponse<Option<string | number> | string | number>>
-
   staticOptions?: Array<Option<T> | string | number>
 }
 
@@ -172,6 +187,11 @@ function callApi() {
 
 const updateInputModel = () => {
   inputModel.value = isFocused.value && props.searchable ? searchQuery.value : displayValue.value
+}
+
+const handleInputClear = () => {
+  inputModel.value = ''
+  emits('update:modelValue', '')
 }
 
 const closeDropdown = () => {
