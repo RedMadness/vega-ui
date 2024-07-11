@@ -50,8 +50,6 @@
                 :searchable="true"
                 :static-options="options"
                 background-color-dropdown="green"
-                value-field="id"
-                label-field="title"
               >
                 <!-- prefix -->
                 <template #prefix>
@@ -103,14 +101,14 @@ const inputValue2 = ref('')
 //   { id: 20, title: '18S' },
 // ])
 
-const options = ref([
-  { id: 1, title: 'one', color: '#005689' },
-  { id: 2, title: '2S', color: 'red' },
-])
+// const options = ref([
+//   { id: 1, title: 'one', color: '#005689' },
+//   { id: 2, title: '2S', color: 'red' },
+// ])
 
 // const options = ref([0, 1])
 
-// const options = ref(['option1', 'option2', 'option3'])
+const options = ref(['option1', 'option2', 'option3'])
 interface ApiResponse<T> {
   data: {
     data: T[]

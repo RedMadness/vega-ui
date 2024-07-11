@@ -93,7 +93,7 @@ export interface Props<T> {
 
   remoteHandler?: (params: any) => Promise<ApiResponse<Option<string | number> | string | number>>
 
-  staticOptions?: Option<T>[]
+  staticOptions?: Array<Option<T> | string | number>
 }
 
 const props = withDefaults(defineProps<Props<number | string>>(), {
@@ -128,7 +128,9 @@ const loadOptions = () => {
   }
 }
 
-const createOption = (option: Option<string | number> | number | string) => {
+const createOption = (
+  option: Option<string | number> | number | string
+): Option<string | number> => {
   if (typeof option === 'object') {
     return {
       [props.valueField]: option[props.valueField] ?? '[Undefined value]',
@@ -210,6 +212,8 @@ const selectItem = (item: Option<number | string>) => {
   }
   handleBlur()
   emits('update:modelValue', item)
+
+  console.log(item, 'item')
 }
 
 const loadMoreItems = () => {
