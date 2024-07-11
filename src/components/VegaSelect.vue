@@ -3,7 +3,7 @@
     <slot name="label"></slot>
     <vega-input
       v-model="inputModel"
-      label="label"
+      :label="label"
       :placeholder="placeholder"
       :readonly="!searchable"
       :font-size="fontSize"
@@ -90,6 +90,7 @@ export interface Props<T> {
   fontSizeDropdown?: string
   optionPaddingDropdown?: string
   transitionDurationDropdown?: string
+  label?: string
 
   remoteHandler?: (params: any) => Promise<ApiResponse<Option<string | number> | string | number>>
 
@@ -102,6 +103,7 @@ const props = withDefaults(defineProps<Props<number | string>>(), {
   labelField: 'label',
 
   placeholder: 'select',
+  label: '',
 })
 
 const emits = defineEmits(['update:modelValue'])
@@ -135,9 +137,10 @@ const createOption = (
     return {
       [props.valueField]: option[props.valueField] ?? '[Undefined value]',
       [props.labelField]: option[props.labelField] ?? '[Undefined label]',
+      isPrimitive: 0,
     }
   } else {
-    return { value: option, label: String(option) }
+    return { value: option, label: String(option), isPrimitive: 1 }
   }
 }
 
@@ -203,17 +206,20 @@ const handleInputClick = () => {
   toggleDropdown()
 }
 
-const selectItem = (item: Option<number | string>) => {
-  selected.value = item[props.valueField]
+const selectItem = (item: Option<number | string> & { isPrimitive: number }) => {
+  selected.value = item.value
   displayValue.value = `${item[props.labelField]}`
+
+  if (item.isPrimitive === 1) {
+    emits('update:modelValue', item.value)
+  } else {
+    emits('update:modelValue', item)
+  }
 
   if (props.searchable) {
     searchQuery.value = ''
   }
   handleBlur()
-  emits('update:modelValue', item)
-
-  console.log(item, 'item')
 }
 
 const loadMoreItems = () => {

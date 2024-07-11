@@ -61,6 +61,23 @@
                   <VegaIconArrow />
                 </template>
               </vega-select>
+
+              <vega-select
+                v-model="inputValue3"
+                :searchable="true"
+                :static-options="options3"
+                background-color-dropdown="green"
+              >
+                <!-- prefix -->
+                <template #prefix>
+                  <VegaIconArrow />
+                </template>
+
+                <!-- postfix -->
+                <template #postfix>
+                  <VegaIconArrow />
+                </template>
+              </vega-select>
             </vega-sidebar>
           </template>
         </vega-layout>
@@ -79,6 +96,7 @@ import VegaIconArrow from './components/VegaIconArrow.vue'
 
 const inputValue = ref('')
 const inputValue2 = ref('')
+const inputValue3 = ref('')
 
 // const options = ref([
 //   { id: 1, title: 'one' },
@@ -101,12 +119,12 @@ const inputValue2 = ref('')
 //   { id: 20, title: '18S' },
 // ])
 
-// const options = ref([
+// const options3 = ref([
 //   { id: 1, title: 'one', color: '#005689' },
 //   { id: 2, title: '2S', color: 'red' },
 // ])
 
-// const options = ref([0, 1])
+const options3 = ref([0, 1])
 
 const options = ref(['option1', 'option2', 'option3'])
 interface ApiResponse<T> {

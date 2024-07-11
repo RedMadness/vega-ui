@@ -73,6 +73,7 @@ const selectItem = (item: Option<number | string>) => {
   emits('select', {
     [props.valueField]: item[props.valueField],
     [props.labelField]: item[props.labelField],
+    isPrimitive: item.isPrimitive,
   })
 }
 
