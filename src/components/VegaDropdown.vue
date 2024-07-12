@@ -6,9 +6,17 @@
     @blur="closeDropdown"
     tabindex="-1"
   >
-    <div v-for="item in items" :key="item.value" class="dropdown-item" @click="selectItem(item)">
-      {{ item[labelField] }}
+    <div v-if="items.length" class="dropdown-items">
+      <div
+        v-for="item in items"
+        :key="item[props.valueField]"
+        class="dropdown-item"
+        @click="selectItem(item)"
+      >
+        {{ item[props.labelField] }}
+      </div>
     </div>
+    <div v-else class="dropdown-no-item">No options available</div>
   </div>
 </template>
 
@@ -67,6 +75,7 @@ const closeDropdown = () => {
 
 const selectItem = (item: Option<number | string>) => {
   emits('select', {
+    ...item,
     [props.valueField]: item[props.valueField],
     [props.labelField]: item[props.labelField],
     isPrimitive: item.isPrimitive,
@@ -132,6 +141,13 @@ const handleScroll = (event: Event) => {
   padding: v-bind(optionPaddingDropdown);
   cursor: pointer;
   background-color: v-bind(backgroundColorDropdown);
+}
+
+.dropdown-no-item {
+  padding: v-bind(optionPaddingDropdown);
+  cursor: pointer;
+  background-color: v-bind(backgroundColorDropdown);
+  text-align: center;
 }
 
 .dropdown-item:hover {

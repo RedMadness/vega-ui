@@ -82,9 +82,7 @@ export interface Props<T> {
   searchable?: boolean
   valueField?: keyof Option<T>
   labelField?: keyof Option<T>
-
   placeholder?: string
-
   fontSize?: string
   fontColor?: string
   placeholderColor?: string
@@ -112,6 +110,8 @@ export interface Props<T> {
 
   remoteHandler?: (params: any) => Promise<ApiResponse<Option<string | number> | string | number>>
   staticOptions?: Array<Option<T> | string | number>
+
+  modelValue?: Option<T> | string | number
 }
 
 const props = withDefaults(defineProps<Props<number | string>>(), {
@@ -121,6 +121,7 @@ const props = withDefaults(defineProps<Props<number | string>>(), {
 
   placeholder: 'Select value',
   label: '',
+  modelValue: undefined,
 })
 
 const emits = defineEmits(['update:modelValue'])
@@ -151,14 +152,16 @@ const loadOptions = () => {
 
 const createOption = (
   option: Option<string | number> | number | string
-): Option<string | number> => {
+): Option<string | number> & { isPrimitive: number } => {
   if (typeof option === 'object') {
     return {
+      ...option,
       [props.valueField]: option[props.valueField] ?? '[Undefined value]',
       [props.labelField]: option[props.labelField] ?? '[Undefined label]',
       isPrimitive: 0,
     }
   } else {
+    // Для примитивов создаем объект с базовыми свойствами
     return { value: option, label: String(option), isPrimitive: 1 }
   }
 }
@@ -277,7 +280,14 @@ watch(inputModel, (newVal, oldVal) => {
 
 watch([() => props.staticOptions, () => props.remoteHandler], loadOptions)
 
-onMounted(loadOptions)
+onMounted(() => {
+  loadOptions()
+
+  inputModel.value =
+    typeof props.modelValue === 'object' && props.modelValue !== null
+      ? (props.modelValue[props.labelField] as string) || ''
+      : `${props.modelValue || ''}`
+})
 </script>
 
 <style scoped>
