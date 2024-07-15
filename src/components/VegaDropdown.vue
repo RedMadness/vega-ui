@@ -1,19 +1,13 @@
 <template>
-  <div
-    class="dropdown"
-    :class="{ open: isOpen }"
-    @scroll="handleScroll"
-    @blur="closeDropdown"
-    tabindex="-1"
-  >
-    <div v-if="items.length" class="dropdown-items">
+  <div class="dropdown" :class="{ open: isOpen }" @scroll="handleScroll">
+    <div v-if="options.length" class="dropdown-items">
       <div
-        v-for="item in items"
-        :key="item[props.valueField]"
+        v-for="option in options"
+        :key="getOptionValue(option)"
         class="dropdown-item"
-        @click="selectItem(item)"
+        @mousedown.left="selectItem(option)"
       >
-        {{ item[props.labelField] }}
+        {{ getOptionText(option) }}
       </div>
     </div>
     <div v-else class="dropdown-no-item">No options available</div>
@@ -28,7 +22,7 @@ export interface Option<T> {
 }
 
 export interface Props<T> {
-  items?: Array<Option<T>>
+  options?: Array<Option<T> | string | number>
   valueField?: keyof Option<T>
   labelField?: keyof Option<T>
 
@@ -46,7 +40,7 @@ export interface Props<T> {
 }
 
 const props = withDefaults(defineProps<Props<number | string>>(), {
-  items: () => [] as Option<number | string>[],
+  options: () => [],
   valueField: 'value',
   labelField: 'label',
   isOpen: false,
@@ -68,18 +62,8 @@ const loading = ref(false)
 const reachedBottom = ref(false)
 const reachedTop = ref(false)
 
-const closeDropdown = () => {
-  resetScrollState()
-  emits('close')
-}
-
-const selectItem = (item: Option<number | string>) => {
-  emits('select', {
-    ...item,
-    [props.valueField]: item[props.valueField],
-    [props.labelField]: item[props.labelField],
-    isPrimitive: item.isPrimitive,
-  })
+const selectItem = (item: Option<number | string> | string | number) => {
+  emits('select', item)
 }
 
 function resetScrollState() {
@@ -114,6 +98,22 @@ const handleScroll = (event: Event) => {
   if (scrollTop > 0 && scrollTop + clientHeight < scrollHeight - 10) {
     resetScrollState()
   }
+}
+
+function getOptionValue(option: Option<number | string> | string | number) {
+  if (typeof option === 'object') {
+    return option[props.valueField]
+  }
+
+  return option
+}
+
+function getOptionText(option: Option<number | string> | string | number) {
+  if (typeof option === 'object') {
+    return option[props.labelField]
+  }
+
+  return option
 }
 </script>
 

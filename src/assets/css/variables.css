@@ -1,7 +1,11 @@
 :root {
+  --vega-primary: var(--vega-blue);
+  --vega-secondary: var(--vega-white);
   --vega-text-color: var(--vega-black);
   --vega-border-color: var(--vega-gray);
 
   --vega-black: #2A2A35;
-  --vega-gray: rgba(100, 108, 255, .14);
+  --vega-gray: #BCBDC9FF;
+  --vega-blue: #638CC7;
+  --vega-white: #fff;
 }

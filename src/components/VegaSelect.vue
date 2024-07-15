@@ -4,7 +4,7 @@
     <vega-input
       v-model="inputModel"
       :label="label"
-      :placeholder="dynamicPlaceholder"
+      :placeholder="placeholderCurrent"
       :readonly="!searchable"
       :font-size="fontSize"
       :font-color="fontColor"
@@ -20,10 +20,11 @@
       :text-align="textAlign"
       :delay-debounce="delayDebounce"
       :clearable="true"
-      @clickWrapper="handleInputClick"
+      @click="handleInputClick"
       @focus="handleFocus"
       @blur="handleBlur"
       @clear="handleInputClear"
+      @input="onSearch"
     >
       <template v-slot:clear-icon>
         <slot name="clear-icon"></slot>
@@ -39,10 +40,10 @@
     </vega-input>
     <!-- dropdown -->
     <vega-dropdown
-      :items="adaptedOptions"
+      :options="optionsList"
       :value-field="valueField"
       :label-field="labelField"
-      :isOpen="dropdownOpen"
+      :is-open="dropdownOpen"
       :backgroundColorDropdown="backgroundColorDropdown"
       :hover-color-dropdown="hoverColorDropdown"
       :text-color-dropdown="textColorDropdown"
@@ -54,13 +55,12 @@
       :infinite-scroll="infiniteScroll"
       @load-more-items="loadMoreItems"
       @select="selectItem"
-      @close="closeDropdown"
     />
   </div>
 </template>
 
 <script lang="ts" setup>
-import { ref, computed, watch, onMounted } from 'vue'
+import { ref, computed, onMounted } from 'vue'
 import VegaInput from './VegaInput.vue'
 import VegaDropdown from './VegaDropdown.vue'
 import VegaIconArrow from './VegaIconArrow.vue'
@@ -109,15 +109,19 @@ export interface Props<T> {
   infiniteScroll?: boolean
 
   remoteHandler?: (params: any) => Promise<ApiResponse<Option<string | number> | string | number>>
-  staticOptions?: Array<Option<T> | string | number>
+  options?: Array<Option<T> | string | number>
 
   modelValue?: Option<T> | string | number
 }
 
 const props = withDefaults(defineProps<Props<number | string>>(), {
+  options: () => [],
   searchable: false,
   valueField: 'value',
   labelField: 'label',
+  backgroundColor: 'var(--vega-secondary)',
+  backgroundColorDropdown: 'var(--vega-secondary)',
+  hoverColorDropdown: 'var(--vega-primary)',
 
   placeholder: 'Select value',
   label: '',
@@ -126,11 +130,10 @@ const props = withDefaults(defineProps<Props<number | string>>(), {
 
 const emits = defineEmits(['update:modelValue'])
 
-const searchQuery = ref('')
-const displayValue = ref('')
-const inputModel = ref('')
+const search = ref('')
+const inputModel = ref<string | number | null>(null)
 const isFocused = ref(false)
-const selected = ref<number | string | null>(null)
+const selected = ref<string | number | null | Option<string | number>>(null)
 const dropdownOpen = ref(false)
 
 const loading = ref(false)
@@ -138,35 +141,60 @@ const total = ref(0)
 const page = ref(1)
 const perPage = ref(25)
 
-const options = ref<(Option<string | number> | string | number)[]>([])
+/** The list of options passed through props. */
+const optionsStatic = ref(props.options)
+/** Options obtained by remote query. */
+const optionsRemote = ref<(Option<string | number> | string | number)[]>([])
 
-const { staticOptions } = props
+const placeholderCurrent = ref(props.placeholder)
 
-const dynamicPlaceholder = ref(props.placeholder)
+const selectedText = computed(() => {
+  if (selected.value === null) {
+    return ''
+  }
+  if (typeof selected.value === 'object') {
+    return String(selected.value[props.labelField])
+  }
 
-const loadOptions = () => {
-  if (staticOptions && staticOptions.length > 0) {
-    options.value = staticOptions.map(createOption)
+  return String(selected.value)
+})
+
+const selectedValue = computed(() => {
+  if (selected.value === null) {
+    return null
+  }
+  if (typeof selected.value === 'object') {
+    return selected.value[props.valueField]
+  }
+
+  return selected.value
+})
+
+const optionsList = computed(() => {
+  return [
+    ...(optionsStatic.value as (Option<string | number> | string | number)[]),
+    ...optionsRemote.value,
+  ]
+})
+
+const handleBlur = () => {
+  reset()
+  updateInputModel()
+  if (!inputModel.value) {
+    placeholderCurrent.value = props.placeholder
   }
 }
 
-const createOption = (
-  option: Option<string | number> | number | string
-): Option<string | number> & { isPrimitive: number } => {
-  if (typeof option === 'object') {
-    return {
-      ...option,
-      [props.valueField]: option[props.valueField] ?? '[Undefined value]',
-      [props.labelField]: option[props.labelField] ?? '[Undefined label]',
-      isPrimitive: 0,
-    }
-  } else {
-    // Для примитивов создаем объект с базовыми свойствами
-    return { value: option, label: String(option), isPrimitive: 1 }
-  }
+const handleFocus = () => {
+  isFocused.value = true
+  placeholderCurrent.value = selectedText.value || props.placeholder
+  updateInputModel()
+  callApi()
 }
 
-const adaptedOptions = computed(() => options.value.map(createOption))
+const updateInputModel = () => {
+  inputModel.value = isFocused.value && props.searchable ? search.value : selectedText.value
+}
 
 function callApi() {
   if (props.remoteHandler) {
@@ -178,9 +206,7 @@ function callApi() {
         per_page: perPage.value,
       })
       .then((response) => {
-        const newOptions = response.data.data ?? []
-        options.value = [...options.value, ...newOptions]
-
+        optionsRemote.value = response.data.data || []
         total.value = response.data.meta?.total || 0
       })
       .catch((error) => {
@@ -192,64 +218,24 @@ function callApi() {
   }
 }
 
-const updateInputModel = () => {
-  inputModel.value = isFocused.value && props.searchable ? searchQuery.value : displayValue.value
-}
-
 const handleInputClear = () => {
   inputModel.value = ''
-  displayValue.value = ''
-  dynamicPlaceholder.value = props.placeholder
-  emits('update:modelValue', '')
-}
-
-const closeDropdown = () => {
-  dropdownOpen.value = false
-  options.value = []
-  loadOptions()
+  placeholderCurrent.value = props.placeholder
+  emits('update:modelValue', null)
 }
 
 const toggleDropdown = () => {
   dropdownOpen.value = !dropdownOpen.value
 }
 
-const handleFocus = () => {
-  isFocused.value = true
-  const previousValue = inputModel.value
-  dynamicPlaceholder.value = displayValue.value || props.placeholder
-  updateInputModel()
-  if (inputModel.value === previousValue) {
-    callApi()
-  }
-}
-
-const handleBlur = () => {
-  isFocused.value = false
-  dropdownOpen.value = false
-  updateInputModel()
-  if (!inputModel.value) {
-    dynamicPlaceholder.value = props.placeholder
-  }
-}
-
 const handleInputClick = () => {
   toggleDropdown()
 }
 
-const selectItem = (item: Option<number | string> & { isPrimitive: number }) => {
-  selected.value = item.value
-  displayValue.value = `${item[props.labelField]}`
-
-  if (item.isPrimitive === 1) {
-    emits('update:modelValue', item.value)
-  } else {
-    emits('update:modelValue', item)
-  }
-
-  if (props.searchable) {
-    searchQuery.value = ''
-  }
-  handleBlur()
+const selectItem = (item: Option<number | string> | string | number) => {
+  selected.value = item
+  emits('update:modelValue', selectedValue.value)
+  reset()
 }
 
 const loadMoreItems = () => {
@@ -259,35 +245,25 @@ const loadMoreItems = () => {
   }
 }
 
-watch(searchQuery, (newVal) => {
-  if (isFocused.value && props.searchable) {
-    inputModel.value = newVal
-  }
-})
-
-watch(inputModel, (newVal, oldVal) => {
-  if (
-    isFocused.value &&
-    props.searchable &&
-    newVal !== oldVal &&
-    (!staticOptions || staticOptions.length === 0)
-  ) {
-    options.value = []
-    page.value = 1
-    callApi()
-  }
-})
-
-watch([() => props.staticOptions, () => props.remoteHandler], loadOptions)
+function onSearch(event: Event) {
+  const element = event.target as HTMLInputElement
+  search.value = element.value
+}
 
 onMounted(() => {
-  loadOptions()
-
   inputModel.value =
     typeof props.modelValue === 'object' && props.modelValue !== null
       ? (props.modelValue[props.labelField] as string) || ''
       : `${props.modelValue || ''}`
 })
+
+function reset() {
+  isFocused.value = false
+  dropdownOpen.value = false
+  optionsRemote.value = []
+  page.value = 1
+  search.value = ''
+}
 </script>
 
 <style scoped>

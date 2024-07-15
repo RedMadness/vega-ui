@@ -3,7 +3,7 @@
     <slot name="label">
       <span v-if="label">{{ label }}</span>
     </slot>
-    <div class="input-wrapper" @click="clickWrapper">
+    <div class="input-wrapper" v-bind="$attrs">
       <slot name="prefix"></slot>
       <input
         ref="inputRef"
@@ -33,7 +33,7 @@ export interface Props {
   label?: string
   readonly?: boolean
   placeholder?: string
-  modelValue?: string
+  modelValue?: string | number | null
   fontSize?: string
   fontColor?: string
   placeholderColor?: string
@@ -74,14 +74,14 @@ const props = withDefaults(defineProps<Props>(), {
   clearable: true,
 })
 
-const emit = defineEmits(['focus', 'blur', 'update:modelValue', 'clickWrapper', 'clear'])
+defineOptions({
+  inheritAttrs: false,
+})
+
+const emit = defineEmits(['focus', 'blur', 'update:modelValue', 'clear'])
 
 function handleFocus(event: FocusEvent) {
   emit('focus', event)
-}
-
-function clickWrapper() {
-  emit('clickWrapper')
 }
 
 const inputRef = ref<HTMLElement | null>(null)
