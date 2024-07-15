@@ -3,8 +3,8 @@
     <slot name="label"></slot>
     <vega-input
       v-model="inputModel"
-      label="label"
-      :placeholder="placeholder"
+      :label="label"
+      :placeholder="dynamicPlaceholder"
       :readonly="!searchable"
       :font-size="fontSize"
       :font-color="fontColor"
@@ -19,45 +19,69 @@
       :height="height"
       :text-align="textAlign"
       :delay-debounce="delayDebounce"
-      @click="handleInputClick"
+      :clearable="true"
+      @clickWrapper="handleInputClick"
       @focus="handleFocus"
       @blur="handleBlur"
+      @clear="handleInputClear"
     >
+      <template v-slot:clear-icon>
+        <slot name="clear-icon"></slot>
+      </template>
       <template v-slot:prefix>
         <slot name="prefix"></slot>
       </template>
       <template v-slot:postfix>
-        <slot name="postfix"></slot>
+        <slot name="postfix">
+          <VegaIconArrow :rotate="dropdownOpen ? '180deg' : '0deg'" />
+        </slot>
       </template>
     </vega-input>
     <!-- dropdown -->
-    <!-- TODO add props for dropdown from select -->
     <vega-dropdown
       :items="adaptedOptions"
+      :value-field="valueField"
+      :label-field="labelField"
       :isOpen="dropdownOpen"
+      :backgroundColorDropdown="backgroundColorDropdown"
+      :hover-color-dropdown="hoverColorDropdown"
+      :text-color-dropdown="textColorDropdown"
+      :border-color-dropdown="borderColorDropdown"
+      :border-radius-dropdown="borderRadiusDropdown"
+      :font-size-dropdown="fontSizeDropdown"
+      :option-padding-dropdown="optionPaddingDropdown"
+      :transitionDuration-dropdown="transitionDurationDropdown"
+      :infinite-scroll="infiniteScroll"
+      @load-more-items="loadMoreItems"
       @select="selectItem"
-      @loadMoreItems="loadMoreItems"
       @close="closeDropdown"
     />
   </div>
 </template>
 
 <script lang="ts" setup>
-import { ref, computed, watch } from 'vue'
+import { ref, computed, watch, onMounted } from 'vue'
 import VegaInput from './VegaInput.vue'
 import VegaDropdown from './VegaDropdown.vue'
+import VegaIconArrow from './VegaIconArrow.vue'
+
+interface ApiResponse<T> {
+  data: {
+    data: T[]
+    meta: {
+      total: number
+    }
+  }
+}
 
 export interface Option<T> {
   [key: string]: T
 }
 export interface Props<T> {
+  label?: string
   searchable?: boolean
-
-  options: Array<Option<T> | T>
-
   valueField?: keyof Option<T>
   labelField?: keyof Option<T>
-
   placeholder?: string
   fontSize?: string
   fontColor?: string
@@ -72,8 +96,8 @@ export interface Props<T> {
   height?: string
   textAlign?: string
   delayDebounce?: number
-
   isOpen?: boolean
+
   backgroundColorDropdown?: string
   hoverColorDropdown?: string
   textColorDropdown?: string
@@ -82,16 +106,25 @@ export interface Props<T> {
   fontSizeDropdown?: string
   optionPaddingDropdown?: string
   transitionDurationDropdown?: string
+  infiniteScroll?: boolean
+
+  remoteHandler?: (params: any) => Promise<ApiResponse<Option<string | number> | string | number>>
+  staticOptions?: Array<Option<T> | string | number>
+
+  modelValue?: Option<T> | string | number
 }
 
 const props = withDefaults(defineProps<Props<number | string>>(), {
   searchable: false,
-  options: () => [] as (Option<number | string> | number | string)[],
   valueField: 'value',
   labelField: 'label',
 
-  placeholder: 'select',
+  placeholder: 'Select value',
+  label: '',
+  modelValue: undefined,
 })
+
+const emits = defineEmits(['update:modelValue'])
 
 const searchQuery = ref('')
 const displayValue = ref('')
@@ -100,25 +133,80 @@ const isFocused = ref(false)
 const selected = ref<number | string | null>(null)
 const dropdownOpen = ref(false)
 
-const createOption = (option: Option<number | string> | number | string) => {
-  if (typeof option !== 'object') {
-    return { value: option, label: String(option) }
+const loading = ref(false)
+const total = ref(0)
+const page = ref(1)
+const perPage = ref(25)
+
+const options = ref<(Option<string | number> | string | number)[]>([])
+
+const { staticOptions } = props
+
+const dynamicPlaceholder = ref(props.placeholder)
+
+const loadOptions = () => {
+  if (staticOptions && staticOptions.length > 0) {
+    options.value = staticOptions.map(createOption)
   }
-
-  const value = option[props.valueField] ?? '[Undefined value]'
-  const label = option[props.labelField] ?? '[Undefined label]'
-
-  return { value, label }
 }
 
-const adaptedOptions = computed(() => props.options.map(createOption))
+const createOption = (
+  option: Option<string | number> | number | string
+): Option<string | number> & { isPrimitive: number } => {
+  if (typeof option === 'object') {
+    return {
+      ...option,
+      [props.valueField]: option[props.valueField] ?? '[Undefined value]',
+      [props.labelField]: option[props.labelField] ?? '[Undefined label]',
+      isPrimitive: 0,
+    }
+  } else {
+    // Для примитивов создаем объект с базовыми свойствами
+    return { value: option, label: String(option), isPrimitive: 1 }
+  }
+}
+
+const adaptedOptions = computed(() => options.value.map(createOption))
+
+function callApi() {
+  if (props.remoteHandler) {
+    loading.value = true
+    props
+      .remoteHandler({
+        search: inputModel.value,
+        page: page.value,
+        per_page: perPage.value,
+      })
+      .then((response) => {
+        const newOptions = response.data.data ?? []
+        options.value = [...options.value, ...newOptions]
+
+        total.value = response.data.meta?.total || 0
+      })
+      .catch((error) => {
+        console.error('API call failed:', error)
+      })
+      .finally(() => {
+        loading.value = false
+      })
+  }
+}
 
 const updateInputModel = () => {
   inputModel.value = isFocused.value && props.searchable ? searchQuery.value : displayValue.value
 }
 
+const handleInputClear = () => {
+  inputModel.value = ''
+  displayValue.value = ''
+  dynamicPlaceholder.value = props.placeholder
+  emits('update:modelValue', '')
+}
+
 const closeDropdown = () => {
   dropdownOpen.value = false
+  options.value = []
+  loadOptions()
 }
 
 const toggleDropdown = () => {
@@ -127,15 +215,20 @@ const toggleDropdown = () => {
 
 const handleFocus = () => {
   isFocused.value = true
+  const previousValue = inputModel.value
+  dynamicPlaceholder.value = displayValue.value || props.placeholder
   updateInputModel()
+  if (inputModel.value === previousValue) {
+    callApi()
+  }
 }
 
 const handleBlur = () => {
   isFocused.value = false
   dropdownOpen.value = false
   updateInputModel()
-  if (!searchQuery.value || !props.searchable) {
-    inputModel.value = displayValue.value
+  if (!inputModel.value) {
+    dynamicPlaceholder.value = props.placeholder
   }
 }
 
@@ -143,13 +236,27 @@ const handleInputClick = () => {
   toggleDropdown()
 }
 
-const selectItem = (item: { value: number | string; label: string }) => {
+const selectItem = (item: Option<number | string> & { isPrimitive: number }) => {
   selected.value = item.value
-  displayValue.value = item.label
+  displayValue.value = `${item[props.labelField]}`
+
+  if (item.isPrimitive === 1) {
+    emits('update:modelValue', item.value)
+  } else {
+    emits('update:modelValue', item)
+  }
+
   if (props.searchable) {
     searchQuery.value = ''
   }
   handleBlur()
+}
+
+const loadMoreItems = () => {
+  if (total.value > page.value * perPage.value) {
+    page.value += 1
+    callApi()
+  }
 }
 
 watch(searchQuery, (newVal) => {
@@ -158,9 +265,29 @@ watch(searchQuery, (newVal) => {
   }
 })
 
-const loadMoreItems = () => {
-  console.log('vega-select loadMore')
-}
+watch(inputModel, (newVal, oldVal) => {
+  if (
+    isFocused.value &&
+    props.searchable &&
+    newVal !== oldVal &&
+    (!staticOptions || staticOptions.length === 0)
+  ) {
+    options.value = []
+    page.value = 1
+    callApi()
+  }
+})
+
+watch([() => props.staticOptions, () => props.remoteHandler], loadOptions)
+
+onMounted(() => {
+  loadOptions()
+
+  inputModel.value =
+    typeof props.modelValue === 'object' && props.modelValue !== null
+      ? (props.modelValue[props.labelField] as string) || ''
+      : `${props.modelValue || ''}`
+})
 </script>
 
 <style scoped>
