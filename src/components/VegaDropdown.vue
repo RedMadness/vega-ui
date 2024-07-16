@@ -1,32 +1,51 @@
 <template>
-  <div class="dropdown" :class="{ open: isOpen }" @scroll="handleScroll">
-    <div v-if="options.length" class="dropdown-items">
-      <div
-        v-for="option in options"
-        :key="getOptionValue(option)"
-        class="dropdown-item"
-        @mousedown.left="selectItem(option)"
-      >
-        {{ getOptionText(option) }}
+  <div v-click-outside="onClickOutside">
+    <div @click="toggleOpenState">
+      <slot name="trigger" />
+    </div>
+    <div class="dropdown" :class="{ open: isOpen }" @scroll="handleScroll">
+      <div v-if="optionsList.length" class="dropdown-items">
+        <div
+          v-for="option in optionsList"
+          :key="getOptionValue(option)"
+          class="dropdown-item"
+          @mousedown.left="selectItem(option)"
+        >
+          {{ getOptionText(option) }}
+        </div>
+        <div ref="loaderRef" />
+      </div>
+      <div v-if="loading && isOpen" class="loading">
+        <vega-loading />
+      </div>
+      <div v-if="!optionsList.length && !loading && isOpen" class="dropdown-no-item">
+        {{ noOptionsMessage }}
       </div>
     </div>
-    <div v-else class="dropdown-no-item">No options available</div>
   </div>
 </template>
 
-<script lang="ts" setup>
-import { ref } from 'vue'
+<script setup lang="ts">
+import { computed, ref, watch } from 'vue'
+import VegaLoading from './VegaLoading.vue'
 
 export interface Option<T> {
   [key: string]: T
+}
+
+interface ApiResponse<T> {
+  data: {
+    data: T[]
+    meta: {
+      total: number
+    }
+  }
 }
 
 export interface Props<T> {
   options?: Array<Option<T> | string | number>
   valueField?: keyof Option<T>
   labelField?: keyof Option<T>
-
-  isOpen?: boolean
   backgroundColorDropdown?: string
   hoverColorDropdown?: string
   textColorDropdown?: string
@@ -35,25 +54,26 @@ export interface Props<T> {
   fontSizeDropdown?: string
   optionPaddingDropdown?: string
   transitionDurationDropdown?: string
-
   infiniteScroll?: boolean
+  noOptionsMessage?: string
+  remoteHandler?: (params: any) => Promise<ApiResponse<Option<string | number> | string | number>>
+  filters?: object
 }
 
 const props = withDefaults(defineProps<Props<number | string>>(), {
   options: () => [],
   valueField: 'value',
   labelField: 'label',
-  isOpen: false,
   backgroundColorDropdown: 'transparent',
   hoverColorDropdown: 'transparent',
   textColorDropdown: 'inherit',
-  borderColorDropdown: 'inherit',
+  borderColorDropdown: 'var(--vega-border-color)',
   borderRadiusDropdown: '4px',
   fontSizeDropdown: 'inherit',
   optionPaddingDropdown: '8px 12px',
   transitionDurationDropdown: '0.3s',
-
   infiniteScroll: false,
+  noOptionsMessage: 'No options available',
 })
 
 const emits = defineEmits(['select', 'close', 'loadMoreItems', 'loadPreviousItems'])
@@ -61,14 +81,106 @@ const emits = defineEmits(['select', 'close', 'loadMoreItems', 'loadPreviousItem
 const loading = ref(false)
 const reachedBottom = ref(false)
 const reachedTop = ref(false)
+const total = ref(0)
+const page = ref(1)
+const perPage = ref(25)
+const isOpen = ref(false)
+/** Is it possible to download additional options from the server? */
+const hasNextPage = computed(() => optionsRemote.value?.length < total.value)
+/** Scroll position. It should be monitored to prevent ‘jumps’ after changing the number of options. */
+const scrollPosition = ref(0)
+/** The list of options passed through props. */
+const optionsStatic = ref(props.options)
+/** Options obtained by remote query. */
+const optionsRemote = ref<(Option<string | number> | string | number)[]>([])
+/** Final list of options */
+const optionsList = computed(() => {
+  return [
+    ...(optionsStatic.value as (Option<string | number> | string | number)[]),
+    ...optionsRemote.value,
+  ]
+})
+
+/** Click outside vue directive. See v-click-outside in root div element. */
+const vClickOutside = {
+  beforeMount(el: HTMLElement, binding: any) {
+    // @ts-ignore
+    el.__ClickOutsideHandler__ = (event: Event) => {
+      const target = event.target as HTMLElement
+      if (el !== target && !el.contains(target)) {
+        binding.value(event)
+      }
+    }
+    // @ts-ignore
+    document.body.addEventListener('click', el.__ClickOutsideHandler__)
+  },
+  unmounted(el: HTMLElement) {
+    // @ts-ignore
+    document.body.removeEventListener('click', el.__ClickOutsideHandler__)
+  },
+}
+
+function toggleOpenState() {
+  isOpen.value ? close() : open()
+}
+
+function open() {
+  if (isOpen.value === false) {
+    isOpen.value = true
+    callApi()
+  }
+}
 
 const selectItem = (item: Option<number | string> | string | number) => {
   emits('select', item)
+  close()
 }
 
-function resetScrollState() {
-  reachedBottom.value = reachedTop.value = loading.value = false
-  loading.value = false
+function onClickOutside() {
+  close()
+}
+
+function close() {
+  if (isOpen.value === true) {
+    isOpen.value = false
+    resetRemote()
+  }
+}
+
+function resetRemote() {
+  optionsRemote.value = []
+  page.value = 1
+}
+
+const handleScroll = (event: Event) => {
+  if (!props.infiniteScroll) return
+
+  const target = event.target as HTMLElement
+
+  const { scrollTop, clientHeight, scrollHeight } = target as HTMLElement
+  handleUpperBoundary(scrollTop)
+  handleLowerBoundary(target)
+
+  if (scrollTop > 0 && scrollTop + clientHeight < scrollHeight - 10) {
+    resetScrollState()
+  }
+}
+
+async function handleLowerBoundary(target: HTMLElement) {
+  const { scrollTop, clientHeight, scrollHeight } = target
+  const isBottomReached = scrollTop + clientHeight === scrollHeight
+  if (!isBottomReached || loading.value || reachedBottom.value) return
+
+  reachedBottom.value = true
+
+  if (hasNextPage.value && isOpen.value) {
+    loading.value = true
+    emits('loadMoreItems')
+    page.value++
+    scrollPositionSave(target)
+    await callApi()
+    scrollPositionRestore(target)
+  }
 }
 
 const handleUpperBoundary = (scrollTop: number) => {
@@ -79,25 +191,17 @@ const handleUpperBoundary = (scrollTop: number) => {
   emits('loadPreviousItems')
 }
 
-const handleLowerBoundary = (scrollTop: number, clientHeight: number, scrollHeight: number) => {
-  const isBottomReached = scrollTop + clientHeight >= scrollHeight - 10
-  if (!isBottomReached || loading.value || reachedBottom.value) return
-
-  reachedBottom.value = true
-  loading.value = true
-  emits('loadMoreItems')
+function resetScrollState() {
+  reachedBottom.value = reachedTop.value = false
 }
 
-const handleScroll = (event: Event) => {
-  if (!props.infiniteScroll) return
+function scrollPositionSave(target: HTMLElement) {
+  scrollPosition.value = target.scrollTop
+}
 
-  const { scrollTop, clientHeight, scrollHeight } = event.target as HTMLElement
-  handleUpperBoundary(scrollTop)
-  handleLowerBoundary(scrollTop, clientHeight, scrollHeight)
-
-  if (scrollTop > 0 && scrollTop + clientHeight < scrollHeight - 10) {
-    resetScrollState()
-  }
+function scrollPositionRestore(target: HTMLElement) {
+  target.scrollTop = scrollPosition.value
+  scrollPosition.value = 0
 }
 
 function getOptionValue(option: Option<number | string> | string | number) {
@@ -115,6 +219,40 @@ function getOptionText(option: Option<number | string> | string | number) {
 
   return option
 }
+
+async function callApi() {
+  if (props.remoteHandler) {
+    loading.value = true
+
+    await props
+      .remoteHandler({
+        ...props.filters,
+        page: page.value,
+        per_page: perPage.value,
+      })
+      .then((response) => {
+        if (isOpen.value) {
+          const data = response.data.data || []
+          optionsRemote.value = [...optionsRemote.value, ...data]
+          total.value = response.data.meta?.total || 0
+        }
+      })
+      .catch((error) => {
+        console.error('API call failed:', error)
+      })
+      .finally(() => {
+        loading.value = false
+      })
+  }
+}
+
+watch(
+  () => props.filters,
+  () => {
+    resetRemote()
+    callApi()
+  }
+)
 </script>
 
 <style scoped>
@@ -157,5 +295,9 @@ function getOptionText(option: Option<number | string> | string | number) {
 .dropdown.open {
   max-height: 200px;
   opacity: 1;
+}
+
+.loading {
+  background-color: v-bind(backgroundColorDropdown);
 }
 </style>

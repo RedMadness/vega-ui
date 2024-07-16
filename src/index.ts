@@ -8,6 +8,7 @@ import VegaSidebarToggle from './components/VegaSidebarToggle.vue'
 import VegaIconArrow from './components/VegaIconArrow.vue'
 import VegaInput from './components/VegaInput.vue'
 import VegaSelect from './components/VegaSelect.vue'
+import VegaLoading from './components/VegaLoading.vue'
 import useSidebarState from './use/useSidebarState.ts'
 import './assets/css/variables.css'
 
@@ -19,6 +20,7 @@ export {
   VegaIconArrow,
   VegaInput,
   VegaSelect,
+  VegaLoading,
   useSidebarState,
 }
 
@@ -31,5 +33,6 @@ export default {
     app.component('VegaIconArrow', VegaIconArrow)
     app.component('VegaInput', VegaInput)
     app.component('VegaSelect', VegaSelect)
+    app.component('VegaLoading', VegaLoading)
   },
 }
