@@ -9,7 +9,7 @@
           v-for="option in optionsList"
           :key="getOptionValue(option)"
           class="dropdown-item"
-          @mousedown.left="selectItem(option)"
+          @mousedown.left="onSelect(option)"
         >
           {{ getOptionText(option) }}
         </div>
@@ -87,8 +87,6 @@ const perPage = ref(25)
 const isOpen = ref(false)
 /** Is it possible to download additional options from the server? */
 const hasNextPage = computed(() => optionsRemote.value?.length < total.value)
-/** Scroll position. It should be monitored to prevent ‘jumps’ after changing the number of options. */
-const scrollPosition = ref(0)
 /** The list of options passed through props. */
 const optionsStatic = ref(props.options)
 /** Options obtained by remote query. */
@@ -131,7 +129,7 @@ function open() {
   }
 }
 
-const selectItem = (item: Option<number | string> | string | number) => {
+const onSelect = (item: Option<number | string> | string | number) => {
   emits('select', item)
   close()
 }
@@ -177,9 +175,9 @@ async function handleLowerBoundary(target: HTMLElement) {
     loading.value = true
     emits('loadMoreItems')
     page.value++
-    scrollPositionSave(target)
+    const scrollPosition = target.scrollTop
     await callApi()
-    scrollPositionRestore(target)
+    target.scrollTop = scrollPosition
   }
 }
 
@@ -193,15 +191,6 @@ const handleUpperBoundary = (scrollTop: number) => {
 
 function resetScrollState() {
   reachedBottom.value = reachedTop.value = false
-}
-
-function scrollPositionSave(target: HTMLElement) {
-  scrollPosition.value = target.scrollTop
-}
-
-function scrollPositionRestore(target: HTMLElement) {
-  target.scrollTop = scrollPosition.value
-  scrollPosition.value = 0
 }
 
 function getOptionValue(option: Option<number | string> | string | number) {

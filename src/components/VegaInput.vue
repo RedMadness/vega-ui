@@ -78,7 +78,7 @@ defineOptions({
   inheritAttrs: false,
 })
 
-const emit = defineEmits(['focus', 'blur', 'update:modelValue', 'clear', 'input'])
+const emit = defineEmits(['focus', 'blur', 'update:modelValue', 'clear'])
 
 function handleFocus(event: FocusEvent) {
   emit('focus', event)
@@ -90,7 +90,6 @@ function handleBlur(event?: FocusEvent) {
 }
 
 function clearInput() {
-  // event.stopPropagation()
   emit('clear')
 }
 
@@ -107,7 +106,6 @@ function debounce(func: (...args: any[]) => void, wait: number) {
 const debouncedHandleInput = debounce((event: Event) => {
   const inputElement = event.target as HTMLInputElement
   emit('update:modelValue', inputElement.value)
-  emit('input', inputElement.value)
 }, props.delayDebounce)
 </script>
 
@@ -141,6 +139,7 @@ const debouncedHandleInput = debounce((event: Event) => {
   background-color: v-bind(backgroundColor);
   padding: v-bind(padding);
   height: v-bind(height);
+  box-sizing: border-box;
 }
 
 .input-wrapper:hover {

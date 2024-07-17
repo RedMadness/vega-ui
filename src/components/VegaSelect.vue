@@ -15,7 +15,7 @@
       :infinite-scroll="infiniteScroll"
       :remote-handler="remoteHandler"
       :filters="filters"
-      @select="selectItem"
+      @select="onSelect"
     >
       <template #trigger>
         <vega-input
@@ -40,7 +40,7 @@
           @focus="handleFocus"
           @blur="handleBlur"
           @clear="handleInputClear"
-          @input="onSearch"
+          @update:model-value="onSearch"
         >
           <template #label>
             <slot name="label" />
@@ -67,6 +67,7 @@ import { ref, computed, onMounted } from 'vue'
 import VegaInput from './VegaInput.vue'
 import VegaDropdown from './VegaDropdown.vue'
 import VegaIconArrow from './VegaIconArrow.vue'
+import useSelectState from '../use/useSelectState.ts'
 
 interface ApiResponse<T> {
   data: {
@@ -115,6 +116,7 @@ export interface Props<T> {
   options?: Array<Option<T> | string | number>
 
   modelValue?: Option<T> | string | number
+  storageKey?: string
 }
 
 const props = withDefaults(defineProps<Props<number | string>>(), {
@@ -141,12 +143,11 @@ const filters = computed(() => {
   }
 })
 
-const inputModel = ref<string | number | null>(null)
-const isFocused = ref(false)
-const selected = ref<string | number | null | Option<string | number>>(null)
-const dropdownOpen = ref(false)
+const storage = props.storageKey ? useSelectState(props.storageKey) : null
 
-const placeholderCurrent = ref(props.placeholder)
+const selected = storage
+  ? storage.storageSelected
+  : ref<Option<number | string> | string | number | null>(null)
 
 const selectedText = computed(() => {
   if (selected.value === null) {
@@ -156,9 +157,8 @@ const selectedText = computed(() => {
     return String(selected.value[props.labelField])
   }
 
-  return String(selected.value)
+  return String(selected.value === undefined ? '' : selected.value)
 })
-
 const selectedValue = computed(() => {
   if (selected.value === null) {
     return null
@@ -169,6 +169,12 @@ const selectedValue = computed(() => {
 
   return selected.value
 })
+
+const inputModel = ref<string | number | null>(null)
+const isFocused = ref(false)
+const dropdownOpen = ref(false)
+
+const placeholderCurrent = ref(props.placeholder)
 
 const handleBlur = () => {
   reset()
@@ -191,29 +197,44 @@ const updateInputModel = () => {
 const handleInputClear = () => {
   inputModel.value = ''
   placeholderCurrent.value = props.placeholder
+  selected.value = null
+  localStorageClear()
   emits('update:modelValue', null)
 }
 
-const selectItem = (item: Option<number | string> | string | number) => {
+function onSelect(item: Option<number | string> | string | number) {
   selected.value = item
   emits('update:modelValue', selectedValue.value)
+  localStorageSave(item)
 }
 
 function onSearch(payload: string) {
   search.value = payload
 }
 
-onMounted(() => {
-  inputModel.value =
-    typeof props.modelValue === 'object'
-      ? (props.modelValue[props.labelField] as string) || ''
-      : `${props.modelValue || ''}`
-})
+function localStorageSave(payload: Option<number | string> | string | number) {
+  if (storage) {
+    storage.storageSave(payload)
+  }
+}
+
+function localStorageClear() {
+  if (storage) {
+    storage.storageClear()
+  }
+}
 
 function reset() {
   isFocused.value = false
   search.value = ''
 }
+
+onMounted(() => {
+  if (selectedValue.value !== null && props.storageKey) {
+    emits('update:modelValue', selectedValue.value)
+    inputModel.value = selectedText.value
+  }
+})
 </script>
 
 <style scoped>

@@ -33,6 +33,9 @@
                 :remoteHandler="testOptionsApi"
                 value-field="id"
                 label-field="id"
+                label="Select 1"
+                infinite-scroll
+                storage-key="select-1"
               >
                 <!-- clear-icon -->
                 <!-- <template #clear-icon>-->
@@ -51,6 +54,7 @@
                 :options="options"
                 value-field="id"
                 label-field="title"
+                storage-key="select-2"
               >
                 <!-- prefix -->
                 <template #prefix>
@@ -59,7 +63,12 @@
               </vega-select>
 
               {{ inputValue3 }}
-              <vega-select v-model="inputValue3" :searchable="true" :options="options3">
+              <vega-select
+                v-model="inputValue3"
+                :searchable="true"
+                :options="options3"
+                storage-key="select-3"
+              >
                 <!-- prefix -->
                 <template #prefix>
                   <VegaIconArrow />
@@ -112,9 +121,9 @@ const options = ref([
 //   { id: 2, title: '2S', color: 'red' },
 // ])
 
-// const options3 = ref([0, 1])
+const options3 = ref([0, 1])
 
-const options3 = ref(['option1', 'option2', 'option3'])
+// const options3 = ref(['option1', 'option2', 'option3'])
 
 export interface Option<T> {
   [key: string]: T
