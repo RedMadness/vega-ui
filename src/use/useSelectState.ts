@@ -1,37 +1,61 @@
-import { onMounted, Ref, ref } from 'vue'
+import { computed, onMounted, Ref, ref } from 'vue'
 
 // to achieve shared state between instances, we need to move the variable outside the composite function
-const state: { key: string; value: Ref<Option<number | string> | string | number | null> }[] = []
+const state: { id: string; value: Ref<Option<number | string> | string | number | null> }[] = []
 
-export default function useSelectState(key: string) {
-  let storageItem = state.find((item) => item.key === key)
+export default function useSelectState(
+  id: string,
+  valueField: string | null = null,
+  labelField: string | null = null
+) {
+  let storageItem = state.find((item) => item.id === id)
   if (storageItem === undefined) {
-    storageItem = { key: key, value: ref(null) }
+    storageItem = { id: id, value: ref(null) }
     state.push(storageItem)
   }
 
-  const storageSelected = storageItem.value
+  const selected = storageItem.value
+  const selectedText = computed(() => {
+    if (selected.value === null) {
+      return ''
+    }
+    if (typeof selected.value === 'object' && labelField) {
+      return String(selected.value[labelField])
+    }
+
+    return String(selected.value === undefined ? '' : selected.value)
+  })
+  const selectedValue = computed(() => {
+    if (selected.value === null) {
+      return null
+    }
+    if (typeof selected.value === 'object' && valueField) {
+      return selected.value[valueField]
+    }
+
+    return selected.value
+  })
 
   onMounted(() => {
-    const data = localStorage.getItem(key)
+    const data = localStorage.getItem(id)
     if (data === null) {
-      storageSelected.value = null
+      selected.value = null
     } else {
-      storageSelected.value = isJSON(data) ? JSON.parse(data) : data
+      selected.value = isJSON(data) ? JSON.parse(data) : data
     }
   })
 
   function storageSave(payload: Object | string | number) {
     typeof payload === 'object'
-      ? localStorage.setItem(key, JSON.stringify(payload))
-      : localStorage.setItem(key, String(payload))
+      ? localStorage.setItem(id, JSON.stringify(payload))
+      : localStorage.setItem(id, String(payload))
   }
 
   function storageClear() {
-    localStorage.removeItem(key)
+    localStorage.removeItem(id)
   }
 
-  return { storageSelected, storageSave, storageClear }
+  return { selected, selectedText, selectedValue, storageSave, storageClear }
 }
 
 function isJSON(payload: string) {

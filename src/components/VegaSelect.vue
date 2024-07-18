@@ -83,8 +83,8 @@ export interface Option<T> {
 export interface Props<T> {
   label?: string
   searchable?: boolean
-  valueField?: keyof Option<T>
-  labelField?: keyof Option<T>
+  valueField?: string
+  labelField?: string
   placeholder?: string
   fontSize?: string
   fontColor?: string
@@ -148,7 +148,7 @@ const filters = computed(() => {
 const storage = props.storageKey ? useSelectState(props.storageKey) : null
 
 const selected = storage
-  ? storage.storageSelected
+  ? storage.selected
   : ref<Option<number | string> | string | number | null>(null)
 
 const selectedText = computed(() => {
