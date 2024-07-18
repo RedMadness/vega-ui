@@ -50,7 +50,6 @@
               {{ inputValue2 }}
               <vega-select
                 v-model="inputValue2"
-                :searchable="true"
                 :options="options"
                 value-field="id"
                 label-field="title"

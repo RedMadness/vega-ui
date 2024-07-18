@@ -1,5 +1,8 @@
 <template>
   <div class="select-container">
+    <div v-if="$slots.label || label">
+      <slot name="label">{{ label }}</slot>
+    </div>
     <vega-dropdown
       :options="options"
       :value-field="valueField"
@@ -16,13 +19,14 @@
       :remote-handler="remoteHandler"
       :filters="filters"
       @select="onSelect"
+      @open="onOpen"
+      @close="onClose"
     >
       <template #trigger>
         <vega-input
           v-model="inputModel"
-          :label="label"
           :placeholder="placeholderCurrent"
-          :readonly="!searchable"
+          :readonly="!searchable || !isOpened"
           :font-size="fontSize"
           :font-color="fontColor"
           :placeholder-color="placeholderColor"
@@ -36,15 +40,10 @@
           :height="height"
           :text-align="textAlign"
           :delay-debounce="delayDebounce"
-          :clearable="true"
-          @focus="handleFocus"
-          @blur="handleBlur"
-          @clear="handleInputClear"
+          :clearable="clearable"
+          @clear="onClear"
           @update:model-value="onSearch"
         >
-          <template #label>
-            <slot name="label" />
-          </template>
           <template #clear-icon>
             <slot name="clear-icon"></slot>
           </template>
@@ -100,7 +99,7 @@ export interface Props<T> {
   height?: string
   textAlign?: string
   delayDebounce?: number
-  isOpen?: boolean
+  clearable?: boolean
 
   backgroundColorDropdown?: string
   hoverColorDropdown?: string
@@ -128,6 +127,7 @@ const props = withDefaults(defineProps<Props<number | string>>(), {
   backgroundColorDropdown: 'var(--vega-secondary)',
   hoverColorDropdown: 'var(--vega-primary)',
   delayDebounce: 600,
+  clearable: true,
 
   placeholder: 'Select value',
   label: '',
@@ -135,6 +135,8 @@ const props = withDefaults(defineProps<Props<number | string>>(), {
 })
 
 const emits = defineEmits(['update:modelValue'])
+
+const isOpened = ref(false)
 
 const search = ref('')
 const filters = computed(() => {
@@ -171,35 +173,35 @@ const selectedValue = computed(() => {
 })
 
 const inputModel = ref<string | number | null>(null)
-const isFocused = ref(false)
 const dropdownOpen = ref(false)
 
 const placeholderCurrent = ref(props.placeholder)
 
-const handleBlur = () => {
-  reset()
+function onOpen() {
+  isOpened.value = true
+  placeholderCurrent.value = selectedText.value || props.placeholder
+  updateInputModel()
+}
+
+function onClose() {
+  isOpened.value = false
+  search.value = ''
   updateInputModel()
   if (!inputModel.value) {
     placeholderCurrent.value = props.placeholder
   }
 }
 
-const handleFocus = () => {
-  isFocused.value = true
-  placeholderCurrent.value = selectedText.value || props.placeholder
-  updateInputModel()
-}
-
-const updateInputModel = () => {
-  inputModel.value = isFocused.value && props.searchable ? search.value : selectedText.value
-}
-
-const handleInputClear = () => {
+const onClear = () => {
   inputModel.value = ''
   placeholderCurrent.value = props.placeholder
   selected.value = null
   localStorageClear()
   emits('update:modelValue', null)
+}
+
+const updateInputModel = () => {
+  inputModel.value = isOpened.value && props.searchable ? search.value : selectedText.value
 }
 
 function onSelect(item: Option<number | string> | string | number) {
@@ -224,11 +226,6 @@ function localStorageClear() {
   }
 }
 
-function reset() {
-  isFocused.value = false
-  search.value = ''
-}
-
 onMounted(() => {
   if (selectedValue.value !== null && props.storageKey) {
     emits('update:modelValue', selectedValue.value)
@@ -240,5 +237,8 @@ onMounted(() => {
 <style scoped>
 .select-container {
   position: relative;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
 }
 </style>

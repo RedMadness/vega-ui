@@ -3,7 +3,7 @@
     <slot name="label">
       <span v-if="label">{{ label }}</span>
     </slot>
-    <div class="input-wrapper" v-bind="$attrs">
+    <label class="input-wrapper" v-bind="$attrs">
       <slot name="prefix"></slot>
       <input
         ref="inputRef"
@@ -17,11 +17,15 @@
         @blur="handleBlur"
         :autocomplete="type === 'password' ? 'on' : 'off'"
       />
-      <span v-if="clearable && modelValue" class="clear-button" @click.stop="clearInput"
-        ><slot name="clear-icon">&#10005;</slot>
+      <span
+        v-if="clearable && modelValue"
+        class="clear-button"
+        @mousedown.stop="clearInput"
+      >
+        <slot name="clear-icon">&#10005;</slot>
       </span>
       <slot name="postfix"></slot>
-    </div>
+    </label>
   </div>
 </template>
 
@@ -161,10 +165,6 @@ const debouncedHandleInput = debounce((event: Event) => {
   cursor: pointer;
   background-color: transparent;
   border: none;
-  position: absolute;
-  right: 40px;
-  top: 50%;
-  transform: translateY(-50%);
   color: #ccc;
   font-size: 16px;
 }

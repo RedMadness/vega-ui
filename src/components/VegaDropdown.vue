@@ -1,6 +1,6 @@
 <template>
   <div v-click-outside="onClickOutside">
-    <div @click="toggleOpenState">
+    <div @mousedown="toggleOpenState">
       <slot name="trigger" />
     </div>
     <div class="dropdown" :class="{ open: isOpen }" @scroll="handleScroll">
@@ -76,7 +76,7 @@ const props = withDefaults(defineProps<Props<number | string>>(), {
   noOptionsMessage: 'No options available',
 })
 
-const emits = defineEmits(['select', 'close', 'loadMoreItems', 'loadPreviousItems'])
+const emits = defineEmits(['open', 'select', 'close'])
 
 const loading = ref(false)
 const reachedBottom = ref(false)
@@ -126,6 +126,7 @@ function open() {
   if (isOpen.value === false) {
     isOpen.value = true
     callApi()
+    emits('open')
   }
 }
 
@@ -142,6 +143,7 @@ function close() {
   if (isOpen.value === true) {
     isOpen.value = false
     resetRemote()
+    emits('close')
   }
 }
 
@@ -173,7 +175,6 @@ async function handleLowerBoundary(target: HTMLElement) {
 
   if (hasNextPage.value && isOpen.value) {
     loading.value = true
-    emits('loadMoreItems')
     page.value++
     const scrollPosition = target.scrollTop
     await callApi()
@@ -186,7 +187,6 @@ const handleUpperBoundary = (scrollTop: number) => {
 
   reachedTop.value = true
   loading.value = true
-  emits('loadPreviousItems')
 }
 
 function resetScrollState() {
