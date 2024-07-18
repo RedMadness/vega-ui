@@ -1,4 +1,4 @@
-import { computed, onMounted, Ref, ref } from 'vue'
+import { computed, Ref, ref } from 'vue'
 
 // to achieve shared state between instances, we need to move the variable outside the composite function
 const state: { id: string; value: Ref<Option<number | string> | string | number | null> }[] = []
@@ -36,14 +36,12 @@ export default function useSelectState(
     return selected.value
   })
 
-  onMounted(() => {
-    const data = localStorage.getItem(id)
-    if (data === null) {
-      selected.value = null
-    } else {
-      selected.value = isJSON(data) ? JSON.parse(data) : data
-    }
-  })
+  const data = localStorage.getItem(id)
+  if (data === null) {
+    selected.value = null
+  } else {
+    selected.value = isJSON(data) ? JSON.parse(data) : data
+  }
 
   function storageSave(payload: Object | string | number) {
     typeof payload === 'object'
