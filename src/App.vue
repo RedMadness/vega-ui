@@ -33,6 +33,7 @@
                 :remoteHandler="testOptionsApi"
                 value-field="id"
                 label-field="id"
+                tooltip-field="description"
                 label="Select 1"
                 infinite-scroll
                 storage-key="select-1"

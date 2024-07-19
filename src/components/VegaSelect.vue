@@ -7,6 +7,7 @@
       :options="options"
       :value-field="valueField"
       :label-field="labelField"
+      :tooltip-field="tooltipField"
       :backgroundColorDropdown="backgroundColorDropdown"
       :hover-color-dropdown="hoverColorDropdown"
       :text-color-dropdown="textColorDropdown"
@@ -85,6 +86,7 @@ export interface Props<T> {
   searchable?: boolean
   valueField?: string
   labelField?: string
+  tooltipField?: string
   placeholder?: string
   fontSize?: string
   fontColor?: string

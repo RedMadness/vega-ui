@@ -11,7 +11,12 @@
           class="dropdown-item"
           @mousedown.left="onSelect(option)"
         >
-          {{ getOptionText(option) }}
+          <vega-tooltip v-if="tooltipField" :text="getOptionTooltip(option)">
+            {{ getOptionText(option) }}
+          </vega-tooltip>
+          <template v-else>
+            {{ getOptionText(option) }}
+          </template>
         </div>
         <div ref="loaderRef" />
       </div>
@@ -28,6 +33,7 @@
 <script setup lang="ts">
 import { computed, ref, watch } from 'vue'
 import VegaLoading from './VegaLoading.vue'
+import VegaTooltip from './VegaTooltip.vue'
 
 export interface Option<T> {
   [key: string]: T
@@ -44,8 +50,9 @@ interface ApiResponse<T> {
 
 export interface Props<T> {
   options?: Array<Option<T> | string | number>
-  valueField?: keyof Option<T>
-  labelField?: keyof Option<T>
+  valueField?: string
+  labelField?: string
+  tooltipField?: string
   backgroundColorDropdown?: string
   hoverColorDropdown?: string
   textColorDropdown?: string
@@ -209,6 +216,14 @@ function getOptionText(option: Option<number | string> | string | number) {
   return option
 }
 
+function getOptionTooltip(option: Option<number | string> | string | number) {
+  if (typeof option === 'object' && props.tooltipField) {
+    return String(option[props.tooltipField])
+  }
+
+  return ''
+}
+
 async function callApi() {
   if (props.remoteHandler) {
     loading.value = true
@@ -249,7 +264,8 @@ watch(
   position: absolute;
   top: 115%;
   left: 0;
-  box-shadow: 0 0 0 1px v-bind(borderColorDropdown);
+  box-shadow: 0 3px 6px 0 rgba(0, 0, 0, 0.15);
+  border: v-bind(borderColorDropdown) 1px solid;
   border-radius: v-bind(borderRadiusDropdown);
   width: 100%;
 

@@ -9,6 +9,7 @@ import VegaIconArrow from './components/VegaIconArrow.vue'
 import VegaInput from './components/VegaInput.vue'
 import VegaSelect from './components/VegaSelect.vue'
 import VegaLoading from './components/VegaLoading.vue'
+import VegaTooltip from './components/VegaTooltip.vue'
 import useSidebarState from './use/useSidebarState.ts'
 import useSelectState from './use/useSelectState.ts'
 import './assets/css/variables.css'
@@ -22,6 +23,7 @@ export {
   VegaInput,
   VegaSelect,
   VegaLoading,
+  VegaTooltip,
   useSidebarState,
   useSelectState,
 }
