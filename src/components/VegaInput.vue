@@ -65,7 +65,7 @@ const props = withDefaults(defineProps<Props>(), {
   hoverBorderColor: 'var(--vega-border-color)',
   focusBorderColor: 'var(--vega-border-color)',
   borderRadius: '4px',
-  padding: '10px',
+  padding: '10px 5px',
   width: '100%',
   height: 'auto',
   textAlign: 'left',
