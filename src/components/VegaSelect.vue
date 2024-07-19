@@ -53,7 +53,7 @@
           </template>
           <template #postfix>
             <slot name="postfix" :isOpened="isOpened">
-              <VegaIconArrow :rotate="isOpened ? '180deg' : '0deg'" />
+              <vega-icon-arrow :rotate="isOpened ? '180deg' : '0deg'" />
             </slot>
           </template>
         </vega-input>

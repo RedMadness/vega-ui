@@ -61,7 +61,7 @@
               >
                 <!-- prefix -->
                 <template #prefix>
-                  <VegaIconArrow />
+                  <vega-icon-arrow />
                 </template>
               </vega-select>
 
@@ -74,7 +74,7 @@
               >
                 <!-- prefix -->
                 <template #prefix>
-                  <VegaIconArrow />
+                  <vega-icon-arrow />
                 </template>
               </vega-select>
             </vega-sidebar>
