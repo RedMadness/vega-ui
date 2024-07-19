@@ -133,7 +133,6 @@ const debouncedHandleInput = debounce((event: Event) => {
   display: flex;
   justify-content: flex-start;
   align-items: center;
-  gap: 8px;
   box-shadow: 0 0 0 1px v-bind(borderColor);
   border-radius: v-bind(borderRadius);
   background-color: v-bind(backgroundColor);
@@ -162,7 +161,8 @@ const debouncedHandleInput = debounce((event: Event) => {
   background-color: transparent;
   border: none;
   color: #ccc;
-  font-size: 16px;
+  font-size: 14px;
+  margin: auto;
 }
 .clear-button:hover {
   color: #999;

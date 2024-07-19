@@ -46,6 +46,9 @@
                 <template #prefix>
                   <VegaIconArrow />
                 </template>
+                <template #postfix="{ isOpened }">
+                  <vega-icon-arrow :rotate="isOpened ? '180deg' : '0deg'" />
+                </template>
               </vega-select>
 
               {{ inputValue2 }}

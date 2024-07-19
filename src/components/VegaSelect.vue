@@ -52,7 +52,7 @@
             <slot name="prefix"></slot>
           </template>
           <template #postfix>
-            <slot name="postfix">
+            <slot name="postfix" :isOpened="isOpened">
               <VegaIconArrow :rotate="isOpened ? '180deg' : '0deg'" />
             </slot>
           </template>
