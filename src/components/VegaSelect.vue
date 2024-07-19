@@ -53,7 +53,7 @@
           </template>
           <template #postfix>
             <slot name="postfix">
-              <VegaIconArrow :rotate="dropdownOpen ? '180deg' : '0deg'" />
+              <VegaIconArrow :rotate="isOpened ? '180deg' : '0deg'" />
             </slot>
           </template>
         </vega-input>
@@ -175,7 +175,6 @@ const selectedValue = computed(() => {
 })
 
 const inputModel = ref<string | number | null>(null)
-const dropdownOpen = ref(false)
 
 const placeholderCurrent = ref(props.placeholder)
 
