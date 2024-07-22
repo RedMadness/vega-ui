@@ -175,9 +175,11 @@ const handleScroll = (event: Event) => {
 
 async function handleLowerBoundary(target: HTMLElement) {
   const { scrollTop, clientHeight, scrollHeight } = target
-  const isBottomReached = scrollTop + clientHeight === scrollHeight
-  if (!isBottomReached || loading.value || reachedBottom.value) return
 
+  /** @see https://developer.mozilla.org/en-US/docs/Web/API/Element/scrollHeight#determine_if_an_element_has_been_totally_scrolled */
+  const isBottomReached = Math.abs(scrollHeight - clientHeight - scrollTop) <= 1
+
+  if (!isBottomReached || loading.value || reachedBottom.value) return
   reachedBottom.value = true
 
   if (hasNextPage.value && isOpen.value) {
