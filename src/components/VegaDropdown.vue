@@ -53,14 +53,14 @@ export interface Props<T> {
   valueField?: string
   labelField?: string
   tooltipField?: string
-  backgroundColorDropdown?: string
-  hoverColorDropdown?: string
-  textColorDropdown?: string
-  borderColorDropdown?: string
-  borderRadiusDropdown?: string
-  fontSizeDropdown?: string
-  optionPaddingDropdown?: string
-  transitionDurationDropdown?: string
+  backgroundColor?: string
+  hoverColor?: string
+  textColor?: string
+  borderColor?: string
+  borderRadius?: string
+  fontSize?: string
+  optionPadding?: string
+  transitionDuration?: string
   infiniteScroll?: boolean
   noOptionsMessage?: string
   remoteHandler?: (params: any) => Promise<ApiResponse<Option<string | number> | string | number>>
@@ -71,14 +71,14 @@ const props = withDefaults(defineProps<Props<number | string>>(), {
   options: () => [],
   valueField: 'value',
   labelField: 'label',
-  backgroundColorDropdown: 'transparent',
-  hoverColorDropdown: 'transparent',
-  textColorDropdown: 'inherit',
-  borderColorDropdown: 'var(--vega-border-color)',
-  borderRadiusDropdown: '4px',
-  fontSizeDropdown: 'inherit',
-  optionPaddingDropdown: '8px 12px',
-  transitionDurationDropdown: '0.3s',
+  backgroundColor: 'var(--vega-secondary)',
+  hoverColor: 'ver(--vega-primary)',
+  textColor: 'inherit',
+  borderColor: 'var(--vega-border-color)',
+  borderRadius: '4px',
+  fontSize: 'inherit',
+  optionPadding: '8px 12px',
+  transitionDuration: '0.3s',
   infiniteScroll: false,
   noOptionsMessage: 'No options available',
 })
@@ -165,7 +165,7 @@ const handleScroll = (event: Event) => {
   const target = event.target as HTMLElement
 
   const { scrollTop, clientHeight, scrollHeight } = target as HTMLElement
-  handleUpperBoundary(scrollTop)
+  // handleUpperBoundary(scrollTop)
   handleLowerBoundary(target)
 
   if (scrollTop > 0 && scrollTop + clientHeight < scrollHeight - 10) {
@@ -175,9 +175,11 @@ const handleScroll = (event: Event) => {
 
 async function handleLowerBoundary(target: HTMLElement) {
   const { scrollTop, clientHeight, scrollHeight } = target
-  const isBottomReached = scrollTop + clientHeight === scrollHeight
-  if (!isBottomReached || loading.value || reachedBottom.value) return
 
+  /** @see https://developer.mozilla.org/en-US/docs/Web/API/Element/scrollHeight#determine_if_an_element_has_been_totally_scrolled */
+  const isBottomReached = Math.abs(scrollHeight - clientHeight - scrollTop) <= 1
+
+  if (!isBottomReached || loading.value || reachedBottom.value) return
   reachedBottom.value = true
 
   if (hasNextPage.value && isOpen.value) {
@@ -189,12 +191,11 @@ async function handleLowerBoundary(target: HTMLElement) {
   }
 }
 
-const handleUpperBoundary = (scrollTop: number) => {
-  if (scrollTop !== 0 || loading.value || reachedTop.value) return
-
-  reachedTop.value = true
-  loading.value = true
-}
+// const handleUpperBoundary = (scrollTop: number) => {
+//   if (scrollTop !== 0 || loading.value || reachedTop.value) return
+//
+//   reachedTop.value = true
+// }
 
 function resetScrollState() {
   reachedBottom.value = reachedTop.value = false
@@ -265,8 +266,8 @@ watch(
   top: 115%;
   left: 0;
   box-shadow: 0 3px 6px 0 rgba(0, 0, 0, 0.15);
-  border: v-bind(borderColorDropdown) 1px solid;
-  border-radius: v-bind(borderRadiusDropdown);
+  border: v-bind(borderColor) 1px solid;
+  border-radius: v-bind(borderRadius);
   width: 100%;
 
   z-index: 1;
@@ -274,27 +275,27 @@ watch(
   box-sizing: border-box;
   max-height: 0;
   opacity: 0;
-  transition: all v-bind(transitionDurationDropdown) ease-in-out;
+  transition: all v-bind(transitionDuration) ease-in-out;
   overflow: auto;
-  color: v-bind(textColorDropdown);
-  font-size: v-bind(fontSizeDropdown);
+  color: v-bind(textColor);
+  font-size: v-bind(fontSize);
+  background-color: v-bind(backgroundColor);
 }
 
 .dropdown-item {
-  padding: v-bind(optionPaddingDropdown);
+  padding: v-bind(optionPadding);
   cursor: pointer;
-  background-color: v-bind(backgroundColorDropdown);
 }
 
 .dropdown-no-item {
-  padding: v-bind(optionPaddingDropdown);
+  padding: v-bind(optionPadding);
   cursor: pointer;
-  background-color: v-bind(backgroundColorDropdown);
+  background-color: v-bind(backgroundColor);
   text-align: center;
 }
 
 .dropdown-item:hover {
-  background-color: v-bind(hoverColorDropdown);
+  background-color: v-bind(hoverColor);
 }
 
 .dropdown.open {
@@ -303,6 +304,6 @@ watch(
 }
 
 .loading {
-  background-color: v-bind(backgroundColorDropdown);
+  background-color: v-bind(backgroundColor);
 }
 </style>
