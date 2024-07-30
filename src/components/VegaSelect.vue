@@ -8,6 +8,7 @@
       :value-field="valueField"
       :label-field="labelField"
       :tooltip-field="tooltipField"
+      :no-options-message="noOptionsMessage"
       :background-color="backgroundColorDropdown"
       :hover-color="hoverColorDropdown"
       :text-color="textColorDropdown"
@@ -15,7 +16,7 @@
       :border-radius="borderRadiusDropdown"
       :font-size="fontSizeDropdown"
       :option-padding="optionPaddingDropdown"
-      :transitionDuration="transitionDurationDropdown"
+      :transition-duration="transitionDurationDropdown"
       :infinite-scroll="infiniteScroll"
       :remote-handler="remoteHandler"
       :filters="filters"
@@ -112,6 +113,7 @@ export interface Props<T> {
   optionPaddingDropdown?: string
   transitionDurationDropdown?: string
   infiniteScroll?: boolean
+  noOptionsMessage?: string
 
   remoteHandler?: (params: any) => Promise<ApiResponse<Option<string | number> | string | number>>
   options?: Array<Option<T> | string | number>
