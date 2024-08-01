@@ -94,14 +94,12 @@ const perPage = ref(25)
 const isOpen = ref(false)
 /** Is it possible to download additional options from the server? */
 const hasNextPage = computed(() => optionsRemote.value?.length < total.value)
-/** The list of options passed through props. */
-const optionsStatic = ref(props.options)
 /** Options obtained by remote query. */
 const optionsRemote = ref<(Option<string | number> | string | number)[]>([])
 /** Final list of options */
 const optionsList = computed(() => {
   return [
-    ...(optionsStatic.value as (Option<string | number> | string | number)[]),
+    ...(props.options as (Option<string | number> | string | number)[]),
     ...optionsRemote.value,
   ]
 })
