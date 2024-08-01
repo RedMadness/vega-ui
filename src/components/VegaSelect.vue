@@ -26,7 +26,7 @@
     >
       <template #trigger>
         <vega-input
-          v-model="inputModel"
+          :model-value="inputModel"
           :placeholder="placeholderCurrent"
           :readonly="!searchable || !isOpened"
           :font-size="fontSize"
@@ -118,7 +118,7 @@ export interface Props<T> {
   remoteHandler?: (params: any) => Promise<ApiResponse<Option<string | number> | string | number>>
   options?: Array<Option<T> | string | number>
 
-  modelValue?: Option<T> | string | number
+  modelValue?: Option<T> | string | number | null
   storageKey?: string
 }
 
@@ -135,7 +135,7 @@ const props = withDefaults(defineProps<Props<number | string>>(), {
 
   placeholder: 'Select value',
   label: '',
-  modelValue: undefined,
+  modelValue: null,
 })
 
 const emits = defineEmits(['update:modelValue'])
@@ -153,7 +153,7 @@ const storage = props.storageKey ? useSelectState(props.storageKey) : null
 
 const selected = storage
   ? storage.selected
-  : ref<Option<number | string> | string | number | null>(null)
+  : ref<Option<number | string> | string | number | null>(props.modelValue)
 
 const selectedText = computed(() => {
   if (selected.value === null) {
@@ -176,35 +176,31 @@ const selectedValue = computed(() => {
   return selected.value
 })
 
-const inputModel = ref<string | number | null>(null)
+const inputModel = computed(() =>
+  isOpened.value && props.searchable ? search.value : selectedText.value
+)
 
 const placeholderCurrent = ref(props.placeholder)
 
 function onOpen() {
   isOpened.value = true
   placeholderCurrent.value = selectedText.value || props.placeholder
-  updateInputModel()
 }
 
 function onClose() {
   isOpened.value = false
   search.value = ''
-  updateInputModel()
   if (!inputModel.value) {
     placeholderCurrent.value = props.placeholder
   }
 }
 
 const onClear = () => {
-  inputModel.value = ''
+  search.value = ''
   placeholderCurrent.value = props.placeholder
   selected.value = null
   localStorageClear()
   emits('update:modelValue', null)
-}
-
-const updateInputModel = () => {
-  inputModel.value = isOpened.value && props.searchable ? search.value : selectedText.value
 }
 
 function onSelect(item: Option<number | string> | string | number) {
@@ -232,7 +228,7 @@ function localStorageClear() {
 onMounted(() => {
   if (selectedValue.value !== null && props.storageKey) {
     emits('update:modelValue', selectedValue.value)
-    inputModel.value = selectedText.value
+    //inputModel.value = selectedText.value
   }
 })
 </script>

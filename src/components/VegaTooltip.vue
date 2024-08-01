@@ -16,7 +16,6 @@ const x = ref('0px')
 const y = ref('0px')
 
 function getMousePosition(event: MouseEvent) {
-  console.log(event)
   x.value = event.clientX + 20 + 'px'
   y.value = event.clientY + 20 + 'px'
 }
