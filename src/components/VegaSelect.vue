@@ -138,7 +138,7 @@ const props = withDefaults(defineProps<Props<number | string>>(), {
   modelValue: null,
 })
 
-const emits = defineEmits(['update:modelValue'])
+const emits = defineEmits(['update:modelValue', 'selected'])
 
 const isOpened = ref(false)
 
@@ -200,12 +200,12 @@ const onClear = () => {
   placeholderCurrent.value = props.placeholder
   selected.value = null
   localStorageClear()
-  emits('update:modelValue', null)
+  emitSelected()
 }
 
 function onSelect(item: Option<number | string> | string | number) {
   selected.value = item
-  emits('update:modelValue', selectedValue.value)
+  emitSelected()
   localStorageSave(item)
 }
 
@@ -225,10 +225,14 @@ function localStorageClear() {
   }
 }
 
+function emitSelected() {
+  emits('update:modelValue', selected.value)
+  emits('selected', selectedValue.value)
+}
+
 onMounted(() => {
   if (selectedValue.value !== null && props.storageKey) {
-    emits('update:modelValue', selectedValue.value)
-    //inputModel.value = selectedText.value
+    emitSelected()
   }
 })
 </script>
