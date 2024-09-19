@@ -261,7 +261,7 @@ watch(
 <style scoped>
 .dropdown {
   position: absolute;
-  top: 115%;
+  top: calc(100% + 8px);
   left: 0;
   box-shadow: 0 3px 6px 0 rgba(0, 0, 0, 0.15);
   border: v-bind(borderColor) 1px solid;
