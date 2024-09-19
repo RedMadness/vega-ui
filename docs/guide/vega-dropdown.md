@@ -16,6 +16,7 @@ Simple example:
   option-padding="12px 15px"
   transition-duration="0.2s"
   infinite-scroll="true"
+  width="200px"
   :remote-handler="() => {}"
 >
   <template #trigger>
@@ -50,6 +51,7 @@ Simple example:
 | `no-options-message`  | `string`                                                                        | `'No options available'`     | Message displayed when there are no options to display.                                                                                                                              |
 | `remote-handler`      | `function`                                                                      |                              | A function that accepts query parameters and returns a promise with the dropdown options. For details on the response format, see [API Response Format](#api-response-format) below. |
 | `filters`             | `object`                                                                        |                              | Optional filters to apply when fetching data remotely.                                                                                                                               |
+| `width`               | `string`                                                                        | `100%`                       | Width value in css format                                                                                                                                                            |
 
 
 

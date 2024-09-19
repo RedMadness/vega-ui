@@ -65,6 +65,7 @@ export interface Props<T> {
   noOptionsMessage?: string
   remoteHandler?: (params: any) => Promise<ApiResponse<Option<string | number> | string | number>>
   filters?: object
+  width?: string,
 }
 
 const props = withDefaults(defineProps<Props<number | string>>(), {
@@ -81,6 +82,7 @@ const props = withDefaults(defineProps<Props<number | string>>(), {
   transitionDuration: '0.3s',
   infiniteScroll: false,
   noOptionsMessage: 'No options available',
+  width: '100%',
 })
 
 const emits = defineEmits(['open', 'select', 'close'])
@@ -266,7 +268,7 @@ watch(
   box-shadow: 0 3px 6px 0 rgba(0, 0, 0, 0.15);
   border: v-bind(borderColor) 1px solid;
   border-radius: v-bind(borderRadius);
-  width: 100%;
+  width: v-bind(width);
 
   z-index: 1;
 
