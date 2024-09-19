@@ -10,6 +10,7 @@ import VegaInput from './components/VegaInput.vue'
 import VegaSelect from './components/VegaSelect.vue'
 import VegaLoading from './components/VegaLoading.vue'
 import VegaTooltip from './components/VegaTooltip.vue'
+import VegaDropdown from './components/VegaDropdown.vue'
 import useSidebarState from './use/useSidebarState.ts'
 import useSelectState from './use/useSelectState.ts'
 import './assets/css/variables.css'
@@ -24,6 +25,7 @@ export {
   VegaSelect,
   VegaLoading,
   VegaTooltip,
+  VegaDropdown,
   useSidebarState,
   useSelectState,
 }
@@ -38,5 +40,6 @@ export default {
     app.component('VegaInput', VegaInput)
     app.component('VegaSelect', VegaSelect)
     app.component('VegaLoading', VegaLoading)
+    app.component('VegaDropdown', VegaDropdown)
   },
 }
