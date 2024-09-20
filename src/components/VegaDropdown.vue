@@ -4,8 +4,8 @@
       <slot name="trigger" />
     </div>
     <div class="dropdown" :class="{ open: isOpen }" @scroll="handleScroll">
-      <div v-if="optionsList.length">
-        <slot>
+      <slot>
+        <div v-if="optionsList.length">
           <div
             v-for="option in optionsList"
             :key="getOptionValue(option)"
@@ -20,14 +20,14 @@
             </template>
           </div>
           <div ref="loaderRef" />
-        </slot>
-      </div>
-      <div v-if="loading && isOpen" class="loading">
-        <vega-loading />
-      </div>
-      <div v-if="!optionsList.length && !loading && isOpen" class="dropdown-no-item">
-        {{ noOptionsMessage }}
-      </div>
+        </div>
+        <div v-if="loading && isOpen" class="loading">
+          <vega-loading />
+        </div>
+        <div v-if="!optionsList.length && !loading && isOpen" class="dropdown-no-item">
+          {{ noOptionsMessage }}
+        </div>
+      </slot>
     </div>
   </div>
 </template>
