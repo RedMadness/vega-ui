@@ -52,6 +52,8 @@ Simple example:
 | `remote-handler`      | `function`                                                                      |                              | A function that accepts query parameters and returns a promise with the dropdown options. For details on the response format, see [API Response Format](#api-response-format) below. |
 | `filters`             | `object`                                                                        |                              | Optional filters to apply when fetching data remotely.                                                                                                                               |
 | `width`               | `string`                                                                        | `100%`                       | Width value in css format                                                                                                                                                            |
+| `offset-left`         | `string`                                                                        | `0`                          | Offset to left\right from trigger element                                                                                                                                            |
+| `offset-top`          | `string`                                                                        | `8px`                        | Offset to up\down from trigger element                                                                                                                                               |
 
 
 

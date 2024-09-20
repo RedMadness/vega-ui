@@ -4,21 +4,23 @@
       <slot name="trigger" />
     </div>
     <div class="dropdown" :class="{ open: isOpen }" @scroll="handleScroll">
-      <div v-if="optionsList.length" class="dropdown-items">
-        <div
-          v-for="option in optionsList"
-          :key="getOptionValue(option)"
-          class="dropdown-item"
-          @mousedown.left="onSelect(option)"
-        >
-          <vega-tooltip v-if="tooltipField" :text="getOptionTooltip(option)">
-            {{ getOptionText(option) }}
-          </vega-tooltip>
-          <template v-else>
-            {{ getOptionText(option) }}
-          </template>
-        </div>
-        <div ref="loaderRef" />
+      <div v-if="optionsList.length">
+        <slot>
+          <div
+            v-for="option in optionsList"
+            :key="getOptionValue(option)"
+            class="dropdown-item"
+            @mousedown.left="onSelect(option)"
+          >
+            <vega-tooltip v-if="tooltipField" :text="getOptionTooltip(option)">
+              {{ getOptionText(option) }}
+            </vega-tooltip>
+            <template v-else>
+              {{ getOptionText(option) }}
+            </template>
+          </div>
+          <div ref="loaderRef" />
+        </slot>
       </div>
       <div v-if="loading && isOpen" class="loading">
         <vega-loading />
@@ -65,7 +67,9 @@ export interface Props<T> {
   noOptionsMessage?: string
   remoteHandler?: (params: any) => Promise<ApiResponse<Option<string | number> | string | number>>
   filters?: object
-  width?: string,
+  width?: string
+  offsetLeft?: string
+  offsetTop?: string
 }
 
 const props = withDefaults(defineProps<Props<number | string>>(), {
@@ -83,6 +87,8 @@ const props = withDefaults(defineProps<Props<number | string>>(), {
   infiniteScroll: false,
   noOptionsMessage: 'No options available',
   width: '100%',
+  offsetLeft: '0',
+  offsetTop: '8px',
 })
 
 const emits = defineEmits(['open', 'select', 'close'])
@@ -263,8 +269,8 @@ watch(
 <style scoped>
 .dropdown {
   position: absolute;
-  top: calc(100% + 8px);
-  left: 0;
+  top: calc(100% + v-bind(offsetTop));
+  left: v-bind(offsetLeft);
   box-shadow: 0 3px 6px 0 rgba(0, 0, 0, 0.15);
   border: v-bind(borderColor) 1px solid;
   border-radius: v-bind(borderRadius);
