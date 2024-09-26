@@ -70,6 +70,7 @@ export interface Props<T> {
   width?: string
   offsetLeft?: string
   offsetTop?: string
+  zIndex?: number
 }
 
 const props = withDefaults(defineProps<Props<number | string>>(), {
@@ -89,6 +90,7 @@ const props = withDefaults(defineProps<Props<number | string>>(), {
   width: '100%',
   offsetLeft: '0',
   offsetTop: '8px',
+  zIndex: 1,
 })
 
 const emits = defineEmits(['open', 'select', 'close'])
@@ -276,7 +278,7 @@ watch(
   border-radius: v-bind(borderRadius);
   width: v-bind(width);
 
-  z-index: 1;
+  z-index: v-bind(zIndex);
 
   box-sizing: border-box;
   max-height: 0;

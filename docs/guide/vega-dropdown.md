@@ -54,6 +54,7 @@ Simple example:
 | `width`               | `string`                                                                        | `100%`                       | Width value in css format                                                                                                                                                            |
 | `offset-left`         | `string`                                                                        | `0`                          | Offset to left\right from trigger element                                                                                                                                            |
 | `offset-top`          | `string`                                                                        | `8px`                        | Offset to up\down from trigger element                                                                                                                                               |
+| `z-index`             | `nunber`                                                                        | `1`                          | Dropdown z-index                                                                                                                                                                     |
 
 
 
