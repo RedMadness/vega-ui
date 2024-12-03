@@ -34,7 +34,9 @@ export interface Props {
   readonly?: boolean
   placeholder?: string
   modelValue?: string | number | null
+  cursorType?: string
   fontSize?: string
+  fontWeight?: string
   fontColor?: string
   placeholderColor?: string
   backgroundColor?: string
@@ -57,7 +59,9 @@ const props = withDefaults(defineProps<Props>(), {
   readonly: false,
   placeholder: '',
   modelValue: '',
+  cursorType: 'inherit',
   fontSize: 'inherit',
+  fontWeight: 'inherit',
   fontColor: 'var(--vega-text-color)',
   placeholderColor: 'var(--vega-gray)',
   backgroundColor: 'none',
@@ -111,9 +115,11 @@ const debouncedHandleInput = debounce((event: Event) => {
 
 <style scoped>
 .vega-input {
+  cursor: v-bind(cursorType);
   border: none;
   box-sizing: border-box;
   font-size: v-bind(fontSize);
+  font-weight: v-bind(fontWeight);
   color: v-bind(fontColor);
   width: 100%;
   height: 100%;
@@ -122,6 +128,7 @@ const debouncedHandleInput = debounce((event: Event) => {
 }
 
 .vega-input:focus {
+  cursor: v-bind(cursorType);
   outline: none;
 }
 
