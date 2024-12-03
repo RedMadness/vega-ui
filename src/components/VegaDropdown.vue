@@ -58,6 +58,7 @@ export interface Props<T> {
   backgroundColor?: string
   hoverColor?: string
   textColor?: string
+  hoverTextColor?: string
   borderColor?: string
   borderRadius?: string
   fontSize?: string
@@ -80,6 +81,7 @@ const props = withDefaults(defineProps<Props<number | string>>(), {
   backgroundColor: 'var(--vega-secondary)',
   hoverColor: 'ver(--vega-primary)',
   textColor: 'inherit',
+  hoverTextColor: 'inherit',
   borderColor: 'var(--vega-border-color)',
   borderRadius: '4px',
   fontSize: 'inherit',
@@ -304,6 +306,7 @@ watch(
 
 .dropdown-item:hover {
   background-color: v-bind(hoverColor);
+  color: v-bind(hoverTextColor);
 }
 
 .dropdown.open {

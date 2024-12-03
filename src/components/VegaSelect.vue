@@ -12,6 +12,7 @@
       :background-color="backgroundColorDropdown"
       :hover-color="hoverColorDropdown"
       :text-color="textColorDropdown"
+      :hover-text-color="hoverTextColorDropdown"
       :border-color="borderColorDropdown"
       :border-radius="borderRadiusDropdown"
       :font-size="fontSizeDropdown"
@@ -29,8 +30,10 @@
           :model-value="inputModel"
           :placeholder="placeholderCurrent"
           :readonly="!searchable || !isOpened"
+          :cursor-type="cursor"
           :font-size="fontSize"
           :font-color="fontColor"
+          :font-weight="fontWeight"
           :placeholder-color="placeholderColor"
           :background-color="backgroundColor"
           :hover-border-color="hoverBorderColor"
@@ -90,6 +93,7 @@ export interface Props<T> {
   tooltipField?: string
   placeholder?: string
   fontSize?: string
+  fontWeight?: string
   fontColor?: string
   placeholderColor?: string
   backgroundColor?: string
@@ -107,6 +111,7 @@ export interface Props<T> {
   backgroundColorDropdown?: string
   hoverColorDropdown?: string
   textColorDropdown?: string
+  hoverTextColorDropdown?: string
   borderColorDropdown?: string
   borderRadiusDropdown?: string
   fontSizeDropdown?: string
@@ -147,6 +152,10 @@ const filters = computed(() => {
   return {
     search: search.value,
   }
+})
+
+const cursor = computed(() => {
+  return props.searchable ? 'text' : 'pointer'
 })
 
 const storage = props.storageKey ? useSelectState(props.storageKey) : null
