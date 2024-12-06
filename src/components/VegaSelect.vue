@@ -160,6 +160,7 @@ const cursor = computed(() => {
 
 const storage = props.storageKey ? useSelectState(props.storageKey) : null
 
+// TODO: initial model-value will be ignored, if storageKey props passed
 const selected = storage
   ? storage.selected
   : ref<Option<number | string> | string | number | null>(props.modelValue)
