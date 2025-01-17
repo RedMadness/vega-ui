@@ -84,7 +84,7 @@ Code above will give you a following result:
 | `clearable`                  | `Boolean`                                                                       | `true`                       | If set to true, adds a clear button to the input field, allowing quick clearing of its content.                                                                                      |
 | `storageKey`                 | `String`                                                                        |                              | Optional key used for storing the selected value in the browser's localStorage. This allows the component to maintain state across page reloads.                                     |
 | `searchable`                 | `Boolean`                                                                       | `false`                      | If set to true, allows the user to type to filter options within the dropdown. This affects whether the input field is interactive.                                                  |
-| `notEmpty`                   | `Boolean`                                                                       | `false`                      | If set to true, the first option will be selected by default.                                                                                                                        |
+| `notEmpty`                   | `Boolean`                                                                       | `false`                      | If set to true, the first option will be selected by default. This will work if the options were passed through prop. Does not work with romoteHendler.                              |
 
 
 ### API Response Format
