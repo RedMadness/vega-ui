@@ -67,7 +67,7 @@
 </template>
 
 <script lang="ts" setup>
-import { ref, computed, onMounted } from 'vue'
+import { ref, computed, onMounted, watch } from 'vue'
 import VegaInput from './VegaInput.vue'
 import VegaDropdown from './VegaDropdown.vue'
 import VegaIconArrow from './VegaIconArrow.vue'
@@ -107,6 +107,7 @@ export interface Props<T> {
   textAlign?: string
   delayDebounce?: number
   clearable?: boolean
+  notEmpty?: boolean
 
   backgroundColorDropdown?: string
   hoverColorDropdown?: string
@@ -137,6 +138,7 @@ const props = withDefaults(defineProps<Props<number | string>>(), {
   hoverColorDropdown: 'var(--vega-primary)',
   delayDebounce: 600,
   clearable: true,
+  notEmpty: false,
 
   placeholder: 'Select value',
   label: '',
@@ -221,6 +223,17 @@ function onSelect(item: Option<number | string> | string | number) {
 
 function onSearch(payload: string) {
   search.value = payload
+}
+
+if (props.notEmpty) {
+  watch(
+    () => props.options,
+    () => {
+      if ((selected.value === null || selected.value === '') && props.options[0])
+        onSelect(props.options[0])
+    },
+    { immediate: true }
+  )
 }
 
 function localStorageSave(payload: Option<number | string> | string | number) {

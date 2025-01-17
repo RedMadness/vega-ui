@@ -58,6 +58,7 @@
                 value-field="id"
                 label-field="title"
                 storage-key="select-2"
+                :not-empty="true"
               >
                 <!-- prefix -->
                 <template #prefix>
