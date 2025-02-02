@@ -6,7 +6,7 @@ const state: { id: string; value: Ref<Option<number | string> | string | number 
 export default function useSelectState(
   id: string,
   valueField: string | null = null,
-  labelField: string | null = null
+  labelField: string | null = null,
 ) {
   let storageItem = state.find((item) => item.id === id)
   if (storageItem === undefined) {
@@ -43,7 +43,7 @@ export default function useSelectState(
     selected.value = isJSON(data) ? JSON.parse(data) : data
   }
 
-  function storageSave(payload: Object | string | number) {
+  function storageSave(payload: object | string | number) {
     typeof payload === 'object'
       ? localStorage.setItem(id, JSON.stringify(payload))
       : localStorage.setItem(id, String(payload))

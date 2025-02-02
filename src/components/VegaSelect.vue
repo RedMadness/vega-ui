@@ -189,7 +189,7 @@ const selectedValue = computed(() => {
 })
 
 const inputModel = computed(() =>
-  isOpened.value && props.searchable ? search.value : selectedText.value
+  isOpened.value && props.searchable ? search.value : selectedText.value,
 )
 
 const placeholderCurrent = ref(props.placeholder)
@@ -232,7 +232,7 @@ if (props.notEmpty) {
       if ((selected.value === null || selected.value === '') && props.options[0])
         onSelect(props.options[0])
     },
-    { immediate: true }
+    { immediate: true },
   )
 }
 

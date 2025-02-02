@@ -266,7 +266,7 @@ watch(
   () => {
     resetRemote()
     callApi()
-  }
+  },
 )
 </script>
 
