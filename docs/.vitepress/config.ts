@@ -33,7 +33,9 @@ export default defineConfig({
           { text: 'Lorem Ipsum', link: '/guide/vega-lorem-ipsum' },
           { text: 'Input', link: '/guide/vega-input' },
           { text: 'Dropdown', link: '/guide/vega-dropdown' },
-          { text: 'Select', link: '/guide/vega-select' },
+          { text: 'Select', link: '/guide/vega-select', items: [
+            { text: 'Select Storage', link: '/guide/vega-select-storage' },
+            ] },
           { text: 'Tooltip', link: '/guide/vega-tooltip' },
         ]
       }

@@ -24,4 +24,5 @@ function api(customHeaders = {}) {
 
 export default {
   getIndicators: (params = {}) => api().get(`/indicators`, { params }),
+  getOrganizations: (params = {}) => api().get(`/organizations`, { params }),
 }

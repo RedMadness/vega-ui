@@ -32,11 +32,11 @@
                 :searchable="true"
                 :remoteHandler="testOptionsApi"
                 value-field="id"
-                label-field="id"
-                tooltip-field="description"
+                label-field="title"
+                tooltip-field="title"
                 label="Select 1"
                 infinite-scroll
-                storage-key="select-1"
+                @selected="selected"
               >
                 <!-- clear-icon -->
                 <!-- <template #clear-icon>-->
@@ -52,19 +52,17 @@
               </vega-select>
 
               {{ inputValue2 }}
-              <vega-select
-                v-model="inputValue2"
+              <vega-select-storage
                 :options="options"
                 value-field="id"
                 label-field="title"
                 storage-key="select-2"
-                :not-empty="true"
               >
                 <!-- prefix -->
                 <template #prefix>
                   <vega-icon-arrow />
                 </template>
-              </vega-select>
+              </vega-select-storage>
 
               {{ inputValue3 }}
               <vega-select
@@ -94,9 +92,11 @@ import VegaSelect from './components/VegaSelect.vue'
 import { ref } from 'vue'
 import VegaIconArrow from './components/VegaIconArrow.vue'
 import api from './service/api.ts'
+import VegaSelectStorage from './components/VegaSelectStorage.vue'
+import useSelectState from './use/useSelectState.ts'
 
-const inputValue = ref('')
-const inputValue2 = ref('')
+const inputValue = ref({ id: 1, title: 'Frami-Glover' })
+const inputValue2 = useSelectState('select-2').selected
 const inputValue3 = ref('')
 
 const options = ref([
@@ -134,7 +134,13 @@ export interface Option<T> {
 }
 
 //test infinity scroll
-const testOptionsApi = api.getIndicators
+const testOptionsApi = api.getOrganizations
+
+setTimeout(() => (inputValue.value = { id: 3, title: 'qweqweqe' }), 1000)
+
+function selected(payload: number) {
+  console.log(payload)
+}
 </script>
 
 <style scoped></style>

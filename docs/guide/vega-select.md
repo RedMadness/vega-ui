@@ -5,22 +5,18 @@ The VegaSelect component is a versatile tool that merges a dropdown list with a 
 
 Simple example:
 ```vue
-<vega-select
-  v-model="inputValue2"
+selected: <code>{{ value }}</code>
+<VegaSelect
+  v-model="value"
   :options="options"
   value-field="id"
   label-field="title"
-  storage-key="select-2"
 >
-  <!-- prefix -->
-  <template #prefix>
-    <span>Arrow</span>
-  </template>
-</vega-select>
+</VegaSelect>
 
 <script setup>
   import { VegaSelect } from 'vega-ui'
-  const inputValue2 = ref('')
+  const value = ref('')
 
   const options = ref([
     { id: 1, title: 'one' },
@@ -28,21 +24,22 @@ Simple example:
   ])
 
 </script>
-
-
 ```
 
 Code above will give you a following result:
 
 <div style="height: 80px">
-  <vega-select
-      value-field="id"
-      label-field="title"
-      storage-key="select-2"
-      background-color="var(--vp-custom-block-info-bg)"
-      searchable
+  selected: <code v-if="value">{{ value }}</code>
+  <VegaSelect
+    value-field="id"
+    label-field="title"
+    v-model="value"
+    :options="options"
+    background-color="#2a2a35"
+    background-color-dropdown="#2a2a35"
+    hover-color-dropdown="#638cc7"
     >
-    </vega-select>
+  </VegaSelect>
 </div>
 
 ## Props
@@ -81,8 +78,7 @@ Code above will give you a following result:
 | `height`                     | `String`                                                                        | `"auto"`                     | Height of the input field.                                                                                                                                                           |
 | `textAlign`                  | `String`                                                                        | `"left"`                     | Text alignment within the input field.                                                                                                                                               |
 | `delayDebounce`              | `Number`                                                                        | `300`                        | Milliseconds to delay the input event for debouncing.                                                                                                                                |
-| `clearable`                  | `Boolean`                                                                       | `true`                       | If set to true, adds a clear button to the input field, allowing quick clearing of its content.                                                                                      |
-| `storageKey`                 | `String`                                                                        |                              | Optional key used for storing the selected value in the browser's localStorage. This allows the component to maintain state across page reloads.                                     |
+| `clearable`                  | `Boolean`                                                                       | `true`                       | If set to true, adds a clear button to the input field, allowing quick clearing of its content.                                                                                      | |
 | `searchable`                 | `Boolean`                                                                       | `false`                      | If set to true, allows the user to type to filter options within the dropdown. This affects whether the input field is interactive.                                                  |
 | `notEmpty`                   | `Boolean`                                                                       | `false`                      | If set to true, the first option will be selected by default. This will work if the options were passed through prop. Does not work with romoteHendler.                              |
 
@@ -105,16 +101,17 @@ The `remoteHandler` function should expect the following response format from th
 }
 ```
 
-### Events
+## Events
 
 The component emits the following events:
 
-| Event Name          | Description                                                                          |
-|---------------------|--------------------------------------------------------------------------------------|
-| `update:modelValue` | Emitted when the selected value is updated. Passes the current value as a parameter. |
+| Event Name | Description                                                                     |
+|------------|---------------------------------------------------------------------------------|
+| `selected` | Emitted when the user selects a value. Passes the current value as a parameter. |
+| `clear`    | Emitted when clear button is pressed.                                           |
 
 
-### Slots
+## Slots
 
 The component provides several slots that allow for the insertion of custom content at various points within the component. These slots enable you to enhance functionality and tailor the appearance to better fit the design of your user interface.
 
@@ -128,4 +125,11 @@ The component provides several slots that allow for the insertion of custom cont
 
 <script setup>
 import VegaSelect from '../../src/components/VegaSelect.vue'
+import { ref } from 'vue'
+
+const value = ref('')
+const options = ref([
+  { id: 1, title: 'one' },
+  { id: 2, title: '2S' },
+])
 </script>

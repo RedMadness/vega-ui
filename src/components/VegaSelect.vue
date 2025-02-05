@@ -67,11 +67,10 @@
 </template>
 
 <script lang="ts" setup>
-import { ref, computed, onMounted, watch } from 'vue'
+import { ref, computed, watch } from 'vue'
 import VegaInput from './VegaInput.vue'
 import VegaDropdown from './VegaDropdown.vue'
 import VegaIconArrow from './VegaIconArrow.vue'
-import useSelectState from '../use/useSelectState.ts'
 
 interface ApiResponse<T> {
   data: {
@@ -108,7 +107,6 @@ export interface Props<T> {
   delayDebounce?: number
   clearable?: boolean
   notEmpty?: boolean
-
   backgroundColorDropdown?: string
   hoverColorDropdown?: string
   textColorDropdown?: string
@@ -120,12 +118,10 @@ export interface Props<T> {
   transitionDurationDropdown?: string
   infiniteScroll?: boolean
   noOptionsMessage?: string
-
-  remoteHandler?: (params: any) => Promise<ApiResponse<Option<string | number> | string | number>>
+  remoteHandler?: (
+    params: object,
+  ) => Promise<ApiResponse<Option<string | number> | string | number>>
   options?: Array<Option<T> | string | number>
-
-  modelValue?: Option<T> | string | number | null
-  storageKey?: string
 }
 
 const props = withDefaults(defineProps<Props<number | string>>(), {
@@ -139,13 +135,12 @@ const props = withDefaults(defineProps<Props<number | string>>(), {
   delayDebounce: 600,
   clearable: true,
   notEmpty: false,
-
   placeholder: 'Select value',
   label: '',
-  modelValue: null,
 })
 
-const emits = defineEmits(['update:modelValue', 'selected'])
+const model = defineModel<Option<string | number | null> | string | number | null>()
+const emits = defineEmits(['selected', 'clear'])
 
 const isOpened = ref(false)
 
@@ -160,32 +155,25 @@ const cursor = computed(() => {
   return props.searchable ? 'text' : 'pointer'
 })
 
-const storage = props.storageKey ? useSelectState(props.storageKey) : null
-
-// TODO: initial model-value will be ignored, if storageKey props passed
-const selected = storage
-  ? storage.selected
-  : ref<Option<number | string> | string | number | null>(props.modelValue)
-
 const selectedText = computed(() => {
-  if (selected.value === null) {
+  if (model.value === null) {
     return ''
   }
-  if (typeof selected.value === 'object') {
-    return String(selected.value[props.labelField])
+  if (typeof model.value === 'object') {
+    return String(model.value[props.labelField])
   }
 
-  return String(selected.value === undefined ? '' : selected.value)
+  return String(model.value === undefined ? '' : model.value)
 })
 const selectedValue = computed(() => {
-  if (selected.value === null) {
+  if (model.value === null) {
     return null
   }
-  if (typeof selected.value === 'object') {
-    return selected.value[props.valueField]
+  if (typeof model.value === 'object') {
+    return model.value[props.valueField]
   }
 
-  return selected.value
+  return model.value
 })
 
 const inputModel = computed(() =>
@@ -210,15 +198,13 @@ function onClose() {
 const onClear = () => {
   search.value = ''
   placeholderCurrent.value = props.placeholder
-  selected.value = null
-  localStorageClear()
-  emitSelected()
+  model.value = null
+  emitClear()
 }
 
 function onSelect(item: Option<number | string> | string | number) {
-  selected.value = item
+  model.value = item
   emitSelected()
-  localStorageSave(item)
 }
 
 function onSearch(payload: string) {
@@ -229,35 +215,20 @@ if (props.notEmpty) {
   watch(
     () => props.options,
     () => {
-      if ((selected.value === null || selected.value === '') && props.options[0])
+      if ((model.value === null || model.value === '') && props.options[0])
         onSelect(props.options[0])
     },
     { immediate: true },
   )
 }
 
-function localStorageSave(payload: Option<number | string> | string | number) {
-  if (storage) {
-    storage.storageSave(payload)
-  }
-}
-
-function localStorageClear() {
-  if (storage) {
-    storage.storageClear()
-  }
-}
-
 function emitSelected() {
-  emits('update:modelValue', selected.value)
   emits('selected', selectedValue.value)
 }
 
-onMounted(() => {
-  if (selectedValue.value !== null && props.storageKey) {
-    emitSelected()
-  }
-})
+function emitClear() {
+  emits('clear')
+}
 </script>
 
 <style scoped>

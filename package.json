@@ -1,6 +1,6 @@
 {
   "name": "vega-ui",
-  "version": "0.2.42",
+  "version": "0.3.0",
   "description": "Vue 3 UI library for rapid prototyping.",
   "keywords": [
     "vue",
@@ -32,7 +32,7 @@
     "lint": "eslint . --fix",
     "format": "prettier --write src/",
     "docs:build": "vitepress build docs",
-    "docs:preview": "vitepress preview docs"
+    "docs:preview": "vitepress preview docs --port 8080"
   },
   "peerDependencies": {
     "vue": "^3.4.21"
