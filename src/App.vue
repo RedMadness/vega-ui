@@ -57,6 +57,7 @@
                 value-field="id"
                 label-field="title"
                 storage-key="select-2"
+                @selected="selected"
               >
                 <!-- prefix -->
                 <template #prefix>
@@ -70,6 +71,7 @@
                 :searchable="true"
                 :options="options3"
                 storage-key="select-3"
+                @selected="selected"
               >
                 <!-- prefix -->
                 <template #prefix>

@@ -165,16 +165,6 @@ const selectedText = computed(() => {
 
   return String(model.value === undefined ? '' : model.value)
 })
-const selectedValue = computed(() => {
-  if (model.value === null) {
-    return null
-  }
-  if (typeof model.value === 'object') {
-    return model.value[props.valueField]
-  }
-
-  return model.value
-})
 
 const inputModel = computed(() =>
   isOpened.value && props.searchable ? search.value : selectedText.value,
@@ -204,7 +194,7 @@ const onClear = () => {
 
 function onSelect(item: Option<number | string> | string | number) {
   model.value = item
-  emitSelected()
+  emitSelected(getValue(item))
 }
 
 function onSearch(payload: string) {
@@ -222,8 +212,16 @@ if (props.notEmpty) {
   )
 }
 
-function emitSelected() {
-  emits('selected', selectedValue.value)
+function getValue(item: Option<number | string> | string | number) {
+  if (typeof item === 'object') {
+    return item[props.valueField]
+  }
+
+  return item
+}
+
+function emitSelected(item: Option<number | string> | string | number) {
+  emits('selected', item)
 }
 
 function emitClear() {
