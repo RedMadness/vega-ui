@@ -1,6 +1,6 @@
 <template>
   <div v-click-outside="onClickOutside">
-    <div ref="trigger" @mousedown="toggleOpenState">
+    <div ref="vega-dropdown-trigger" @mousedown="toggleOpenState">
       <slot name="trigger" />
     </div>
     <div class="dropdown" :class="{ open: isOpen }" @scroll="handleScroll">
@@ -100,7 +100,7 @@ const props = withDefaults(defineProps<Props<number | string>>(), {
 
 const emits = defineEmits(['open', 'select', 'close'])
 
-const trigger = useTemplateRef('trigger')
+const trigger = useTemplateRef('vega-dropdown-trigger')
 const top = ref(0)
 const left = ref(0)
 
