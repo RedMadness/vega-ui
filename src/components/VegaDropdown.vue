@@ -70,6 +70,9 @@ export interface Props<T> {
   remoteHandler?: (
     params: object,
   ) => Promise<ApiResponse<Option<string | number> | string | number>>
+  responseHandler?: (
+    response: ApiResponse<Option<string | number> | string | number>,
+  ) => Array<Option<T> | string | number>
   filters?: object
   width?: string
   offsetLeft?: string
@@ -254,7 +257,7 @@ async function callApi() {
       })
       .then((response) => {
         if (isOpen.value) {
-          const data = response.data.data || []
+          const data = transformResponse(response)
           optionsRemote.value = [...optionsRemote.value, ...data]
           total.value = response.data.meta?.total || 0
         }
@@ -266,6 +269,13 @@ async function callApi() {
         loading.value = false
       })
   }
+}
+
+function transformResponse(response: ApiResponse<string | number | Option<string | number>>) {
+  if (props.responseHandler) {
+    return props.responseHandler(response)
+  }
+  return response.data.data || []
 }
 
 watch(

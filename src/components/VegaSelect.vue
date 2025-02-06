@@ -20,6 +20,7 @@
       :transition-duration="transitionDurationDropdown"
       :infinite-scroll="infiniteScroll"
       :remote-handler="remoteHandler"
+      :response-handler="responseHandler"
       :filters="filters"
       :width="width"
       @select="onSelect"
@@ -123,6 +124,9 @@ export interface Props<T> {
   remoteHandler?: (
     params: object,
   ) => Promise<ApiResponse<Option<string | number> | string | number>>
+  responseHandler?: (
+    response: ApiResponse<Option<string | number> | string | number>,
+  ) => Array<Option<T> | string | number>
   options?: Array<Option<T> | string | number>
 }
 
