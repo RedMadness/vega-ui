@@ -23,6 +23,7 @@
       :response-handler="responseHandler"
       :filters="filters"
       :width="width"
+      :hide-if-empty="hideEmptyDropdown"
       @select="onSelect"
       @open="onOpen"
       @close="onClose"
@@ -128,6 +129,7 @@ export interface Props<T> {
     response: ApiResponse<Option<string | number> | string | number>,
   ) => Array<Option<T> | string | number>
   options?: Array<Option<T> | string | number>
+  hideEmptyDropdown?: boolean
 }
 
 const props = withDefaults(defineProps<Props<number | string>>(), {

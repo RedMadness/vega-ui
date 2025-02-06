@@ -3,7 +3,7 @@
     <div ref="vega-dropdown-trigger" @mousedown="toggleOpenState">
       <slot name="trigger" />
     </div>
-    <div class="dropdown" :class="{ open: isOpen }" @scroll="handleScroll">
+    <div class="dropdown" v-show="!forceHided" :class="{ open: isOpen }" @scroll="handleScroll">
       <slot>
         <div v-if="optionsList.length">
           <div
@@ -78,6 +78,7 @@ export interface Props<T> {
   offsetLeft?: string
   offsetTop?: string
   zIndex?: number
+  hideIfEmpty?: boolean
 }
 
 const props = withDefaults(defineProps<Props<number | string>>(), {
@@ -124,6 +125,12 @@ const optionsList = computed(() => {
     ...(props.options as (Option<string | number> | string | number)[]),
     ...optionsRemote.value,
   ]
+})
+const forceHided = computed(() => {
+  if (props.hideIfEmpty && optionsList.value.length === 0 && isOpen.value) {
+    return true
+  }
+  return false
 })
 
 onMounted(() => updateCoordinated())
@@ -317,7 +324,7 @@ watch(
   cursor: pointer;
 }
 
-.dropdown-no-item {
+.dropdown-no-options {
   padding: v-bind(optionPadding);
   cursor: pointer;
   background-color: v-bind(backgroundColor);
