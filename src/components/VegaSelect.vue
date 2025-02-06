@@ -21,6 +21,7 @@
       :infinite-scroll="infiniteScroll"
       :remote-handler="remoteHandler"
       :filters="filters"
+      :width="width"
       @select="onSelect"
       @open="onOpen"
       @close="onClose"

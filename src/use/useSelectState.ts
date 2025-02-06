@@ -44,9 +44,11 @@ export default function useSelectState(
   }
 
   function storageSave(payload: object | string | number) {
-    typeof payload === 'object'
-      ? localStorage.setItem(id, JSON.stringify(payload))
-      : localStorage.setItem(id, String(payload))
+    if (typeof payload === 'object') {
+      localStorage.setItem(id, JSON.stringify(payload))
+    } else {
+      localStorage.setItem(id, String(payload))
+    }
   }
 
   function storageClear() {
@@ -59,6 +61,7 @@ export default function useSelectState(
 function isJSON(payload: string) {
   try {
     JSON.parse(payload)
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
   } catch (e) {
     return false
   }

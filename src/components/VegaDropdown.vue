@@ -1,6 +1,6 @@
 <template>
   <div v-click-outside="onClickOutside">
-    <div @mousedown="toggleOpenState">
+    <div ref="trigger" @mousedown="toggleOpenState">
       <slot name="trigger" />
     </div>
     <div class="dropdown" :class="{ open: isOpen }" @scroll="handleScroll">
@@ -22,7 +22,7 @@
           <div ref="loaderRef" />
         </div>
         <div v-if="loading && isOpen" class="loading">
-          <vega-loading />
+          <vega-loading :scale="0.6" />
         </div>
         <div v-if="!optionsList.length && !loading && isOpen" class="dropdown-no-item">
           {{ noOptionsMessage }}
@@ -33,9 +33,10 @@
 </template>
 
 <script setup lang="ts">
-import { computed, ref, watch } from 'vue'
+import { computed, onMounted, ref, useTemplateRef, watch } from 'vue'
 import VegaLoading from './VegaLoading.vue'
 import VegaTooltip from './VegaTooltip.vue'
+import vClickOutside from '../directives/clickOutside'
 
 export interface Option<T> {
   [key: string]: T
@@ -66,7 +67,9 @@ export interface Props<T> {
   transitionDuration?: string
   infiniteScroll?: boolean
   noOptionsMessage?: string
-  remoteHandler?: (params: any) => Promise<ApiResponse<Option<string | number> | string | number>>
+  remoteHandler?: (
+    params: object,
+  ) => Promise<ApiResponse<Option<string | number> | string | number>>
   filters?: object
   width?: string
   offsetLeft?: string
@@ -89,13 +92,17 @@ const props = withDefaults(defineProps<Props<number | string>>(), {
   transitionDuration: '0.3s',
   infiniteScroll: false,
   noOptionsMessage: 'No options available',
-  width: '100%',
+  width: '300px',
   offsetLeft: '0',
   offsetTop: '8px',
   zIndex: 1,
 })
 
 const emits = defineEmits(['open', 'select', 'close'])
+
+const trigger = useTemplateRef('trigger')
+const top = ref(0)
+const left = ref(0)
 
 const loading = ref(false)
 const reachedBottom = ref(false)
@@ -116,27 +123,15 @@ const optionsList = computed(() => {
   ]
 })
 
-/** Click outside vue directive. See v-click-outside in root div element. */
-const vClickOutside = {
-  beforeMount(el: HTMLElement, binding: any) {
-    // @ts-ignore
-    el.__ClickOutsideHandler__ = (event: Event) => {
-      const target = event.target as HTMLElement
-      if (el !== target && !el.contains(target)) {
-        binding.value(event)
-      }
-    }
-    // @ts-ignore
-    document.body.addEventListener('click', el.__ClickOutsideHandler__)
-  },
-  unmounted(el: HTMLElement) {
-    // @ts-ignore
-    document.body.removeEventListener('click', el.__ClickOutsideHandler__)
-  },
-}
+onMounted(() => updateCoordinated())
 
 function toggleOpenState() {
-  isOpen.value ? close() : open()
+  updateCoordinated()
+  if (isOpen.value) {
+    close()
+  } else {
+    open()
+  }
 }
 
 function open() {
@@ -235,6 +230,18 @@ function getOptionTooltip(option: Option<number | string> | string | number) {
   return ''
 }
 
+function updateCoordinated() {
+  // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+  // @ts-expect-error
+  const position = trigger.value.getBoundingClientRect()
+  // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+  // @ts-expect-error
+  top.value = position.bottom + 'px'
+  // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+  // @ts-expect-error
+  left.value = position.left + 'px'
+}
+
 async function callApi() {
   if (props.remoteHandler) {
     loading.value = true
@@ -272,9 +279,9 @@ watch(
 
 <style scoped>
 .dropdown {
-  position: absolute;
-  top: calc(100% + v-bind(offsetTop));
-  left: v-bind(offsetLeft);
+  position: fixed;
+  top: v-bind(top);
+  left: calc(v-bind(offsetLeft) + v-bind(left));
   box-shadow: 0 3px 6px 0 rgba(0, 0, 0, 0.15);
   border: v-bind(borderColor) 1px solid;
   border-radius: v-bind(borderRadius);
@@ -285,11 +292,14 @@ watch(
   box-sizing: border-box;
   max-height: 0;
   opacity: 0;
-  transition: all v-bind(transitionDuration) ease-in-out;
+  transition: opacity v-bind(transitionDuration) ease-in-out;
   overflow: auto;
   color: v-bind(textColor);
   font-size: v-bind(fontSize);
   background-color: v-bind(backgroundColor);
+  scrollbar-color: var(--vega-border-color) var(--vega-secondary);
+  scrollbar-width: thin;
+  scrollbar-gutter: stable both-edges;
 }
 
 .dropdown-item {
@@ -316,5 +326,8 @@ watch(
 
 .loading {
   background-color: v-bind(backgroundColor);
+  display: flex;
+  justify-content: center;
+  padding: 6px 0;
 }
 </style>

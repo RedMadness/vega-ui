@@ -97,9 +97,9 @@ function clearInput() {
   emit('clear')
 }
 
-function debounce(func: (...args: any[]) => void, wait: number) {
+function debounce<Arg extends unknown[]>(func: (...args: Arg) => void, wait: number) {
   let timeoutId: ReturnType<typeof setTimeout> | null = null
-  return function (...args: any[]) {
+  return function (...args: Arg) {
     if (timeoutId !== null) {
       clearTimeout(timeoutId)
     }

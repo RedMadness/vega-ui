@@ -25,7 +25,7 @@
           </template>
 
           <template #aside-right>
-            <vega-sidebar name="vega-sidebar-right" title="SIDEBAR TITLE 2" width-min="350px">
+            <vega-sidebar name="vega-sidebar-right" title="SIDEBAR TITLE 2">
               {{ inputValue }}
               <vega-select
                 v-model="inputValue"
