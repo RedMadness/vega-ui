@@ -90,6 +90,7 @@ export interface Props<T> {
   searchable?: boolean
   valueField?: string
   labelField?: string
+  searchQueryKey?: string
   tooltipField?: string
   placeholder?: string
   fontSize?: string
@@ -138,6 +139,7 @@ const props = withDefaults(defineProps<Props<number | string>>(), {
   notEmpty: false,
   placeholder: 'Select value',
   label: '',
+  searchQueryKey: 'search',
 })
 
 const model = defineModel<Option<string | number | null> | string | number | null>()
@@ -148,7 +150,7 @@ const isOpened = ref(false)
 const search = ref('')
 const filters = computed(() => {
   return {
-    search: search.value,
+    [props.searchQueryKey]: search.value,
   }
 })
 
