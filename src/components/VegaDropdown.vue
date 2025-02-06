@@ -280,7 +280,7 @@ watch(
 <style scoped>
 .dropdown {
   position: fixed;
-  top: v-bind(top);
+  top: calc(v-bind(offsetTop) + v-bind(top));
   left: calc(v-bind(offsetLeft) + v-bind(left));
   box-shadow: 0 3px 6px 0 rgba(0, 0, 0, 0.15);
   border: v-bind(borderColor) 1px solid;
