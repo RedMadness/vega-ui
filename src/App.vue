@@ -36,13 +36,9 @@
                 tooltip-field="title"
                 label="Select 1"
                 infinite-scroll
+                dropdown-auto-position
                 @selected="selected"
               >
-                <!-- clear-icon -->
-                <!-- <template #clear-icon>-->
-                <!--  <span>+</span>-->
-                <!-- </template>-->
-                <!-- prefix -->
                 <template #prefix>
                   <VegaIconArrow />
                 </template>
@@ -57,6 +53,8 @@
                 value-field="id"
                 label-field="title"
                 storage-key="select-2"
+                dropdown-auto-position
+                dropdown-scrollbar-color="var(--vega-blue)"
                 @selected="selected"
               >
                 <!-- prefix -->
@@ -71,6 +69,7 @@
                 :searchable="true"
                 :options="options3"
                 storage-key="select-3"
+                dropdown-auto-position
                 @selected="selected"
               >
                 <!-- prefix -->

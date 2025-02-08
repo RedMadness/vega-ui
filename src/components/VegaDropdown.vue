@@ -5,26 +5,24 @@
     </div>
     <div class="dropdown" v-show="!forceHided" :class="{ open: isOpen }" @scroll="handleScroll">
       <slot>
-        <div v-if="optionsList.length">
-          <div
-            v-for="option in optionsList"
-            :key="getOptionValue(option)"
-            class="dropdown-item"
-            @mousedown.left="onSelect(option)"
-          >
-            <vega-tooltip v-if="tooltipField" :text="getOptionTooltip(option)">
-              {{ getOptionText(option) }}
-            </vega-tooltip>
-            <template v-else>
-              {{ getOptionText(option) }}
-            </template>
-          </div>
-          <div ref="loaderRef" />
+        <div
+          v-for="option in optionsList"
+          :key="getOptionValue(option)"
+          class="dropdown-item"
+          @mousedown.left="onSelect(option)"
+        >
+          <vega-tooltip v-if="tooltipField" :text="getOptionTooltip(option)">
+            {{ getOptionText(option) }}
+          </vega-tooltip>
+          <template v-else>
+            {{ getOptionText(option) }}
+          </template>
         </div>
+        <div ref="loaderRef" />
         <div v-if="loading && isOpen" class="loading">
           <vega-loading :scale="0.6" />
         </div>
-        <div v-if="!optionsList.length && !loading && isOpen" class="dropdown-no-item">
+        <div v-if="!optionsList.length && !loading && isOpen" class="dropdown-no-items">
           {{ noOptionsMessage }}
         </div>
       </slot>
@@ -75,10 +73,13 @@ export interface Props<T> {
   ) => Array<Option<T> | string | number>
   filters?: object
   width?: string
-  offsetLeft?: string
-  offsetTop?: string
+  offsetLeft?: number
+  offsetTop?: number
   zIndex?: number
   hideIfEmpty?: boolean
+  scrollbarColor?: string
+  itemHeight?: number
+  autoPosition?: boolean
 }
 
 const props = withDefaults(defineProps<Props<number | string>>(), {
@@ -97,16 +98,22 @@ const props = withDefaults(defineProps<Props<number | string>>(), {
   infiniteScroll: false,
   noOptionsMessage: 'No options available',
   width: '300px',
-  offsetLeft: '0',
-  offsetTop: '8px',
+  offsetLeft: 0,
+  offsetTop: 8,
   zIndex: 1,
+  scrollbarColor: 'var(--vega-border-color)',
+  itemHeight: 34,
+  autoPosition: false,
 })
 
 const emits = defineEmits(['open', 'select', 'close'])
 
 const trigger = useTemplateRef('vega-dropdown-trigger')
-const top = ref(0)
-const left = ref(0)
+const top = ref('0')
+const left = ref('0')
+const maxHeight = 200
+const offsetTopPx = computed(() => props.offsetTop + 'px')
+const offsetLeftPx = computed(() => props.offsetLeft + 'px')
 
 const loading = ref(false)
 const reachedBottom = ref(false)
@@ -136,7 +143,6 @@ const forceHided = computed(() => {
 onMounted(() => updateCoordinated())
 
 function toggleOpenState() {
-  updateCoordinated()
   if (isOpen.value) {
     close()
   } else {
@@ -149,6 +155,7 @@ function open() {
     isOpen.value = true
     callApi()
     emits('open')
+    updateCoordinated()
   }
 }
 
@@ -243,13 +250,24 @@ function getOptionTooltip(option: Option<number | string> | string | number) {
 function updateCoordinated() {
   // eslint-disable-next-line @typescript-eslint/ban-ts-comment
   // @ts-expect-error
-  const position = trigger.value.getBoundingClientRect()
-  // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-  // @ts-expect-error
-  top.value = position.bottom + 'px'
-  // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-  // @ts-expect-error
-  left.value = position.left + 'px'
+  const positionTrigger = trigger.value.getBoundingClientRect()
+
+  // calculating dropdown height
+  const dropdownHeight =
+    optionsList.value.length * props.itemHeight > maxHeight
+      ? maxHeight
+      : optionsList.value.length * props.itemHeight
+
+  // place the dropdown at the bottom if there is enough space.
+  // otherwise, place it at top of the trigger element
+  // works only if "auto-position" prop is true
+  if (props.autoPosition && positionTrigger.bottom + dropdownHeight > window.innerHeight) {
+    top.value = positionTrigger.top - dropdownHeight - props.offsetTop * 2 + 'px'
+  } else {
+    top.value = positionTrigger.bottom + 'px'
+  }
+
+  left.value = positionTrigger.left + 'px'
 }
 
 async function callApi() {
@@ -267,6 +285,7 @@ async function callApi() {
           const data = transformResponse(response)
           optionsRemote.value = [...optionsRemote.value, ...data]
           total.value = response.data.meta?.total || 0
+          updateCoordinated()
         }
       })
       .catch((error) => {
@@ -297,8 +316,8 @@ watch(
 <style scoped>
 .dropdown {
   position: fixed;
-  top: calc(v-bind(offsetTop) + v-bind(top));
-  left: calc(v-bind(offsetLeft) + v-bind(left));
+  top: calc(v-bind(offsetTopPx) + v-bind(top));
+  left: calc(v-bind(offsetLeftPx) + v-bind(left));
   box-shadow: 0 3px 6px 0 rgba(0, 0, 0, 0.15);
   border: v-bind(borderColor) 1px solid;
   border-radius: v-bind(borderRadius);
@@ -314,9 +333,8 @@ watch(
   color: v-bind(textColor);
   font-size: v-bind(fontSize);
   background-color: v-bind(backgroundColor);
-  scrollbar-color: var(--vega-border-color) var(--vega-secondary);
+  scrollbar-color: v-bind(scrollbarColor) v-bind(backgroundColor);
   scrollbar-width: thin;
-  scrollbar-gutter: stable both-edges;
 }
 
 .dropdown-item {
@@ -324,7 +342,7 @@ watch(
   cursor: pointer;
 }
 
-.dropdown-no-options {
+.dropdown-no-items {
   padding: v-bind(optionPadding);
   cursor: pointer;
   background-color: v-bind(backgroundColor);
@@ -337,7 +355,7 @@ watch(
 }
 
 .dropdown.open {
-  max-height: 200px;
+  max-height: v-bind(maxHeight + 'px');
   opacity: 1;
 }
 
