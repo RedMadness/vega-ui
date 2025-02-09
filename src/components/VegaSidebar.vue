@@ -5,7 +5,7 @@
         <div v-if="headerRight" class="vega-sidebar-header-right">
           <div>
             <slot name="toggle-button">
-              <vega-sidebar-toggle right :name="name">
+              <vega-sidebar-toggle icon-to-right :name="name">
                 <slot name="toggle-icon" />
               </vega-sidebar-toggle>
             </slot>
