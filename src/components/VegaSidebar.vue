@@ -2,7 +2,21 @@
   <div class="vega-sidebar" :class="{ 'vega-sidebar-exit': !show }">
     <div class="vega-sidebar-container">
       <slot name="header">
-        <div class="vega-sidebar-header">
+        <div v-if="headerRight" class="vega-sidebar-header-right">
+          <div>
+            <slot name="toggle-button">
+              <vega-sidebar-toggle right :name="name">
+                <slot name="toggle-icon" />
+              </vega-sidebar-toggle>
+            </slot>
+          </div>
+          <div v-if="show" class="vega-sidebar-header-content">
+            <slot name="title">
+              {{ title }}
+            </slot>
+          </div>
+        </div>
+        <div v-else class="vega-sidebar-header">
           <div v-if="show" class="vega-sidebar-header-content">
             <slot name="title">
               {{ title }}
@@ -32,6 +46,8 @@ export interface Props {
   width?: string
   widthMin?: string
   headerHeight?: string
+  headerRight?: boolean
+  headerGap?: string
   padding?: string
   gap?: string
   background?: string
@@ -43,6 +59,8 @@ const props = withDefaults(defineProps<Props>(), {
   width: '350px',
   widthMin: 'calc(2rem * 2 + 24px)',
   headerHeight: '80px',
+  headerRight: false,
+  headerGap: '8px',
   padding: '2rem',
   gap: '16px',
   background: 'none',
@@ -58,6 +76,13 @@ const { show } = useSidebarState(props.name)
   display: flex;
   align-items: center;
   justify-content: space-between;
+}
+.vega-sidebar-header-right {
+  min-height: v-bind(headerHeight);
+  line-height: v-bind(headerHeight);
+  display: flex;
+  align-items: center;
+  gap: v-bind(headerGap);
 }
 .vega-sidebar-container {
   padding: 0 v-bind(padding);

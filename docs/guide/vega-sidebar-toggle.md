@@ -31,11 +31,12 @@ To achieve a link between the sidebar and the toggle button, you must specify th
 ```
 
 ## Props
-| Prop                      | Type          | Default        | Description                                                                                            |
-|---------------------------|---------------|----------------|--------------------------------------------------------------------------------------------------------|
-| [name](#name)             | String        | `vega-sidebar` | Name of the associated sidebar. Used as a key to store the state of the sidebar in local storage.      |
-| [show-if](#show-if)       | Boolean\|null | `null`         | Show toggle button only when the associated sidebar is in a certain state.                             |
-| [also-close](#also-close) | Array         | `undefined`    | Automatically close sidebars with given names after changing the state of the main associated sidebar. |
+| Prop                            | Type          | Default        | Description                                                                                            |
+|---------------------------------|---------------|----------------|--------------------------------------------------------------------------------------------------------|
+| [name](#name)                   | String        | `vega-sidebar` | Name of the associated sidebar. Used as a key to store the state of the sidebar in local storage.      |
+| [show-if](#show-if)             | Boolean\|null | `null`         | Show toggle button only when the associated sidebar is in a certain state.                             |
+| [also-close](#also-close)       | Array         | `undefined`    | Automatically close sidebars with given names after changing the state of the main associated sidebar. |
+| [icon-to-right](#icon-to-right) | Boolean       | `false`        | Arrow icon pointing to the right at the start.                                                         |
 
 ### name
 Name of the associated sidebar. Used as a key to store the state of the sidebar in local storage.
@@ -68,6 +69,16 @@ Automatically close sidebars with given names after changing the state of main a
   name="left-sidebar-1"
   :also-close="['right-sidebar-1', 'right-sidebar-2']"
 />
+```
+
+### icon-to-right
+- Type: `Boolean`
+- Default: `false`
+
+Arrow icon pointing to the right at the start.
+
+```html
+<VegaSidebarToggle icon-to-right />
 ```
 
 ## Slots

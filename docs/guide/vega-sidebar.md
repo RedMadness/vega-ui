@@ -49,16 +49,18 @@ Demo
 </script>
 
 ## Props
-| Prop                            | Type   | Default                 | Description                                                                |
-|---------------------------------|--------|-------------------------|----------------------------------------------------------------------------|
-| [name](#name)                   | String | `vega-sidebar`          | Name of the sidebar, used as a key for storing the state in local storage. |
-| [title](#title)                 | String | `''`                    | The title of the sidebar.                                                  |
-| [width](#width)                 | String | `350px`                 | Width of the sidebar in its opened state.                                  |
-| [width-min](#width-min)         | String | `calc(2rem * 2 + 24px)` | Width of the sidebar in its closed state.                                  |
-| [header-height](#header-height) | String | `80px`                  | Height of the sidebar's header.                                            |
-| [padding](#padding)             | String | `2rem`                  | Left and right padding of the sidebar.                                     |
-| [gap](#gap)                     | String | `16px`                  | Gap between the sidebar's header and content.                              |
-| [background](#background)       | String | `none`                  | Background of the sidebar. Accepts HEX, RGB values.                        |
+| Prop                            | Type    | Default                 | Description                                                                |
+|---------------------------------|---------|-------------------------|----------------------------------------------------------------------------|
+| [name](#name)                   | String  | `vega-sidebar`          | Name of the sidebar, used as a key for storing the state in local storage. |
+| [title](#title)                 | String  | `''`                    | The title of the sidebar.                                                  |
+| [width](#width)                 | String  | `350px`                 | Width of the sidebar in its opened state.                                  |
+| [width-min](#width-min)         | String  | `calc(2rem * 2 + 24px)` | Width of the sidebar in its closed state.                                  |
+| [header-height](#header-height) | String  | `80px`                  | Height of the sidebar's header.                                            |
+| [padding](#padding)             | String  | `2rem`                  | Left and right padding of the sidebar.                                     |
+| [gap](#gap)                     | String  | `16px`                  | Gap between the sidebar's header and content.                              |
+| [background](#background)       | String  | `none`                  | Background of the sidebar. Accepts HEX, RGB values.                        |
+| [header-right](#header-right)   | Boolean | `false`                 | Arrange sidebar header elements in order: toggle > gap > title.            |
+| [header-gap](#header-gap)       | String  | `8px`                   | Gap between toggle and title. Works only if `header-right` passed.         |
 
 ### name
 - Type: `String`
@@ -133,6 +135,24 @@ Background of the sidebar. Accepts HEX, RGB values.
 
 ```html
 <VegaSidebar background="#fff" />
+```
+
+### header-right
+Arrange sidebar header elements in order: toggle > gap > title. Gap ba default is 8px and can be changed through `header-gap` prop.
+- Type: `Boolean`
+- Default: `false`
+
+```html
+<VegaSidebar header-right />
+```
+
+### header-gap
+Gap between toggle and title. Works only if `header-right` passed.
+- Type: `String`
+- Default: `8px`
+
+```html
+<VegaSidebar header-gap="20px" />
 ```
 
 ## Slots

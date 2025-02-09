@@ -9,6 +9,7 @@
       xmlns="http://www.w3.org/2000/svg"
     >
       <path
+        :transform="'rotate(' + initialRotate + ', 12, 12)'"
         d="M16 10L12 14L8 10"
         :stroke="color"
         stroke-width="2"
@@ -24,12 +25,14 @@ export interface Props {
   color?: string
   rotate?: string
   transition?: boolean
+  initialRotate?: number
 }
 
 withDefaults(defineProps<Props>(), {
   color: '#B5C7D3',
   rotate: '90deg',
   transition: true,
+  initialRotate: 0,
 })
 </script>
 
