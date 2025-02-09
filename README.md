@@ -7,7 +7,7 @@ A beautiful vue 3 component library.
 
 ## Features
 ### Lightweight 🍃
-No other internal dependency.
+Unpacked Size 75 kB and zero dependencies.
 ### Written in TypeScript 💪
 All components written in TypeScript.
 ### State memory 💾

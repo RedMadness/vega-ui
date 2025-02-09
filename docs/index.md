@@ -13,7 +13,7 @@ hero:
 
 features:
   - title: Lightweight
-    details: No other internal dependency
+    details: Unpacked Size 75 kB and zero dependencies.
   - title: Written in TypeScript
     details: All components written in TypeScript.
   - title: State memory
