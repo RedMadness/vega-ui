@@ -27,6 +27,7 @@
       :scrollbar-color="dropdownScrollbarColor"
       :auto-position="dropdownAutoPosition"
       :item-height="dropdownItemHeight"
+      :z-index="dropdownZIndex"
       @select="onSelect"
       @open="onOpen"
       @close="onClose"
