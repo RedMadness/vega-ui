@@ -1,0 +1,15 @@
+version: "2"
+services:
+  node:
+    image: "node:23-alpine"
+    user: "node"
+    working_dir: /home/node/app
+    environment:
+      - NODE_ENV=production
+    volumes:
+      - ../:/home/node/app
+    expose:
+      - "5173"
+    ports: # use if it is necessary to expose the container to the host machine
+      - "5173:5173"
+    command: npm run dev

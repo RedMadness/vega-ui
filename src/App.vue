@@ -8,7 +8,7 @@
       aside-right-background="#fff"
       content-background="#ececec"
     >
-      <template #header>AWESOME HEADER</template>
+      <template #header>HEADER 1</template>
 
       <template #aside-left>
         <vega-sidebar title="SIDEBAR TITLE">
@@ -18,7 +18,7 @@
 
       <template #default>
         <vega-layout header-border="#dcdfe6" aside-right-border="#dcdfe6">
-          <template #header> AWESOME HEADER 2 </template>
+          <template #header> HEADER 2 </template>
 
           <template #default>
             <vega-lorem-ipsum />
