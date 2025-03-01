@@ -100,6 +100,7 @@ const { show } = useSidebarState(props.name)
   width: v-bind(width);
   height: 100%;
   background: v-bind(background);
+  scrollbar-width: thin;
 }
 .vega-sidebar-exit {
   width: v-bind(widthMin);

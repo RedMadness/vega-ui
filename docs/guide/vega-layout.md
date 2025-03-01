@@ -117,6 +117,7 @@ Example above will give you a following structure:
 | [aside-right-width](#aside-right-width)           | String  | 'initial' | Width of the right aside. Accepts a valid CSS value.                                                        |
 | [aside-right-border](#aside-right-border)         | String  | 'none'    | Border color of the right aside. Accepts HEX, RGB values.                                                   |
 | [aside-right-background](#aside-right-background) | String  | 'none'    | Background color of the right aside. Accepts HEX, RGB values.                                               |
+| [scrollbar-color](#scrollbar-color)               | String  | `var(--vega-border-color)`          | Scrollbar color                                                                                             |
 
 ### content-background
 - Type: `String`
@@ -280,6 +281,16 @@ Background color of the right aside. Accepts HEX, RGB values.
 
 ```html
 <VegaLayout aside-right-background="#fff" />
+```
+
+### scrollbar-color
+- Type: `String`
+- Default: `var(--vega-border-color)`
+
+Scrollbar color.
+
+```html
+<VegaLayout scrollbar-color="#638cc7" />
 ```
 
 ## Slots

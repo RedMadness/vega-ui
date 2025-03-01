@@ -7,6 +7,7 @@
       aside-left-background="#fff"
       aside-right-background="#fff"
       content-background="#ececec"
+      scrollbar-color="#638cc7"
     >
       <template #header>HEADER 1</template>
 

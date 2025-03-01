@@ -48,6 +48,7 @@ export interface Props {
   asideRightBackground?: string
   headerFirst?: boolean
   headerShadow?: string
+  scrollbarColor?: string
 }
 
 withDefaults(defineProps<Props>(), {
@@ -64,6 +65,7 @@ withDefaults(defineProps<Props>(), {
   asideRightBackground: 'none',
   headerFirst: false,
   headerShadow: 'none',
+  scrollbarColor: 'var(--vega-border-color)',
 })
 </script>
 
@@ -78,6 +80,8 @@ withDefaults(defineProps<Props>(), {
   flex-direction: row;
   min-width: 0;
   height: 100%;
+
+  scrollbar-color: v-bind(scrollbarColor) v-bind(contentBackground);
 }
 .vega-column {
   flex-direction: column;
@@ -104,6 +108,7 @@ withDefaults(defineProps<Props>(), {
   padding: 0;
   z-index: 0;
   background: v-bind(contentBackground);
+  scrollbar-width: thin;
 }
 
 .vega-header-config {
