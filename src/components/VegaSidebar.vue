@@ -98,6 +98,7 @@ const { show } = useSidebarState(props.name)
 }
 .vega-sidebar-content {
   padding: v-bind(contentPadding);
+  height: 100%;
 }
 .vega-sidebar {
   -webkit-transition: width 0.2s ease;
