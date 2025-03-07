@@ -31,7 +31,9 @@
           </div>
         </div>
       </slot>
-      <slot></slot>
+      <div class="vega-sidebar-content">
+        <slot></slot>
+      </div>
     </div>
   </div>
 </template>
@@ -48,7 +50,8 @@ export interface Props {
   headerHeight?: string
   headerRight?: boolean
   headerGap?: string
-  padding?: string
+  contentPadding?: string
+  headerPadding?: string
   gap?: string
   background?: string
 }
@@ -61,7 +64,8 @@ const props = withDefaults(defineProps<Props>(), {
   headerHeight: '80px',
   headerRight: false,
   headerGap: '8px',
-  padding: '2rem',
+  contentPadding: '0 2rem',
+  headerPadding: '0 2rem',
   gap: '16px',
   background: 'none',
 })
@@ -73,6 +77,7 @@ const { show } = useSidebarState(props.name)
 .vega-sidebar-header {
   min-height: v-bind(headerHeight);
   line-height: v-bind(headerHeight);
+  padding: v-bind(headerPadding);
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -80,16 +85,19 @@ const { show } = useSidebarState(props.name)
 .vega-sidebar-header-right {
   min-height: v-bind(headerHeight);
   line-height: v-bind(headerHeight);
+  padding: v-bind(headerPadding);
   display: flex;
   align-items: center;
   gap: v-bind(headerGap);
 }
 .vega-sidebar-container {
-  padding: 0 v-bind(padding);
   display: flex;
   flex-direction: column;
   gap: v-bind(gap);
   height: 100%;
+}
+.vega-sidebar-content {
+  padding: v-bind(contentPadding);
 }
 .vega-sidebar {
   -webkit-transition: width 0.2s ease;
