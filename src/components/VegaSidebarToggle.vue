@@ -1,7 +1,7 @@
 <template>
   <div class="vega-sidebar-toggle" @click="onClick" v-if="displayed">
     <slot :show="show">
-      <vega-icon-arrow :initial-rotate="initialRotate" :rotate="rotate" :transition="false" />
+      <vega-icon-arrow :color="iconColor" :initial-rotate="initialRotate" :rotate="rotate" :transition="false" />
     </slot>
   </div>
 </template>
@@ -16,6 +16,7 @@ export interface Props {
   showIf?: boolean | null
   alsoClose?: string[] | null
   iconToRight?: boolean
+  iconColor?: string
 }
 
 const props = withDefaults(defineProps<Props>(), {
@@ -23,6 +24,7 @@ const props = withDefaults(defineProps<Props>(), {
   showIf: null,
   alsoClose: null,
   right: false,
+  iconColor: 'var(--vega-border-color)',
 })
 
 const { show, toggle } = useSidebarState(props.name)

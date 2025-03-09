@@ -12,7 +12,7 @@
       <template #header>HEADER 1</template>
 
       <template #aside-left>
-        <vega-sidebar title="SIDEBAR TITLE">
+        <vega-sidebar title="SIDEBAR TITLE" header-border="1px var(--vega-border-color) solid">
           <vega-lorem-ipsum />
         </vega-sidebar>
       </template>

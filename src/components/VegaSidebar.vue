@@ -5,7 +5,7 @@
         <div v-if="headerRight" class="vega-sidebar-header-right">
           <div>
             <slot name="toggle-button">
-              <vega-sidebar-toggle icon-to-right :name="name">
+              <vega-sidebar-toggle icon-to-right :name="name" :icon-color="toggleIconColor">
                 <slot name="toggle-icon" />
               </vega-sidebar-toggle>
             </slot>
@@ -24,7 +24,7 @@
           </div>
           <div>
             <slot name="toggle-button">
-              <vega-sidebar-toggle :name="name">
+              <vega-sidebar-toggle :name="name" :icon-color="toggleIconColor">
                 <slot name="toggle-icon" />
               </vega-sidebar-toggle>
             </slot>
@@ -52,8 +52,10 @@ export interface Props {
   headerGap?: string
   contentPadding?: string
   headerPadding?: string
+  headerBorder?: string
   gap?: string
   background?: string
+  toggleIconColor?: string
 }
 
 const props = withDefaults(defineProps<Props>(), {
@@ -64,10 +66,12 @@ const props = withDefaults(defineProps<Props>(), {
   headerHeight: '80px',
   headerRight: false,
   headerGap: '8px',
-  contentPadding: '0 2rem',
   headerPadding: '0 2rem',
+  headerBorder: 'none',
+  contentPadding: '0 2rem',
   gap: '16px',
   background: 'none',
+  toggleIconColor: 'var(--vega-border-color)'
 })
 
 const { show } = useSidebarState(props.name)
@@ -81,6 +85,7 @@ const { show } = useSidebarState(props.name)
   display: flex;
   align-items: center;
   justify-content: space-between;
+  border-bottom: v-bind(headerBorder);
 }
 .vega-sidebar-header-right {
   min-height: v-bind(headerHeight);
