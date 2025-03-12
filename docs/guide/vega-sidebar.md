@@ -64,6 +64,7 @@ Demo
 | [gap](#gap)                             | String  | `16px`                     | Gap between the sidebar's header and content.                              |
 | [background](#background)               | String  | `none`                     | Background of the sidebar. Accepts HEX, RGB values.                        |
 | [toggle-icon-color](#toggle-icon-color) | String  | `var(--vega-border-color)` | Toggle icon color.                                                         |
+| [scrollbar-color](#scrollbar-color)     | String  | `var(--vega-border-color)` | Scrollbar color                                                            |
 
 ### name
 - Type: `String`
@@ -185,6 +186,16 @@ Toggle icon color.
 
 ```html
 <VegaSidebar toggle-icon-color="red" />
+```
+
+### scrollbar-color
+- Type: `String`
+- Default: `var(--vega-border-color)`
+
+Scrollbar color.
+
+```html
+<VegaSidebar scrollbar-color="#638cc7" />
 ```
 
 ## Slots

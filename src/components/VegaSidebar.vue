@@ -56,6 +56,7 @@ export interface Props {
   gap?: string
   background?: string
   toggleIconColor?: string
+  scrollbarColor?: string
 }
 
 const props = withDefaults(defineProps<Props>(), {
@@ -71,7 +72,8 @@ const props = withDefaults(defineProps<Props>(), {
   contentPadding: '0 2rem',
   gap: '16px',
   background: 'none',
-  toggleIconColor: 'var(--vega-border-color)'
+  toggleIconColor: 'var(--vega-border-color)',
+  scrollbarColor: 'var(--vega-border-color)',
 })
 
 const { show } = useSidebarState(props.name)
@@ -116,6 +118,7 @@ const { show } = useSidebarState(props.name)
   height: 100%;
   background: v-bind(background);
   scrollbar-width: thin;
+  scrollbar-color: v-bind(scrollbarColor) v-bind(background);
 }
 .vega-sidebar-exit {
   width: v-bind(widthMin);

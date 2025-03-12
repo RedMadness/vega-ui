@@ -104,6 +104,8 @@ Example above will give you a following structure:
 
 | Prop                                              | Type    | Default                    | Description                                                                                                 |
 |:--------------------------------------------------|---------|:---------------------------|-------------------------------------------------------------------------------------------------------------|
+| [container-background](#container-background)     | String  | 'none'                     | Background colour of the entire container. Accepts HEX, RGB values.                                         |
+| [container-padding](#container-padding)           | String  | '0'                        | Padding of the entire container. Accepts a valid CSS padding value.                                         |
 | [content-background](#content-background)         | String  | 'none'                     | Background color of the content area. Accepts HEX, RGB values.                                              |
 | [content-border-radius](#content-border-radius)   | String  | '0'                        | Content border radius. Accepts a valid CSS border radius value.                                             |
 | [content-padding](#content-padding)               | String  | '0'                        | Content padding. Accepts a valid CSS padding value.                                                         |
@@ -121,11 +123,33 @@ Example above will give you a following structure:
 | [aside-right-background](#aside-right-background) | String  | 'none'                     | Background color of the right aside. Accepts HEX, RGB values.                                               |
 | [scrollbar-color](#scrollbar-color)               | String  | `var(--vega-border-color)` | Scrollbar color                                                                                             |
 
+
+### container-background
+- Type: `String`
+- Default: `none`
+
+Background colour of the entire container. Accepts HEX, RGB values.
+
+```html
+<VegaLayout container-backgroun="#005689" />
+```
+
+### container-padding
+- Type: `String`
+- Default: `0`
+
+Padding of the entire container. Accepts a valid CSS padding value.
+
+```html
+<VegaLayout container-padding="0 2rem" />
+```
+
 ### content-background
 - Type: `String`
 - Default: `none`
 
 Background color of the content area. Accepts HEX, RGB values.
+
 ```html
 <VegaLayout content-background="#005689" />
 ```

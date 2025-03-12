@@ -3,7 +3,7 @@
     <header class="vega-header vega-header-config">
       <slot name="header" />
     </header>
-    <section class="vega-container vega-content">
+    <section class="vega-section vega-content">
       <aside class="vega-aside vega-aside-left-config">
         <slot name="aside-left" />
       </aside>
@@ -19,7 +19,7 @@
     <aside class="vega-aside vega-aside-left-config">
       <slot name="aside-left" />
     </aside>
-    <section class="vega-container vega-column">
+    <section class="vega-section vega-column">
       <header class="vega-header vega-header-config">
         <slot name="header" />
       </header>
@@ -35,6 +35,8 @@
 
 <script setup lang="ts">
 export interface Props {
+  containerPadding?: string
+  containerBackground?: string
   contentBackground?: string
   contentBorderRadius?: string
   contentPadding?: string,
@@ -54,6 +56,8 @@ export interface Props {
 }
 
 withDefaults(defineProps<Props>(), {
+  containerBackground: 'none',
+  containerPadding: '0',
   contentBackground: 'none',
   contentBorderRadius: '0',
   contentPadding: '0',
@@ -77,6 +81,8 @@ withDefaults(defineProps<Props>(), {
 .vega-container {
   --vega-header-height: v-bind(headerHeight);
 
+  background: v-bind(containerBackground);
+  padding: v-bind(containerPadding);
   box-sizing: border-box;
   display: flex;
   flex: 1;
@@ -84,8 +90,16 @@ withDefaults(defineProps<Props>(), {
   flex-direction: row;
   min-width: 0;
   height: 100%;
-
-  scrollbar-color: v-bind(scrollbarColor) v-bind(contentBackground);
+}
+.vega-section {
+  background: v-bind(containerBackground);
+  box-sizing: border-box;
+  display: flex;
+  flex: 1;
+  flex-basis: auto;
+  flex-direction: row;
+  min-width: 0;
+  height: 100%;
 }
 .vega-column {
   flex-direction: column;
@@ -114,6 +128,7 @@ withDefaults(defineProps<Props>(), {
   background: v-bind(contentBackground);
   scrollbar-width: thin;
   border-radius: v-bind(contentBorderRadius);
+  scrollbar-color: v-bind(scrollbarColor) v-bind(contentBackground);
 }
 
 .vega-header-config {

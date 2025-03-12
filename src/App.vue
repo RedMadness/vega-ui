@@ -6,14 +6,14 @@
       aside-left-border="#dcdfe6"
       aside-left-background="#fff"
       aside-right-background="#fff"
-      scrollbar-color="#638cc7"
-      content-background="var(--vega-gray)"
+      scrollbar-color="red"
+      container-background="var(--vega-gray)"
       content-padding="0 0 0 2rem"
     >
       <template #header>HEADER 1</template>
 
       <template #aside-left>
-        <vega-sidebar title="SIDEBAR TITLE" header-border="1px var(--vega-border-color) solid">
+        <vega-sidebar title="SIDEBAR TITLE" header-border="1px var(--vega-border-color) solid" scrollbar-color="red" background="white">
           <vega-lorem-ipsum />
         </vega-sidebar>
       </template>
@@ -24,6 +24,7 @@
           content-border-radius="14px"
           content-background="white"
           content-padding="0 2rem"
+          scrollbar-color="red"
         >
           <template #header> HEADER 2 </template>
 
