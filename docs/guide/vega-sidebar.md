@@ -58,11 +58,11 @@ Demo
 | [header-height](#header-height)         | String  | `80px`                     | Height of the sidebar's header.                                            |
 | [header-padding](#header-padding)       | String  | `0 2rem`                   | Header padding.                                                            |
 | [header-border](#header-border)         | String  | `none`                     | Header border.                                                             |
+| [header-right](#header-right)           | Boolean | `false`                    | Arrange sidebar header elements in order: toggle > gap > title.            |
+| [header-gap](#header-gap)               | String  | `8px`                      | Gap between toggle and title. Works only if `header-right` passed.         |
 | [content-padding](#content-padding)     | String  | `0 2rem`                   | Sidebar content padding.                                                   |
 | [gap](#gap)                             | String  | `16px`                     | Gap between the sidebar's header and content.                              |
 | [background](#background)               | String  | `none`                     | Background of the sidebar. Accepts HEX, RGB values.                        |
-| [header-right](#header-right)           | Boolean | `false`                    | Arrange sidebar header elements in order: toggle > gap > title.            |
-| [header-gap](#header-gap)               | String  | `8px`                      | Gap between toggle and title. Works only if `header-right` passed.         |
 | [toggle-icon-color](#toggle-icon-color) | String  | `var(--vega-border-color)` | Toggle icon color.                                                         |
 
 ### name

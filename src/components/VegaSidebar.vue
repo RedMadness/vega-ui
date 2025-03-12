@@ -94,6 +94,7 @@ const { show } = useSidebarState(props.name)
   display: flex;
   align-items: center;
   gap: v-bind(headerGap);
+  border-bottom: v-bind(headerBorder);
 }
 .vega-sidebar-container {
   display: flex;

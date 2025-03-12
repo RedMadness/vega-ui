@@ -102,22 +102,24 @@ Example above will give you a following structure:
 
 ## Props
 
-| Prop                                              | Type    | Default   | Description                                                                                                 |
-|:--------------------------------------------------|---------|:----------|-------------------------------------------------------------------------------------------------------------|
-| [content-background](#content-background)         | String  | 'none'    | Background color of the content area. Accepts HEX, RGB values.                                              |
-| [header-first](#header-first)                     | Boolean | 'false'   | Determines if the header should be on top of asides.                                                        |
-| [header-height](#header-height)                   | String  | '80px'    | Height of the header. Accepts a valid CSS value.                                                            |
-| [header-border](#header-border)                   | String  | 'none'    | Color of the header border. Accepts HEX, RGB values.                                                        |
-| [header-background](#header-background)           | String  | 'none'    | Background color of the header. Accepts HEX, RGB values.                                                    |
-| [header-shadow](#header-shadow)                   | String  | 'none'    | CSS box-shadow value for the header. [box-shadow](https://developer.mozilla.org/ru/docs/Web/CSS/box-shadow) |
-| [header-padding](#header-padding)                 | String  | '2rem'    | Left and right padding of the header. Accepts a valid CSS value.                                            |
-| [aside-left-width](#aside-left-width)             | String  | 'initial' | Width of the left aside. Accepts a valid CSS value.                                                         |
-| [aside-left-border](#aside-left-border)           | String  | 'none'    | Border color of the left aside. Accepts HEX, RGB values.                                                    |
-| [aside-left-background](#aside-left-background)   | String  | 'none'    | Background color of the left aside. Accepts HEX, RGB values.                                                |
-| [aside-right-width](#aside-right-width)           | String  | 'initial' | Width of the right aside. Accepts a valid CSS value.                                                        |
-| [aside-right-border](#aside-right-border)         | String  | 'none'    | Border color of the right aside. Accepts HEX, RGB values.                                                   |
-| [aside-right-background](#aside-right-background) | String  | 'none'    | Background color of the right aside. Accepts HEX, RGB values.                                               |
-| [scrollbar-color](#scrollbar-color)               | String  | `var(--vega-border-color)`          | Scrollbar color                                                                                             |
+| Prop                                              | Type    | Default                    | Description                                                                                                 |
+|:--------------------------------------------------|---------|:---------------------------|-------------------------------------------------------------------------------------------------------------|
+| [content-background](#content-background)         | String  | 'none'                     | Background color of the content area. Accepts HEX, RGB values.                                              |
+| [content-border-radius](#content-border-radius)   | String  | '0'                        | Content border radius. Accepts a valid CSS border radius value.                                             |
+| [content-padding](#content-padding)               | String  | '0'                        | Content padding. Accepts a valid CSS padding value.                                                         |
+| [header-first](#header-first)                     | Boolean | 'false'                    | Determines if the header should be on top of asides.                                                        |
+| [header-height](#header-height)                   | String  | '80px'                     | Height of the header. Accepts a valid CSS value.                                                            |
+| [header-border](#header-border)                   | String  | 'none'                     | Color of the header border. Accepts HEX, RGB values.                                                        |
+| [header-background](#header-background)           | String  | 'none'                     | Background color of the header. Accepts HEX, RGB values.                                                    |
+| [header-shadow](#header-shadow)                   | String  | 'none'                     | CSS box-shadow value for the header. [box-shadow](https://developer.mozilla.org/ru/docs/Web/CSS/box-shadow) |
+| [header-padding](#header-padding)                 | String  | '2rem'                     | Left and right padding of the header. Accepts a valid CSS value.                                            |
+| [aside-left-width](#aside-left-width)             | String  | 'initial'                  | Width of the left aside. Accepts a valid CSS value.                                                         |
+| [aside-left-border](#aside-left-border)           | String  | 'none'                     | Border color of the left aside. Accepts HEX, RGB values.                                                    |
+| [aside-left-background](#aside-left-background)   | String  | 'none'                     | Background color of the left aside. Accepts HEX, RGB values.                                                |
+| [aside-right-width](#aside-right-width)           | String  | 'initial'                  | Width of the right aside. Accepts a valid CSS value.                                                        |
+| [aside-right-border](#aside-right-border)         | String  | 'none'                     | Border color of the right aside. Accepts HEX, RGB values.                                                   |
+| [aside-right-background](#aside-right-background) | String  | 'none'                     | Background color of the right aside. Accepts HEX, RGB values.                                               |
+| [scrollbar-color](#scrollbar-color)               | String  | `var(--vega-border-color)` | Scrollbar color                                                                                             |
 
 ### content-background
 - Type: `String`
@@ -126,6 +128,26 @@ Example above will give you a following structure:
 Background color of the content area. Accepts HEX, RGB values.
 ```html
 <VegaLayout content-background="#005689" />
+```
+
+### content-border-radius
+- Type: `String`
+- Default: `0`
+
+Content border radius. Accepts a valid CSS border radius value.
+
+```html
+<VegaLayout content-border-radius="4px 4px 0 0" />
+```
+
+### content-padding
+- Type: `String`
+- Default: `0`
+
+Content padding. Accepts a valid CSS padding value.
+
+```html
+<VegaLayout content-padding="0 2rem" />
 ```
 
 ### header-first

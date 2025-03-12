@@ -2,12 +2,13 @@
   <div style="height: 100vh">
     <vega-layout
       :header-first="true"
-      header-background="#005689"
+      header-background="var(--vega-blue)"
       aside-left-border="#dcdfe6"
       aside-left-background="#fff"
       aside-right-background="#fff"
-      content-background="#ececec"
       scrollbar-color="#638cc7"
+      content-background="var(--vega-gray)"
+      content-padding="0 0 0 2rem"
     >
       <template #header>HEADER 1</template>
 
@@ -18,7 +19,12 @@
       </template>
 
       <template #default>
-        <vega-layout header-border="#dcdfe6" aside-right-border="#dcdfe6">
+        <vega-layout
+          aside-right-border="#dcdfe6"
+          content-border-radius="14px"
+          content-background="white"
+          content-padding="0 2rem"
+        >
           <template #header> HEADER 2 </template>
 
           <template #default>
@@ -26,7 +32,7 @@
           </template>
 
           <template #aside-right>
-            <vega-sidebar header-right name="vega-sidebar-right" title="SIDEBAR TITLE 2">
+            <vega-sidebar header-right name="vega-sidebar-right" title="SIDEBAR TITLE 2" toggle-icon-color="var(--vega-text-color)">
               {{ inputValue }}
               <vega-select
                 v-model="inputValue"
@@ -39,14 +45,7 @@
                 infinite-scroll
                 dropdown-auto-position
                 @selected="selected"
-              >
-                <template #prefix>
-                  <VegaIconArrow />
-                </template>
-                <template #postfix="{ isOpened }">
-                  <vega-icon-arrow :rotate="isOpened ? '180deg' : '0deg'" />
-                </template>
-              </vega-select>
+              />
 
               {{ inputValue2 }}
               <vega-select-storage

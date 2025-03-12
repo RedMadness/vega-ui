@@ -36,6 +36,8 @@
 <script setup lang="ts">
 export interface Props {
   contentBackground?: string
+  contentBorderRadius?: string
+  contentPadding?: string,
   headerHeight?: string
   headerBorder?: string
   headerBackground?: string
@@ -53,6 +55,8 @@ export interface Props {
 
 withDefaults(defineProps<Props>(), {
   contentBackground: 'none',
+  contentBorderRadius: '0',
+  contentPadding: '0',
   headerHeight: '80px',
   headerBorder: 'none',
   headerBackground: 'none',
@@ -105,10 +109,11 @@ withDefaults(defineProps<Props>(), {
   flex: 1;
   flex-basis: auto;
   overflow: auto;
-  padding: 0;
+  padding: v-bind(contentPadding);
   z-index: 0;
   background: v-bind(contentBackground);
   scrollbar-width: thin;
+  border-radius: v-bind(contentBorderRadius);
 }
 
 .vega-header-config {
