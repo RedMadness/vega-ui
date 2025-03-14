@@ -84,7 +84,7 @@ import { Option, Props, VegaSelectProps } from '../props/VegaSelectProps.ts'
 
 const props = withDefaults(defineProps<Props<number | string>>(), VegaSelectProps)
 
-const model = defineModel<Option<string | number> | string | number | null>()
+const model = defineModel<Option<string | number> | string | number | null | Array<string | number | Option<string | number>>>()
 const emits = defineEmits(['selected', 'clear'])
 
 const isOpened = ref(false)
@@ -103,6 +103,14 @@ const cursor = computed(() => {
 const selectedText = computed(() => {
   if (!model.value) {
     return ''
+  }
+  if (Array.isArray(model.value)) {
+    return model.value.map(function(item) {
+      if (typeof item === 'object') {
+        return String(item[props.labelField])
+      }
+      return String(item)
+    }).toString();
   }
   if (typeof model.value === 'object') {
     return String(model.value[props.labelField])
@@ -133,11 +141,21 @@ function onClose() {
 const onClear = () => {
   search.value = ''
   placeholderCurrent.value = props.placeholder
-  model.value = null
+  model.value = Array.isArray(model.value) ? [] : null
   emitClear()
 }
 
 function onSelect(item: Option<number | string> | string | number) {
+  if (Array.isArray(model.value)) {
+    const index = model.value.findIndex((el) => getValue(el) === getValue(item))
+    if (index < 0) {
+      model.value.push(item)
+    } else {
+      model.value.splice(index, 1)
+    }
+    emitSelected(getValue(item))
+    return
+  }
   model.value = item
   emitSelected(getValue(item))
 }
@@ -166,7 +184,10 @@ function getValue(item: Option<number | string> | string | number) {
 }
 
 function emitSelected(item: Option<number | string> | string | number) {
-  emits('selected', item)
+  emits('selected', Array.isArray(model.value)
+    ? model.value.map(item => getValue(item))
+    : item
+  )
 }
 
 function emitClear() {

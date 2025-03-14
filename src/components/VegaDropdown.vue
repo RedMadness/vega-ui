@@ -114,7 +114,7 @@ const props = withDefaults(defineProps<Props<number | string>>(), {
 })
 
 const emits = defineEmits(['open', 'select', 'close'])
-const model = defineModel<null | undefined | string | number | Option<string | number>>()
+const model = defineModel<null | undefined | string | number | Option<string | number> | Array<null | undefined | string | number | Option<string | number>>>()
 
 const trigger = useTemplateRef('vega-dropdown-trigger')
 const top = ref('0')
@@ -260,7 +260,23 @@ function checkSelected(option: Option<number | string> | string | number) {
     return false
   }
 
-  return getOptionValue(option) === getOptionValue(model.value)
+  if (!Array.isArray(model.value)) {
+    return getOptionValue(option) === getOptionValue(model.value)
+  }
+
+  let selected = false
+  for (const modelItem of model.value) {
+    if (modelItem === null || modelItem === undefined) {
+      continue
+    }
+
+    if (getOptionValue(option) === getOptionValue(modelItem)) {
+      selected = true
+      break
+    }
+  }
+
+  return selected
 }
 
 function updateCoordinated() {

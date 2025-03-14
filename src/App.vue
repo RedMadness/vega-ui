@@ -98,7 +98,7 @@ import VegaSelectStorage from './components/VegaSelectStorage.vue'
 import useSelectState from './use/useSelectState.ts'
 
 const inputValue = ref({ id: 1, title: 'Frami-Glover' })
-const inputValue2 = useSelectState('select-2').selected
+const inputValue2 = useSelectState('select-2', 'id', 'title', [{ id: 2, title: '2S' }]).selected
 const inputValue3 = ref('')
 
 const options = ref([
