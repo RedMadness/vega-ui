@@ -56,6 +56,7 @@ export interface Props<T> {
   dropdownItemHeight?: number
   dropdownAutoPosition?: boolean
   dropdownZIndex?: number
+  dropdownItemSelectedColor?: string
 }
 
 export const VegaSelectProps = {
@@ -76,4 +77,5 @@ export const VegaSelectProps = {
   dropdownItemHeight: 34,
   dropdownAutoPosition: false,
   dropdownZIndex: 1,
+  dropdownItemSelectedColor: 'var(--vega-primary)'
 }

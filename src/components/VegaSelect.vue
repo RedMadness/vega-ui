@@ -4,6 +4,7 @@
       <slot name="label">{{ label }}</slot>
     </div>
     <vega-dropdown
+      v-model="model"
       :options="options"
       :value-field="valueField"
       :label-field="labelField"
@@ -27,6 +28,7 @@
       :scrollbar-color="dropdownScrollbarColor"
       :auto-position="dropdownAutoPosition"
       :item-height="dropdownItemHeight"
+      :item-selected-color="dropdownItemSelectedColor"
       :z-index="dropdownZIndex"
       @select="onSelect"
       @open="onOpen"
@@ -82,7 +84,7 @@ import { Option, Props, VegaSelectProps } from '../props/VegaSelectProps.ts'
 
 const props = withDefaults(defineProps<Props<number | string>>(), VegaSelectProps)
 
-const model = defineModel<Option<string | number | null> | string | number | null>()
+const model = defineModel<Option<string | number> | string | number | null>()
 const emits = defineEmits(['selected', 'clear'])
 
 const isOpened = ref(false)

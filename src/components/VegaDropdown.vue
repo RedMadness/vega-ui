@@ -9,14 +9,18 @@
           v-for="option in optionsList"
           :key="getOptionValue(option)"
           class="dropdown-item"
+          :class="{ selected: checkSelected(option) }"
           @mousedown.left="onSelect(option)"
         >
-          <vega-tooltip v-if="tooltipField" :text="getOptionTooltip(option)">
-            {{ getOptionText(option) }}
-          </vega-tooltip>
-          <template v-else>
-            {{ getOptionText(option) }}
-          </template>
+          <div>
+            <vega-tooltip v-if="tooltipField" :text="getOptionTooltip(option)">
+              {{ getOptionText(option) }}
+            </vega-tooltip>
+            <template v-else>
+              {{ getOptionText(option) }}
+            </template>
+          </div>
+          <vega-icon-check v-if="checkSelected(option)" class="check-icon" :color="itemSelectedColor" />
         </div>
         <div ref="loaderRef" />
         <div v-if="loading && isOpen" class="loading">
@@ -35,6 +39,7 @@ import { computed, onMounted, ref, useTemplateRef, watch } from 'vue'
 import VegaLoading from './VegaLoading.vue'
 import VegaTooltip from './VegaTooltip.vue'
 import vClickOutside from '../directives/clickOutside'
+import VegaIconCheck from './VegaIconCheck.vue'
 
 export interface Option<T> {
   [key: string]: T
@@ -80,6 +85,7 @@ export interface Props<T> {
   scrollbarColor?: string
   itemHeight?: number
   autoPosition?: boolean
+  itemSelectedColor?: string
 }
 
 const props = withDefaults(defineProps<Props<number | string>>(), {
@@ -104,9 +110,11 @@ const props = withDefaults(defineProps<Props<number | string>>(), {
   scrollbarColor: 'var(--vega-border-color)',
   itemHeight: 34,
   autoPosition: false,
+  itemSelectedColor: 'var(--vega-primary)',
 })
 
 const emits = defineEmits(['open', 'select', 'close'])
+const model = defineModel<null | undefined | string | number | Option<string | number>>()
 
 const trigger = useTemplateRef('vega-dropdown-trigger')
 const top = ref('0')
@@ -247,6 +255,14 @@ function getOptionTooltip(option: Option<number | string> | string | number) {
   return ''
 }
 
+function checkSelected(option: Option<number | string> | string | number) {
+  if (model.value === null || model.value === undefined) {
+    return false
+  }
+
+  return getOptionValue(option) === getOptionValue(model.value)
+}
+
 function updateCoordinated() {
   // eslint-disable-next-line @typescript-eslint/ban-ts-comment
   // @ts-expect-error
@@ -340,6 +356,17 @@ watch(
 .dropdown-item {
   padding: v-bind(optionPadding);
   cursor: pointer;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  &.selected {
+    color: v-bind(itemSelectedColor);
+  }
+}
+
+.check-icon {
+  height: 14px;
+  width: 14px;
 }
 
 .dropdown-no-items {
