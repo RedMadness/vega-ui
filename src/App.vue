@@ -29,55 +29,57 @@
           <template #header> HEADER 2 </template>
 
           <template #default>
+            <div style="margin-top: 20px"></div>
+            <vega-input type="number" label="TEST" hover-border-color="green" focus-border-color="red" />
             <vega-lorem-ipsum />
           </template>
 
           <template #aside-right>
             <vega-sidebar header-right name="vega-sidebar-right" title="SIDEBAR TITLE 2" toggle-icon-color="var(--vega-text-color)">
-              {{ inputValue }}
-              <vega-select
-                v-model="inputValue"
-                :searchable="true"
-                :remoteHandler="testOptionsApi"
-                value-field="id"
-                label-field="title"
-                tooltip-field="title"
-                label="Select 1"
-                infinite-scroll
-                dropdown-auto-position
-                @selected="selected"
-              />
+              <div class="selects">
+                {{ inputValue }}
+                <vega-select
+                  v-model="inputValue"
+                  :searchable="true"
+                  :remoteHandler="testOptionsApi"
+                  value-field="id"
+                  label-field="title"
+                  tooltip-field="title"
+                  label="Select 1"
+                  infinite-scroll
+                  dropdown-auto-position
+                  @selected="selected"
+                />
 
-              {{ inputValue2 }}
-              <vega-select-storage
-                :options="options"
-                value-field="id"
-                label-field="title"
-                storage-key="select-2"
-                dropdown-auto-position
-                dropdown-scrollbar-color="var(--vega-blue)"
-                @selected="selected"
-              >
-                <!-- prefix -->
-                <template #prefix>
-                  <vega-icon-arrow />
-                </template>
-              </vega-select-storage>
+                {{ inputValue2 }}
+                <vega-select-storage
+                  :options="options"
+                  label="Select 2"
+                  value-field="id"
+                  label-field="title"
+                  storage-key="select-2"
+                  dropdown-auto-position
+                  dropdown-scrollbar-color="var(--vega-blue)"
+                  @selected="selected"
+                >
+                </vega-select-storage>
 
-              {{ inputValue3 }}
-              <vega-select
-                v-model="inputValue3"
-                :searchable="true"
-                :options="options3"
-                storage-key="select-3"
-                dropdown-auto-position
-                @selected="selected"
-              >
-                <!-- prefix -->
-                <template #prefix>
-                  <vega-icon-arrow />
-                </template>
-              </vega-select>
+                {{ inputValue3 }}
+                <vega-select
+                  label="Select 3"
+                  v-model="inputValue3"
+                  :searchable="true"
+                  :options="options3"
+                  storage-key="select-3"
+                  dropdown-auto-position
+                  @selected="selected"
+                >
+                  <!-- prefix -->
+                  <template #prefix>
+                    <vega-icon-arrow />
+                  </template>
+                </vega-select>
+              </div>
             </vega-sidebar>
           </template>
         </vega-layout>
@@ -96,6 +98,7 @@ import VegaIconArrow from './components/VegaIconArrow.vue'
 import api from './service/api.ts'
 import VegaSelectStorage from './components/VegaSelectStorage.vue'
 import useSelectState from './use/useSelectState.ts'
+import VegaInput from './components/VegaInput.vue'
 
 const inputValue = ref({ id: 1, title: 'Frami-Glover' })
 const inputValue2 = useSelectState('select-2', 'id', 'title', [{ id: 2, title: '2S' }]).selected
@@ -145,4 +148,10 @@ function selected(payload: number) {
 }
 </script>
 
-<style scoped></style>
+<style scoped>
+.selects {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+</style>

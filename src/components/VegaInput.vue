@@ -163,6 +163,12 @@ const debouncedHandleInput = debounce((event: Event) => {
   width: v-bind(width);
 }
 
+input[type=number]::-webkit-inner-spin-button,
+input[type=number]::-webkit-outer-spin-button {
+  -webkit-appearance: none;
+  opacity: 0;
+}
+
 .clear-button {
   cursor: pointer;
   background-color: transparent;
