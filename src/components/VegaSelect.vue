@@ -128,6 +128,9 @@ const placeholderCurrent = ref(props.placeholder)
 function onOpen() {
   isOpened.value = true
   placeholderCurrent.value = selectedText.value || props.placeholder
+  if (props.searchPersist) {
+    search.value = selectedText.value
+  }
 }
 
 function onClose() {

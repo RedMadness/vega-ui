@@ -12,9 +12,10 @@ export interface Option<T> {
 export interface Props<T> {
   label?: string
   searchable?: boolean
+  searchQueryKey?: string
+  searchPersist?: boolean
   valueField?: string
   labelField?: string
-  searchQueryKey?: string
   tooltipField?: string
   placeholder?: string
   fontSize?: string
@@ -62,6 +63,7 @@ export interface Props<T> {
 export const VegaSelectProps = {
   options: () => [],
   searchable: false,
+  searchPersist: false,
   valueField: 'value',
   labelField: 'label',
   backgroundColor: 'var(--vega-secondary)',

@@ -71,7 +71,7 @@ const props = withDefaults(defineProps<Props>(), {
   borderRadius: '4px',
   padding: '10px 5px',
   width: '100%',
-  height: 'auto',
+  height: '40px',
   textAlign: 'left',
   delayDebounce: 300,
 

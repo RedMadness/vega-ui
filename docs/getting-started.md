@@ -1,5 +1,5 @@
 ::: warning
-This package is in the early stages of development. Use it at your own risk.
+This package is currently in the early stages of development. Please use it with caution and be aware that you might encounter bugs or incomplete features.
 :::
 
 # Install
@@ -37,5 +37,5 @@ Manually import
 </script>
 ```
 ::: info
-`styles.css` very important. Don't forget import it!
+Importing styles.css is crucial for ensuring that the components are styled correctly. Make sure to include it in your project.
 :::
