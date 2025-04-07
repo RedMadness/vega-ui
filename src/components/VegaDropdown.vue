@@ -3,8 +3,9 @@
     <div
       ref="vega-dropdown-trigger"
       @mousedown="toggleOpenState"
+      @keydown="startSearch"
+      @keydown.esc="close"
       @keydown.enter="onEnterPressed"
-      @keydown.esc="isOpen = false"
       @keydown.up.prevent="navigateOptions('up')"
       @keydown.down.prevent="navigateOptions('down')"
     >
@@ -383,6 +384,12 @@ function onEnterPressed() {
   if (isOpen.value) {
     selectOption()
   } else {
+    open()
+  }
+}
+
+function startSearch(event: KeyboardEvent) {
+  if (event.code !== 'Tab' && !isOpen.value) {
     open()
   }
 }

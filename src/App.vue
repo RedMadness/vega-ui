@@ -32,6 +32,7 @@
             <div style="margin-top: 20px"></div>
             {{ inputValue2 }}
             <vega-select-storage
+              searchable
               :options="options"
               label="Select 2"
               value-field="id"
