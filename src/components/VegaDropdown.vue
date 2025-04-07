@@ -1,15 +1,30 @@
 <template>
   <div v-click-outside="onClickOutside">
-    <div ref="vega-dropdown-trigger" @mousedown="toggleOpenState">
+    <div
+      ref="vega-dropdown-trigger"
+      @mousedown="toggleOpenState"
+      @keydown.enter="onEnterPressed"
+      @keydown.esc="isOpen = false"
+      @keydown.up.prevent="navigateOptions('up')"
+      @keydown.down.prevent="navigateOptions('down')"
+    >
       <slot name="trigger" />
     </div>
-    <div class="dropdown" v-show="!forceHided" :class="{ open: isOpen }" @scroll="handleScroll">
+    <div
+      ref="dropdown"
+      class="dropdown"
+      v-show="!forceHided"
+      :class="{ open: isOpen }"
+      @scroll="handleScroll"
+      @keydown.enter="selectOption"
+      tabindex="-1"
+    >
       <slot>
         <div
-          v-for="option in optionsList"
+          v-for="(option, index) in optionsList"
           :key="getOptionValue(option)"
           class="dropdown-item"
-          :class="{ selected: checkSelected(option) }"
+          :class="{ selected: checkSelected(option), highlighted: index === highlightedIndex }"
           @mousedown.left="onSelect(option)"
         >
           <div>
@@ -35,7 +50,7 @@
 </template>
 
 <script setup lang="ts">
-import { computed, onMounted, ref, useTemplateRef, watch } from 'vue'
+import { computed, nextTick, onMounted, ref, useTemplateRef, watch } from 'vue'
 import VegaLoading from './VegaLoading.vue'
 import VegaTooltip from './VegaTooltip.vue'
 import vClickOutside from '../directives/clickOutside'
@@ -116,6 +131,7 @@ const props = withDefaults(defineProps<Props<number | string>>(), {
 const emits = defineEmits(['open', 'select', 'close'])
 const model = defineModel<null | undefined | string | number | Option<string | number> | Array<null | undefined | string | number | Option<string | number>>>()
 
+const dropdown = ref<HTMLElement | null>(null)
 const trigger = useTemplateRef('vega-dropdown-trigger')
 const top = ref('0')
 const left = ref('0')
@@ -130,6 +146,7 @@ const total = ref(0)
 const page = ref(1)
 const perPage = ref(25)
 const isOpen = ref(false)
+const highlightedIndex = ref(-1)
 /** Is it possible to download additional options from the server? */
 const hasNextPage = computed(() => optionsRemote.value?.length < total.value)
 /** Options obtained by remote query. */
@@ -148,7 +165,7 @@ const forceHided = computed(() => {
   return false
 })
 
-onMounted(() => updateCoordinated())
+onMounted(() => updateCoordinates())
 
 function toggleOpenState() {
   if (isOpen.value) {
@@ -160,10 +177,11 @@ function toggleOpenState() {
 
 function open() {
   if (isOpen.value === false) {
+    highlightedIndex.value = -1
     isOpen.value = true
     callApi()
     emits('open')
-    updateCoordinated()
+    updateCoordinates()
   }
 }
 
@@ -279,7 +297,7 @@ function checkSelected(option: Option<number | string> | string | number) {
   return selected
 }
 
-function updateCoordinated() {
+function updateCoordinates() {
   // eslint-disable-next-line @typescript-eslint/ban-ts-comment
   // @ts-expect-error
   const positionTrigger = trigger.value.getBoundingClientRect()
@@ -317,7 +335,7 @@ async function callApi() {
           const data = transformResponse(response)
           optionsRemote.value = [...optionsRemote.value, ...data]
           total.value = response.data.meta?.total || 0
-          updateCoordinated()
+          updateCoordinates()
         }
       })
       .catch((error) => {
@@ -334,6 +352,39 @@ function transformResponse(response: ApiResponse<string | number | Option<string
     return props.responseHandler(response)
   }
   return response.data.data || []
+}
+
+function navigateOptions(direction: 'up' | 'down') {
+  if (!isOpen.value) return
+
+  if (direction === 'up' && highlightedIndex.value > 0) {
+    highlightedIndex.value--
+  } else if (direction === 'down' && highlightedIndex.value < optionsList.value.length - 1) {
+    highlightedIndex.value++
+  }
+
+  nextTick(() => {
+    if (dropdown.value) {
+      const highlightedElement = dropdown.value.querySelector('.highlighted') as HTMLElement
+      if (highlightedElement) {
+        highlightedElement.scrollIntoView({ block: 'nearest' })
+      }
+    }
+  })
+}
+
+function selectOption() {
+  if (highlightedIndex.value >= 0 && highlightedIndex.value < optionsList.value.length) {
+    onSelect(optionsList.value[highlightedIndex.value])
+  }
+}
+
+function onEnterPressed() {
+  if (isOpen.value) {
+    selectOption()
+  } else {
+    open()
+  }
 }
 
 watch(
@@ -377,6 +428,10 @@ watch(
   align-items: center;
   &.selected {
     color: v-bind(itemSelectedColor);
+  }
+  &.highlighted {
+    background-color: v-bind(hoverColor);
+    color: v-bind(hoverTextColor);
   }
 }
 

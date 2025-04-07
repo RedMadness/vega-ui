@@ -30,6 +30,19 @@
 
           <template #default>
             <div style="margin-top: 20px"></div>
+            {{ inputValue2 }}
+            <vega-select-storage
+              :options="options"
+              label="Select 2"
+              value-field="id"
+              label-field="title"
+              storage-key="select-2"
+              dropdown-auto-position
+              dropdown-scrollbar-color="var(--vega-blue)"
+              focus-border-color="blue"
+              @selected="selected"
+            >
+            </vega-select-storage>
             <vega-input label="TEST" hover-border-color="green" focus-border-color="red" />
             <vega-textarea v-model="textareaValue" label="TEXTAREA" placeholder="Placeholder" />
             <vega-lorem-ipsum />
@@ -51,19 +64,6 @@
                   dropdown-auto-position
                   @selected="selected"
                 />
-
-                {{ inputValue2 }}
-                <vega-select-storage
-                  :options="options"
-                  label="Select 2"
-                  value-field="id"
-                  label-field="title"
-                  storage-key="select-2"
-                  dropdown-auto-position
-                  dropdown-scrollbar-color="var(--vega-blue)"
-                  @selected="selected"
-                >
-                </vega-select-storage>
 
                 {{ inputValue3 }}
                 <vega-select
