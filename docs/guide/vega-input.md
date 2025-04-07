@@ -10,7 +10,6 @@ Simple example:
   label="label"
   background-color="var(--vp-custom-block-info-bg)"
   :delay-debounce="800"
-  padding="0 8px 0 8px"
   width="420px"
   height="32px"
 >
@@ -39,7 +38,6 @@ Code above will give you a following result:
       label="label"
       background-color="var(--vp-custom-block-info-bg)"
       :delay-debounce="800"
-      padding="0 8px 0 8px"
       width="420px"
       height="32px"
     >

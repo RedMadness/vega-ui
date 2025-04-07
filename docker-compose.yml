@@ -10,6 +10,8 @@ services:
       - ./:/home/node/app
     expose:
       - "5173"
+      - "8080"
     ports: # use if it is necessary to expose the container to the host machine
       - "5173:5173"
+      - "8080:8080"
     command: npm run dev

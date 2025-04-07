@@ -5,6 +5,7 @@ import VegaSidebar from './components/VegaSidebar.vue'
 import VegaSidebarToggle from './components/VegaSidebarToggle.vue'
 import VegaIconArrow from './components/VegaIconArrow.vue'
 import VegaInput from './components/VegaInput.vue'
+import VegaTextarea from './components/VegaTextarea.vue'
 import VegaSelect from './components/VegaSelect.vue'
 import VegaSelectStorage from './components/VegaSelectStorage.vue'
 import VegaLoading from './components/VegaLoading.vue'
@@ -21,6 +22,7 @@ export {
   VegaSidebarToggle,
   VegaIconArrow,
   VegaInput,
+  VegaTextarea,
   VegaSelect,
   VegaSelectStorage,
   VegaLoading,

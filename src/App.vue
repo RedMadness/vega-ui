@@ -30,7 +30,8 @@
 
           <template #default>
             <div style="margin-top: 20px"></div>
-            <vega-input type="number" label="TEST" hover-border-color="green" focus-border-color="red" />
+            <vega-input label="TEST" hover-border-color="green" focus-border-color="red" />
+            <vega-textarea label="TEXTAREA" placeholder="Placeholder" />
             <vega-lorem-ipsum />
           </template>
 
@@ -99,6 +100,7 @@ import api from './service/api.ts'
 import VegaSelectStorage from './components/VegaSelectStorage.vue'
 import useSelectState from './use/useSelectState.ts'
 import VegaInput from './components/VegaInput.vue'
+import VegaTextarea from './components/VegaTextarea.vue'
 
 const inputValue = ref({ id: 1, title: 'Frami-Glover' })
 const inputValue2 = useSelectState('select-2', 'id', 'title', [{ id: 2, title: '2S' }]).selected

@@ -5,20 +5,15 @@
     </slot>
     <label class="input-wrapper" v-bind="$attrs">
       <slot name="prefix"></slot>
-      <input
-        :type="type"
+      <textarea
         :readonly="readonly"
         class="vega-input"
         :placeholder="placeholder"
         :value="modelValue"
-        @input="debouncedHandleInput"
+        @input="inputHandler"
         @focus="handleFocus"
         @blur="handleBlur"
-        :autocomplete="type === 'password' ? 'on' : 'off'"
       />
-      <span v-if="clearable && modelValue" class="clear-button" @mousedown.stop="clearInput">
-        <slot name="clear-icon">&#10005;</slot>
-      </span>
       <slot name="postfix"></slot>
     </label>
   </div>
@@ -27,39 +22,7 @@
 <script setup lang="ts">
 import { Props, VegaInputProps } from '../props/VegaInputProps.ts'
 
-export interface TestProps {
-  type?: 'text' | 'password' | 'date' | 'email' | 'number' | 'url'
-  label?: string
-  readonly?: boolean
-  placeholder?: string
-  modelValue?: string | number | null
-  cursorType?: string
-  fontSize?: string
-  fontWeight?: string
-  fontColor?: string
-  placeholderColor?: string
-  backgroundColor?: string
-  hoverBorderColor?: string
-  focusBorderColor?: string
-  borderColor?: string
-  borderRadius?: string
-  padding?: string
-  width?: string
-  height?: string
-  textAlign?: string
-  delayDebounce?: number
-
-  clearable?: boolean
-}
-
-const props = withDefaults(defineProps<Props & {
-  type?: 'text' | 'password' | 'date' | 'email' | 'number' | 'url',
-  clearable?: boolean
-}>(), {
-  ...VegaInputProps,
-  type: 'text',
-  clearable: true,
-})
+const props = withDefaults(defineProps<Props>(), VegaInputProps)
 
 defineOptions({
   inheritAttrs: false,
@@ -75,10 +38,6 @@ function handleBlur(event?: FocusEvent) {
   emit('blur', event)
 }
 
-function clearInput() {
-  emit('clear')
-}
-
 function debounce<Arg extends unknown[]>(func: (...args: Arg) => void, wait: number) {
   let timeoutId: ReturnType<typeof setTimeout> | null = null
   return function (...args: Arg) {
@@ -90,9 +49,20 @@ function debounce<Arg extends unknown[]>(func: (...args: Arg) => void, wait: num
 }
 
 const debouncedHandleInput = debounce((event: Event) => {
-  const inputElement = event.target as HTMLInputElement
+  const inputElement = event.target as HTMLTextAreaElement
   emit('update:modelValue', inputElement.value)
 }, props.delayDebounce)
+
+function inputHandler(event: Event) {
+  debouncedHandleInput(event)
+  setAutoHeight(event)
+}
+
+function setAutoHeight(event: Event) {
+  const target = event.target as HTMLTextAreaElement
+  target.style.height = '40px'
+  target.style.height = (target.scrollHeight) + 'px'
+}
 </script>
 
 <style scoped>
@@ -107,6 +77,10 @@ const debouncedHandleInput = debounce((event: Event) => {
   height: 100%;
   background-color: transparent;
   text-align: v-bind(textAlign);
+  resize: none;
+  overflow: hidden;
+  outline: none;
+  font-family: inherit;
 }
 
 .vega-input:focus {
@@ -126,7 +100,7 @@ const debouncedHandleInput = debounce((event: Event) => {
   border-radius: v-bind(borderRadius);
   background-color: v-bind(backgroundColor);
   padding: v-bind(padding);
-  height: v-bind(height);
+  height: auto;
   box-sizing: border-box;
 }
 
@@ -149,17 +123,5 @@ input[type=number]::-webkit-inner-spin-button,
 input[type=number]::-webkit-outer-spin-button {
   -webkit-appearance: none;
   opacity: 0;
-}
-
-.clear-button {
-  cursor: pointer;
-  background-color: transparent;
-  border: none;
-  color: #ccc;
-  font-size: 14px;
-  margin: auto;
-}
-.clear-button:hover {
-  color: #999;
 }
 </style>
