@@ -6,6 +6,7 @@
     <label class="input-wrapper" v-bind="$attrs">
       <slot name="prefix"></slot>
       <textarea
+        ref="textarea"
         :readonly="readonly"
         class="vega-input"
         :placeholder="placeholder"
@@ -21,8 +22,10 @@
 
 <script setup lang="ts">
 import { Props, VegaInputProps } from '../props/VegaInputProps.ts'
+import { onMounted, useTemplateRef, watch } from 'vue'
 
 const props = withDefaults(defineProps<Props>(), VegaInputProps)
+const ref = useTemplateRef('textarea')
 
 defineOptions({
   inheritAttrs: false,
@@ -55,14 +58,21 @@ const debouncedHandleInput = debounce((event: Event) => {
 
 function inputHandler(event: Event) {
   debouncedHandleInput(event)
-  setAutoHeight(event)
+  setAutoHeight()
 }
 
-function setAutoHeight(event: Event) {
-  const target = event.target as HTMLTextAreaElement
-  target.style.height = '40px'
-  target.style.height = (target.scrollHeight) + 'px'
+function setAutoHeight() {
+  const target = ref.value as HTMLTextAreaElement
+  target.style.height = '44px'
+  requestAnimationFrame(() => {
+    target.style.height = (target.scrollHeight) + 'px';
+  });
 }
+
+onMounted(() => setAutoHeight())
+watch(() => props.modelValue, () => {
+  setAutoHeight()
+})
 </script>
 
 <style scoped>

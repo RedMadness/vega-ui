@@ -31,7 +31,7 @@
           <template #default>
             <div style="margin-top: 20px"></div>
             <vega-input label="TEST" hover-border-color="green" focus-border-color="red" />
-            <vega-textarea label="TEXTAREA" placeholder="Placeholder" />
+            <vega-textarea v-model="textareaValue" label="TEXTAREA" placeholder="Placeholder" />
             <vega-lorem-ipsum />
           </template>
 
@@ -106,6 +106,8 @@ const inputValue = ref({ id: 1, title: 'Frami-Glover' })
 const inputValue2 = useSelectState('select-2', 'id', 'title', [{ id: 2, title: '2S' }]).selected
 const inputValue3 = ref('')
 
+const textareaValue = ref('asdasd')
+
 const options = ref([
   { id: 1, title: 'one' },
   { id: 2, title: '2S' },
@@ -144,6 +146,11 @@ export interface Option<T> {
 const testOptionsApi = api.getOrganizations
 
 setTimeout(() => (inputValue.value = { id: 3, title: 'qweqweqe' }), 1000)
+setTimeout(() => (textareaValue.value = 'wewerewr\n' +
+  'werwer\n' +
+  '\n' +
+  '\n' +
+  'werwerwre'), 1000)
 
 function selected(payload: number) {
   console.log(payload)
