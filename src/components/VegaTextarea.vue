@@ -31,7 +31,7 @@ defineOptions({
   inheritAttrs: false,
 })
 
-const emit = defineEmits(['focus', 'blur', 'update:modelValue', 'clear'])
+const emit = defineEmits(['focus', 'blur', 'update:modelValue'])
 
 function handleFocus(event: FocusEvent) {
   emit('focus', event)
@@ -63,7 +63,7 @@ function inputHandler(event: Event) {
 
 function setAutoHeight() {
   const target = ref.value as HTMLTextAreaElement
-  target.style.height = '44px'
+  target.style.height = target.scrollHeight + 'px'
   requestAnimationFrame(() => {
     target.style.height = (target.scrollHeight) + 'px';
   });

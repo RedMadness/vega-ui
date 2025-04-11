@@ -26,7 +26,7 @@ Simple example:
 ```
 
 ## Props
-Same as [Vega Select](./vega-select#props), except:
+Same as [Vega Select](./vega-select#props), plus:
 
 | Prop Name     | Type     | Default Value | Description                                                                                                                                      |
 |---------------|----------|---------------|--------------------------------------------------------------------------------------------------------------------------------------------------|
@@ -35,7 +35,7 @@ Same as [Vega Select](./vega-select#props), except:
 
 ## Events
 
-Same as [Vega Select](./vega-select#events), except:
+Same as [Vega Select](./vega-select#events), plus:
 
 | Event Name | Description                                                                      |
 |------------|----------------------------------------------------------------------------------|

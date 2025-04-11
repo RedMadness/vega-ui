@@ -30,6 +30,7 @@
       :item-height="dropdownItemHeight"
       :item-selected-color="dropdownItemSelectedColor"
       :z-index="dropdownZIndex"
+      :close-on-select="dropdownCloseOnSelect"
       @select="onSelect"
       @open="onOpen"
       @close="onClose"
@@ -38,7 +39,7 @@
         <vega-input
           :model-value="inputModel"
           :placeholder="placeholderCurrent"
-          :readonly="!searchable || !isOpened"
+          :readonly="!searchable"
           :cursor-type="cursor"
           :font-size="fontSize"
           :font-color="fontColor"
@@ -76,7 +77,7 @@
 </template>
 
 <script lang="ts" setup>
-import { ref, computed, watch } from 'vue'
+import { ref, computed, watch, nextTick } from 'vue'
 import VegaInput from './VegaInput.vue'
 import VegaDropdown from './VegaDropdown.vue'
 import VegaIconArrow from './VegaIconArrow.vue'
@@ -149,6 +150,7 @@ const onClear = () => {
 }
 
 function onSelect(item: Option<number | string> | string | number) {
+  // Multiselect handling
   if (Array.isArray(model.value)) {
     const index = model.value.findIndex((el) => getValue(el) === getValue(item))
     if (index < 0) {
@@ -161,6 +163,9 @@ function onSelect(item: Option<number | string> | string | number) {
   }
   model.value = item
   emitSelected(getValue(item))
+  if (!props.dropdownCloseOnSelect) {
+    nextTick(() => search.value = selectedText.value)
+  }
 }
 
 function onSearch(payload: string) {

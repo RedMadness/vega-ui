@@ -3,7 +3,9 @@
     <div
       ref="vega-dropdown-trigger"
       @mousedown="toggleOpenState"
+      @focusin="open"
       @keydown="startSearch"
+      @keydown.tab="close"
       @keydown.esc="close"
       @keydown.enter="onEnterPressed"
       @keydown.up.prevent="navigateOptions('up')"
@@ -17,8 +19,9 @@
       v-show="!forceHided"
       :class="{ open: isOpen }"
       @scroll="handleScroll"
-      @keydown.enter="selectOption"
       tabindex="-1"
+      @keydown.tab="close"
+      @keydown.esc="close"
     >
       <slot>
         <div
@@ -102,6 +105,7 @@ export interface Props<T> {
   itemHeight?: number
   autoPosition?: boolean
   itemSelectedColor?: string
+  closeOnSelect?: boolean
 }
 
 const props = withDefaults(defineProps<Props<number | string>>(), {
@@ -127,6 +131,7 @@ const props = withDefaults(defineProps<Props<number | string>>(), {
   itemHeight: 34,
   autoPosition: false,
   itemSelectedColor: 'var(--vega-primary)',
+  closeOnSelect: true,
 })
 
 const emits = defineEmits(['open', 'select', 'close'])
@@ -188,7 +193,9 @@ function open() {
 
 const onSelect = (item: Option<number | string> | string | number) => {
   emits('select', item)
-  close()
+  if (props.closeOnSelect) {
+    close()
+  }
 }
 
 function onClickOutside() {
@@ -336,6 +343,7 @@ async function callApi() {
           const data = transformResponse(response)
           optionsRemote.value = [...optionsRemote.value, ...data]
           total.value = response.data.meta?.total || 0
+          highlightedIndex.value = -1
           updateCoordinates()
         }
       })
@@ -374,15 +382,9 @@ function navigateOptions(direction: 'up' | 'down') {
   })
 }
 
-function selectOption() {
-  if (highlightedIndex.value >= 0 && highlightedIndex.value < optionsList.value.length) {
-    onSelect(optionsList.value[highlightedIndex.value])
-  }
-}
-
 function onEnterPressed() {
-  if (isOpen.value) {
-    selectOption()
+  if (isOpen.value && highlightedIndex.value >= 0 && highlightedIndex.value < optionsList.value.length) {
+    onSelect(optionsList.value[highlightedIndex.value])
   } else {
     open()
   }

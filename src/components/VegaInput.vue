@@ -27,31 +27,6 @@
 <script setup lang="ts">
 import { Props, VegaInputProps } from '../props/VegaInputProps.ts'
 
-export interface TestProps {
-  type?: 'text' | 'password' | 'date' | 'email' | 'number' | 'url'
-  label?: string
-  readonly?: boolean
-  placeholder?: string
-  modelValue?: string | number | null
-  cursorType?: string
-  fontSize?: string
-  fontWeight?: string
-  fontColor?: string
-  placeholderColor?: string
-  backgroundColor?: string
-  hoverBorderColor?: string
-  focusBorderColor?: string
-  borderColor?: string
-  borderRadius?: string
-  padding?: string
-  width?: string
-  height?: string
-  textAlign?: string
-  delayDebounce?: number
-
-  clearable?: boolean
-}
-
 const props = withDefaults(defineProps<Props & {
   type?: 'text' | 'password' | 'date' | 'email' | 'number' | 'url',
   clearable?: boolean

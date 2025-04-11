@@ -6,23 +6,13 @@ By default, it uses a text input type, but you can specify other types as needed
 Simple example:
 ```vue
 <vega-input
-  placeholder="input"
+  placeholder="Placeholder"
   label="label"
   background-color="var(--vp-custom-block-info-bg)"
+  placeholder-color="gray"
   :delay-debounce="800"
   width="420px"
-  height="32px"
->
-  <template #prefix>
-    <span>prefix</span>
-  </template>
-  <template #postfix>
-    <span>postfix</span>
-  </template>
-  <template #clear-icon>
-    &#10005;
-  </template>
-</vega-input>
+/>
 
 <script setup>
   import { VegaInput } from 'vega-ui'
@@ -34,21 +24,13 @@ Code above will give you a following result:
 
 <div style="height: 80px">
   <vega-input
-      placeholder="input"
+      placeholder="Placeholder"
       label="label"
       background-color="var(--vp-custom-block-info-bg)"
+      placeholder-color="gray"
       :delay-debounce="800"
       width="420px"
-      height="32px"
-    >
-      <template v-slot:prefix>
-        <slot name="prefix"></slot>
-          <span>prefix</span>
-      </template>
-      <template v-slot:postfix>
-        <span>postfix</span>
-      </template>
-    </vega-input>
+    />
 </div>
 
 ### Props
