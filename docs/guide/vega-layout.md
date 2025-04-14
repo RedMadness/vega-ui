@@ -112,6 +112,7 @@ Example above will give you a following structure:
 | [header-first](#header-first)                     | Boolean | 'false'                    | Determines if the header should be on top of asides.                                                        |
 | [header-height](#header-height)                   | String  | '80px'                     | Height of the header. Accepts a valid CSS value.                                                            |
 | [header-border](#header-border)                   | String  | 'none'                     | Color of the header border. Accepts HEX, RGB values.                                                        |
+| [header-border-radius](#header-border-radius)     | String  | '0'                        | Header border radius. Accepts a valid CSS border radius value.                                              |
 | [header-background](#header-background)           | String  | 'none'                     | Background color of the header. Accepts HEX, RGB values.                                                    |
 | [header-shadow](#header-shadow)                   | String  | 'none'                     | CSS box-shadow value for the header. [box-shadow](https://developer.mozilla.org/ru/docs/Web/CSS/box-shadow) |
 | [header-padding](#header-padding)                 | String  | '2rem'                     | Left and right padding of the header. Accepts a valid CSS value.                                            |
@@ -237,6 +238,16 @@ Color of the header border. Accepts HEX, RGB values.
 
 ```html
 <VegaLayout header-border="#005689" />
+```
+
+### header-border-radius
+- Type: `String`
+- Default: `0`
+
+Header border radius. Accepts a valid CSS border radius value.
+
+```html
+<VegaLayout header-border-radius="4px 4px 0 0" />
 ```
 
 ### header-background

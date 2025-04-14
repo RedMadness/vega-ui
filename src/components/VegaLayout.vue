@@ -42,6 +42,7 @@ export interface Props {
   contentPadding?: string,
   headerHeight?: string
   headerBorder?: string
+  headerBorderRadius?: string
   headerBackground?: string
   headerPadding?: string
   asideLeftWidth?: string
@@ -63,6 +64,7 @@ withDefaults(defineProps<Props>(), {
   contentPadding: '0',
   headerHeight: '80px',
   headerBorder: 'none',
+  headerBorderRadius: '0',
   headerBackground: 'none',
   headerPadding: '2rem',
   asideLeftWidth: 'initial',
@@ -110,6 +112,7 @@ withDefaults(defineProps<Props>(), {
   z-index: 1;
   display: flex;
   align-items: center;
+  border-radius: v-bind(headerBorderRadius);
 }
 .vega-aside {
   box-sizing: border-box;
