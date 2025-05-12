@@ -26,6 +26,10 @@ const props = defineProps({
     type: String,
     default: 'var(--vega-primary)',
   },
+  borderColor: {
+    type: String,
+    default: 'var(--vega-border-color)'
+  },
   label: String,
   labelPosition: {
     type: String as PropType<'top' | 'bottom' | 'left' | 'right'>,
@@ -88,8 +92,8 @@ const flexDirection = computed(() => {
     background-image: url("data:image/svg+xml;charset=utf-8,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 9.5 7.5'%3E%3Cpath fill='none' stroke='%23fff' stroke-linecap='round' stroke-linejoin='round' stroke-width='1.5' d='M.25 4.35l3.93 2.4 5.07-6'/%3E%3C/svg%3E");
   }
   .vega-checkbox-original:focus-visible + .vega-checkbox-actual:after {
-    border: 1px solid var(--vega-primary);
-    outline: 1px solid var(--vega-border-color);
+    border: 1px solid v-bind(checkedColor);
+    outline: 1px solid v-bind(borderColor);
   }
   .vega-checkbox-actual {
     position: relative;
@@ -101,7 +105,7 @@ const flexDirection = computed(() => {
     background-size: 60%;
     border-radius: 0.125rem;
     transition: all 0.2s;
-    border: 1px solid var(--vega-border-color);
+    border: 1px solid v-bind(borderColor);
     background-color: transparent;
     background-position: 50%;
     background-repeat: no-repeat;

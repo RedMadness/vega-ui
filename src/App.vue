@@ -49,7 +49,7 @@
               <vega-textarea v-model="textareaValue" label="TEXTAREA" placeholder="Placeholder" />
               {{ checkboxValue }}
               <div>
-                <vega-checkbox v-model="checkboxValue" label="123" label-position="left" />
+                <vega-checkbox v-model="checkboxValue" label="Checkbox label" border-color="red" />
               </div>
               <vega-checkbox checked-color="green" />
               <vega-lorem-ipsum />
