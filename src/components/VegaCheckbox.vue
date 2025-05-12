@@ -30,6 +30,14 @@ const props = defineProps({
   labelPosition: {
     type: String as PropType<'top' | 'bottom' | 'left' | 'right'>,
     default: 'right',
+  },
+  labelGap: {
+    type: String,
+    default: '6px',
+  },
+  checkboxSize: {
+    type: String,
+    default: '16px',
   }
 })
 const emit = defineEmits(['update:modelValue'])
@@ -60,9 +68,11 @@ const flexDirection = computed(() => {
   cursor: pointer;
   display: inline-flex;
   flex-direction: v-bind(flexDirection);
-  gap: 4px;
+  gap: v-bind(labelGap);
 }
 .vega-checkbox-input {
+  display: flex;
+  align-items: center;
   .vega-checkbox-original {
     opacity: 0;
     outline: none;
@@ -83,8 +93,8 @@ const flexDirection = computed(() => {
   }
   .vega-checkbox-actual {
     position: relative;
-    width: 16px;
-    height: 16px;
+    width: v-bind(checkboxSize);
+    height: v-bind(checkboxSize);
     display: inline-block;
   }
   .vega-checkbox-actual:after {
@@ -98,8 +108,8 @@ const flexDirection = computed(() => {
     position: absolute;
     content: '';
     box-sizing: border-box;
-    width: 16px;
-    height: 16px;
+    width: v-bind(checkboxSize);
+    height: v-bind(checkboxSize);
     user-select: none;
   }
 }
