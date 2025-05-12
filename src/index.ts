@@ -11,6 +11,7 @@ import VegaSelectStorage from './components/VegaSelectStorage.vue'
 import VegaLoading from './components/VegaLoading.vue'
 import VegaTooltip from './components/VegaTooltip.vue'
 import VegaDropdown from './components/VegaDropdown.vue'
+import VegaCheckbox from './components/VegaCheckbox.vue'
 import useSidebarState from './use/useSidebarState.ts'
 import useSelectState from './use/useSelectState.ts'
 import './assets/css/variables.css'
@@ -28,6 +29,7 @@ export {
   VegaLoading,
   VegaTooltip,
   VegaDropdown,
+  VegaCheckbox,
   useSidebarState,
   useSelectState,
 }

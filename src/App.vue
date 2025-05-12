@@ -29,24 +29,31 @@
           <template #header> HEADER 2 </template>
 
           <template #default>
-            <div style="margin-top: 20px"></div>
-            {{ inputValue2 }}
-            <vega-select-storage
-              searchable
-              :options="options"
-              label="Select 2"
-              value-field="id"
-              label-field="title"
-              storage-key="select-2"
-              dropdown-auto-position
-              dropdown-scrollbar-color="var(--vega-blue)"
-              focus-border-color="blue"
-              @selected="selected"
-            >
-            </vega-select-storage>
-            <vega-input label="TEST" hover-border-color="green" focus-border-color="red" />
-            <vega-textarea v-model="textareaValue" label="TEXTAREA" placeholder="Placeholder" />
-            <vega-lorem-ipsum />
+            <div class="content-wrapper">
+              {{ inputValue2 }}
+              <vega-select-storage
+                searchable
+                search-persist
+                :options="options"
+                label="Select 2"
+                value-field="id"
+                label-field="title"
+                storage-key="select-2"
+                dropdown-auto-position
+                dropdown-scrollbar-color="var(--vega-blue)"
+                :dropdown-close-on-select="false"
+                focus-border-color="blue"
+                @selected="selected"
+              >
+              </vega-select-storage>
+              <vega-textarea v-model="textareaValue" label="TEXTAREA" placeholder="Placeholder" />
+              {{ checkboxValue }}
+              <div>
+                <vega-checkbox v-model="checkboxValue" label="123" label-position="left" />
+              </div>
+              <vega-checkbox checked-color="green" />
+              <vega-lorem-ipsum />
+            </div>
           </template>
 
           <template #aside-right>
@@ -100,14 +107,15 @@ import VegaIconArrow from './components/VegaIconArrow.vue'
 import api from './service/api.ts'
 import VegaSelectStorage from './components/VegaSelectStorage.vue'
 import useSelectState from './use/useSelectState.ts'
-import VegaInput from './components/VegaInput.vue'
 import VegaTextarea from './components/VegaTextarea.vue'
+import VegaCheckbox from './components/VegaCheckbox.vue'
 
 const inputValue = ref({ id: 1, title: 'Frami-Glover' })
 const inputValue2 = useSelectState('select-2', 'id', 'title', [{ id: 2, title: '2S' }]).selected
 const inputValue3 = ref('')
 
 const textareaValue = ref('asdasd')
+const checkboxValue = ref(true)
 
 const options = ref([
   { id: 1, title: 'one' },
@@ -160,6 +168,12 @@ function selected(payload: number) {
 
 <style scoped>
 .selects {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+.content-wrapper {
+  padding: 30px 0;
   display: flex;
   flex-direction: column;
   gap: 20px;
