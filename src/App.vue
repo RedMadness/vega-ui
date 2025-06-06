@@ -46,6 +46,10 @@
                 @selected="selected"
               >
               </vega-select-storage>
+
+              Input
+              <vega-input v-model="inputText" :min="1.5" :max="20" :maxLength="4" />
+
               <vega-textarea v-model="textareaValue" label="TEXTAREA" placeholder="Placeholder" />
               {{ checkboxValue }}
               <div>
@@ -109,12 +113,14 @@ import VegaSelectStorage from './components/VegaSelectStorage.vue'
 import useSelectState from './use/useSelectState.ts'
 import VegaTextarea from './components/VegaTextarea.vue'
 import VegaCheckbox from './components/VegaCheckbox.vue'
+import VegaInput from './components/VegaInput.vue'
 
 const inputValue = ref({ id: 1, title: 'Frami-Glover' })
 const inputValue2 = useSelectState('select-2', 'id', 'title', [{ id: 2, title: '2S' }]).selected
 const inputValue3 = ref('')
 
 const textareaValue = ref('asdasd')
+const inputText = ref()
 const checkboxValue = ref(true)
 
 const options = ref([

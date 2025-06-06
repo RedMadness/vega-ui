@@ -30,6 +30,9 @@ import { Props, VegaInputProps } from '../props/VegaInputProps.ts'
 const props = withDefaults(defineProps<Props & {
   type?: 'text' | 'password' | 'date' | 'email' | 'number' | 'url',
   clearable?: boolean
+  min?: number
+  max?: number
+  maxLength?: number
 }>(), {
   ...VegaInputProps,
   type: 'text',
@@ -51,6 +54,7 @@ function handleBlur(event?: FocusEvent) {
 }
 
 function clearInput() {
+  emit('update:modelValue', '')
   emit('clear')
 }
 
@@ -66,7 +70,19 @@ function debounce<Arg extends unknown[]>(func: (...args: Arg) => void, wait: num
 
 const debouncedHandleInput = debounce((event: Event) => {
   const inputElement = event.target as HTMLInputElement
-  emit('update:modelValue', inputElement.value)
+  let value = inputElement.value
+
+  if (props.min > parseFloat(value)) value = props.min
+  if (props.max < parseFloat(value)) value = props.max
+
+  if (props.maxLength < value.length) value = value.slice(0, props.maxLength)
+
+  if (inputElement.value !== value) {
+    inputElement.value = value
+  }
+
+  emit('update:modelValue', value)
+
 }, props.delayDebounce)
 </script>
 
