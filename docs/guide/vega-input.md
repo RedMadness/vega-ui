@@ -58,6 +58,8 @@ Here are the props available for the component. Each prop allows you to customiz
 | `delayDebounce`    | `Number`                                 | `300`                        | Milliseconds to delay the input event for debouncing.                                           |
 | `readonly`         | `Boolean`                                | false                        | If set to true, the input field will be read-only, preventing user modifications.               |
 | `clearable`        | `Boolean`                                | true                         | If set to true, adds a clear button to the input field, allowing quick clearing of its content. |
+| `min`              | `Number`                                 | ``                           | Max value for numeric type input                                                                |
+| `min`              | `Number`                                 | ``                           | Min value for numeric type input                                                                |
 
 ### Events
 

@@ -11,10 +11,12 @@
         class="vega-input"
         :placeholder="placeholder"
         :value="modelValue"
-        @input="debouncedHandleInput"
+        @input="onInput"
         @focus="handleFocus"
         @blur="handleBlur"
         :autocomplete="type === 'password' ? 'on' : 'off'"
+        :min="min"
+        :max="max"
       />
       <span v-if="clearable && modelValue" class="clear-button" @mousedown.stop="clearInput">
         <slot name="clear-icon">&#10005;</slot>
@@ -30,6 +32,8 @@ import { Props, VegaInputProps } from '../props/VegaInputProps.ts'
 const props = withDefaults(defineProps<Props & {
   type?: 'text' | 'password' | 'date' | 'email' | 'number' | 'url',
   clearable?: boolean
+  min?: number
+  max?: number
 }>(), {
   ...VegaInputProps,
   type: 'text',
@@ -54,6 +58,35 @@ function clearInput() {
   emit('clear')
 }
 
+function onInput(event: Event) {
+  const input = event.target as HTMLInputElement;
+  let value = input.value;
+
+  if (props.type === 'number' && (props.min || props.max)) {
+    value = handleMinMax(value)
+  }
+
+  debouncedHandleInput(event, value)
+}
+
+function handleMinMax(value: string) {
+  const floatValue = parseFloat(value)
+
+  if (isNaN(floatValue)) {
+    return '0'
+  }
+
+  if (props.min && floatValue < props.min) {
+    return props.min.toString()
+  }
+
+  if (props.max && floatValue > props.max) {
+    return props.max.toString()
+  }
+
+  return value
+}
+
 function debounce<Arg extends unknown[]>(func: (...args: Arg) => void, wait: number) {
   let timeoutId: ReturnType<typeof setTimeout> | null = null
   return function (...args: Arg) {
@@ -64,9 +97,12 @@ function debounce<Arg extends unknown[]>(func: (...args: Arg) => void, wait: num
   }
 }
 
-const debouncedHandleInput = debounce((event: Event) => {
-  const inputElement = event.target as HTMLInputElement
-  emit('update:modelValue', inputElement.value)
+const debouncedHandleInput = debounce((event: Event, value?: string) => {
+  const input = event.target as HTMLInputElement
+  if (value) {
+    input.value = value
+  }
+  emit('update:modelValue', value)
 }, props.delayDebounce)
 </script>
 
