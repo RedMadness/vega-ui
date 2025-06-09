@@ -48,7 +48,8 @@
               </vega-select-storage>
 
               Input
-              <vega-input v-model="inputText" :min="1.5" :max="20" :maxLength="4" />
+              <code>{{ inputText }}</code>
+              <vega-input v-model="inputText" :min="1.5" :max="50" :delay-debounce="50" type="number" />
 
               <vega-textarea v-model="textareaValue" label="TEXTAREA" placeholder="Placeholder" />
               {{ checkboxValue }}
