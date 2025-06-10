@@ -37,29 +37,29 @@ Code above will give you a following result:
 
 Here are the props available for the component. Each prop allows you to customize the input field in various ways, enhancing its functionality and style.
 
-| Prop Name          | Type                                     | Default                      | Description                                                                                     |
-|--------------------|------------------------------------------|------------------------------|-------------------------------------------------------------------------------------------------|
-| `type`             | `text \| date \| email \| number \| url` | `text`                       | Specifies the type of input.                                                                    |
-| `placeholder`      | `String`                                 | `""`                         | Text to display when the input is empty.                                                        |
-| `label`            | `String`                                 | `''`                         | Label above the input.                                                                          |
-| `modelValue`       | `String, Number, null`                   | `""`                         | Value bound to the input and updated via v-model.                                               |
-| `fontSize`         | `String`                                 | `"inherit"`                  | Font size of the input text.                                                                    |
-| `fontColor`        | `String`                                 | `"var(--vega-text-color)"`   | Text color of the input.                                                                        |
-| `placeholderColor` | `String`                                 | `"var(--vega-gray)"`         | Color of the placeholder text.                                                                  |
-| `backgroundColor`  | `String`                                 | `"none"`                     | Background color of the input.                                                                  |
-| `borderColor`      | `String`                                 | `"var(--vega-border-color)"` | Color of the input border.                                                                      |
-| `hoverBorderColor` | `String`                                 | `"var(--vega-border-color)"` | Border color of the input on hover.                                                             |
-| `focusBorderColor` | `String`                                 | `"var(--vega-border-color)"` | Border color of the input when focused.                                                         |
-| `borderRadius`     | `String`                                 | `"4px"`                      | Border radius of the input field.                                                               |
-| `padding`          | `String`                                 | `"10px"`                     | Padding inside the input field.                                                                 |
-| `width`            | `String`                                 | `"100%"`                     | Width of the input field.                                                                       |
-| `height`           | `String`                                 | `"auto"`                     | Height of the input field.                                                                      |
-| `textAlign`        | `String`                                 | `"left"`                     | Text alignment within the input field.                                                          |
-| `delayDebounce`    | `Number`                                 | `300`                        | Milliseconds to delay the input event for debouncing.                                           |
-| `readonly`         | `Boolean`                                | false                        | If set to true, the input field will be read-only, preventing user modifications.               |
-| `clearable`        | `Boolean`                                | true                         | If set to true, adds a clear button to the input field, allowing quick clearing of its content. |
-| `min`              | `Number`                                 | ``                           | Max value for numeric type input                                                                |
-| `min`              | `Number`                                 | ``                           | Min value for numeric type input                                                                |
+| Prop name            | Type                       | Default                      | Description                                                                                     |
+|----------------------|----------------------------|------------------------------|-------------------------------------------------------------------------------------------------|
+| `background-color`   | `string`                   | `"none"`                     | Background color of the input.                                                                  |
+| `border-color`       | `string`                   | `"var(--vega-border-color)"` | Color of the input border.                                                                      |
+| `border-radius`      | `string`                   | `"4px"`                      | Border radius of the input field.                                                               |
+| `clearable`          | `boolean`                  | `true`                       | If set to true, adds a clear button to the input field, allowing quick clearing of its content. |
+| `delay-debounce`     | `number`                   | `300`                        | Milliseconds to delay the input event for debouncing.                                           |
+| `font-color`         | `string`                   | `"var(--vega-text-color)"`   | Text color of the input.                                                                        |
+| `font-size`          | `string`                   | `"inherit"`                  | Font size of the input text.                                                                    |
+| `focus-border-color` | `string`                   | `"var(--vega-border-color)"` | Border color of the input when focused.                                                         |
+| `height`             | `string`                   | `"auto"`                     | Height of the input field.                                                                      |
+| `hover-border-color` | `string`                   | `"var(--vega-border-color)"` | Border color of the input on hover.                                                             |
+| `label`              | `string`                   | `""`                         | Label above the input.                                                                          |
+| `max`                | `number`                   | ``                           | Max value for numeric type input.                                                               |
+| `min`                | `number`                   | ``                           | Min value for numeric type input.                                                               |
+| `model-value`        | `string \| number \| null` | `""`                         | Value bound to the input and updated via v-model.                                               |
+| `padding`            | `string`                   | `"10px"`                     | Padding inside the input field.                                                                 |
+| `placeholder`        | `string`                   | `""`                         | Text to display when the input is empty.                                                        |
+| `placeholder-color`  | `string`                   | `"var(--vega-gray)"`         | Color of the placeholder text.                                                                  |
+| `readonly`           | `boolean`                  | `false`                      | If set to true, the input field will be read-only, preventing user modifications.               |
+| `text-align`         | `string`                   | `"left"`                     | Text alignment within the input field.                                                          |
+| `type`               | `string`                   | `"text"`                     | Specifies the type of input (`text`, `date`, `email`, `number`, `url`).                         |
+| `width`              | `string`                   | `"100%"`                     | Width of the input field.                                                                       |
 
 ### Events
 

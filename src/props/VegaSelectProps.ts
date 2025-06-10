@@ -34,6 +34,7 @@ export interface Props<T> {
   delayDebounce?: number
   clearable?: boolean
   notEmpty?: boolean
+  readonly?: boolean
   backgroundColorDropdown?: string
   hoverColorDropdown?: string
   textColorDropdown?: string
@@ -82,4 +83,5 @@ export const VegaSelectProps = {
   dropdownZIndex: 1,
   dropdownItemSelectedColor: 'var(--vega-primary)',
   dropdownCloseOnSelect: true,
+  readonly: false,
 }
