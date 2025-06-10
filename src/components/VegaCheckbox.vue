@@ -1,7 +1,7 @@
 <template>
   <label class="vega-checkbox">
     <span class="vega-checkbox-input">
-      <input type="checkbox" :checked="checked" class="vega-checkbox-original" @input="onSelect" />
+      <input type="checkbox" :disabled="readonly" :checked="checked" class="vega-checkbox-original" @input="onSelect" />
       <span class="vega-checkbox-actual" />
     </span>
     <span class="vega-checkbox-label">{{ label }}</span>
@@ -42,12 +42,17 @@ const props = defineProps({
   checkboxSize: {
     type: String,
     default: '16px',
-  }
+  },
+  readonly: Boolean,
 })
 const emit = defineEmits(['update:modelValue'])
 
 const checked = computed(() => props.modelValue === props.checkedValue)
 function onSelect() {
+  if (props.readonly) {
+    return
+  }
+
   emit('update:modelValue', checked.value ? props.uncheckedValue : props.checkedValue)
 }
 
