@@ -18,7 +18,7 @@
         :min="min"
         :max="max"
       />
-      <span v-if="clearable && modelValue" class="clear-button" @mousedown.stop="clearInput">
+      <span v-if="clearable && modelValue && !readonly" class="clear-button" @mousedown.stop="clearInput">
         <slot name="clear-icon">&#10005;</slot>
       </span>
       <slot name="postfix"></slot>

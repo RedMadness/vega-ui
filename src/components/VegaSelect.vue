@@ -31,6 +31,7 @@
       :item-selected-color="dropdownItemSelectedColor"
       :z-index="dropdownZIndex"
       :close-on-select="dropdownCloseOnSelect"
+      :disabled="readonly"
       @select="onSelect"
       @open="onOpen"
       @close="onClose"
@@ -39,7 +40,7 @@
         <vega-input
           :model-value="inputModel"
           :placeholder="placeholderCurrent"
-          :readonly="!searchable"
+          :readonly="!searchable || readonly"
           :cursor-type="cursor"
           :font-size="fontSize"
           :font-color="fontColor"

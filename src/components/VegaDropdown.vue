@@ -106,6 +106,7 @@ export interface Props<T> {
   autoPosition?: boolean
   itemSelectedColor?: string
   closeOnSelect?: boolean
+  disabled?: boolean
 }
 
 const props = withDefaults(defineProps<Props<number | string>>(), {
@@ -132,6 +133,7 @@ const props = withDefaults(defineProps<Props<number | string>>(), {
   autoPosition: false,
   itemSelectedColor: 'var(--vega-primary)',
   closeOnSelect: true,
+  disabled: false,
 })
 
 const emits = defineEmits(['open', 'select', 'close'])
@@ -182,7 +184,7 @@ function toggleOpenState() {
 }
 
 function open() {
-  if (isOpen.value === false) {
+  if (isOpen.value === false && !props.disabled) {
     highlightedIndex.value = -1
     isOpen.value = true
     callApi()
