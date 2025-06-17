@@ -39,7 +39,7 @@ export interface Props {
   containerBackground?: string
   contentBackground?: string
   contentBorderRadius?: string
-  contentPadding?: string,
+  contentPadding?: string
   headerHeight?: string
   headerBorder?: string
   headerBorderRadius?: string

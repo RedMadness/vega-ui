@@ -29,16 +29,21 @@
 <script setup lang="ts">
 import { Props, VegaInputProps } from '../props/VegaInputProps.ts'
 
-const props = withDefaults(defineProps<Props & {
-  type?: 'text' | 'password' | 'date' | 'email' | 'number' | 'url',
-  clearable?: boolean
-  min?: number
-  max?: number
-}>(), {
-  ...VegaInputProps,
-  type: 'text',
-  clearable: true,
-})
+const props = withDefaults(
+  defineProps<
+    Props & {
+      type?: 'text' | 'password' | 'date' | 'email' | 'number' | 'url'
+      clearable?: boolean
+      min?: number
+      max?: number
+    }
+  >(),
+  {
+    ...VegaInputProps,
+    type: 'text',
+    clearable: true,
+  },
+)
 
 defineOptions({
   inheritAttrs: false,
@@ -59,8 +64,8 @@ function clearInput() {
 }
 
 function onInput(event: Event) {
-  const input = event.target as HTMLInputElement;
-  let value = input.value;
+  const input = event.target as HTMLInputElement
+  let value = input.value
 
   if (props.type === 'number' && (props.min || props.max)) {
     value = handleMinMax(value)
@@ -156,8 +161,8 @@ const debouncedHandleInput = debounce((event: Event, value?: string) => {
   width: v-bind(width);
 }
 
-input[type=number]::-webkit-inner-spin-button,
-input[type=number]::-webkit-outer-spin-button {
+input[type='number']::-webkit-inner-spin-button,
+input[type='number']::-webkit-outer-spin-button {
   -webkit-appearance: none;
   opacity: 0;
 }

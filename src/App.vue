@@ -13,7 +13,12 @@
       <template #header>HEADER 1</template>
 
       <template #aside-left>
-        <vega-sidebar title="SIDEBAR TITLE" header-border="1px var(--vega-border-color) solid" scrollbar-color="red" background="white">
+        <vega-sidebar
+          title="SIDEBAR TITLE"
+          header-border="1px var(--vega-border-color) solid"
+          scrollbar-color="red"
+          background="white"
+        >
           <vega-lorem-ipsum />
         </vega-sidebar>
       </template>
@@ -49,7 +54,13 @@
 
               Input
               <code>{{ inputText }}</code>
-              <vega-input v-model="inputText" :min="1.5" :max="50" :delay-debounce="50" type="number" />
+              <vega-input
+                v-model="inputText"
+                :min="1.5"
+                :max="50"
+                :delay-debounce="50"
+                type="number"
+              />
 
               <vega-textarea v-model="textareaValue" label="TEXTAREA" placeholder="Placeholder" />
               {{ checkboxValue }}
@@ -62,7 +73,12 @@
           </template>
 
           <template #aside-right>
-            <vega-sidebar header-right name="vega-sidebar-right" title="SIDEBAR TITLE 2" toggle-icon-color="var(--vega-text-color)">
+            <vega-sidebar
+              header-right
+              name="vega-sidebar-right"
+              title="SIDEBAR TITLE 2"
+              toggle-icon-color="var(--vega-text-color)"
+            >
               <div class="selects">
                 {{ inputValue }}
                 <vega-select
@@ -162,11 +178,10 @@ export interface Option<T> {
 const testOptionsApi = api.getOrganizations
 
 setTimeout(() => (inputValue.value = { id: 3, title: 'qweqweqe' }), 1000)
-setTimeout(() => (textareaValue.value = 'wewerewr\n' +
-  'werwer\n' +
-  '\n' +
-  '\n' +
-  'werwerwre'), 1000)
+setTimeout(
+  () => (textareaValue.value = 'wewerewr\n' + 'werwer\n' + '\n' + '\n' + 'werwerwre'),
+  1000,
+)
 
 function selected(payload: number) {
   console.log(payload)

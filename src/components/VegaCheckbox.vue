@@ -1,7 +1,13 @@
 <template>
   <label class="vega-checkbox">
     <span class="vega-checkbox-input">
-      <input type="checkbox" :disabled="readonly" :checked="checked" class="vega-checkbox-original" @input="onSelect" />
+      <input
+        type="checkbox"
+        :disabled="readonly"
+        :checked="checked"
+        class="vega-checkbox-original"
+        @input="onSelect"
+      />
       <span class="vega-checkbox-actual" />
     </span>
     <span class="vega-checkbox-label">{{ label }}</span>
@@ -9,7 +15,6 @@
 </template>
 
 <script setup lang="ts">
-
 import { computed, PropType } from 'vue'
 
 const props = defineProps({
@@ -28,7 +33,7 @@ const props = defineProps({
   },
   borderColor: {
     type: String,
-    default: 'var(--vega-border-color)'
+    default: 'var(--vega-border-color)',
   },
   label: String,
   labelPosition: {

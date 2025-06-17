@@ -39,7 +39,11 @@
               {{ getOptionText(option) }}
             </template>
           </div>
-          <vega-icon-check v-if="checkSelected(option)" class="check-icon" :color="itemSelectedColor" />
+          <vega-icon-check
+            v-if="checkSelected(option)"
+            class="check-icon"
+            :color="itemSelectedColor"
+          />
         </div>
         <div ref="loaderRef" />
         <div v-if="loading && isOpen" class="loading">
@@ -137,7 +141,14 @@ const props = withDefaults(defineProps<Props<number | string>>(), {
 })
 
 const emits = defineEmits(['open', 'select', 'close'])
-const model = defineModel<null | undefined | string | number | Option<string | number> | Array<null | undefined | string | number | Option<string | number>>>()
+const model = defineModel<
+  | null
+  | undefined
+  | string
+  | number
+  | Option<string | number>
+  | Array<null | undefined | string | number | Option<string | number>>
+>()
 
 const dropdown = ref<HTMLElement | null>(null)
 const trigger = useTemplateRef('vega-dropdown-trigger')
@@ -385,7 +396,11 @@ function navigateOptions(direction: 'up' | 'down') {
 }
 
 function onEnterPressed() {
-  if (isOpen.value && highlightedIndex.value >= 0 && highlightedIndex.value < optionsList.value.length) {
+  if (
+    isOpen.value &&
+    highlightedIndex.value >= 0 &&
+    highlightedIndex.value < optionsList.value.length
+  ) {
     onSelect(optionsList.value[highlightedIndex.value])
   } else {
     open()

@@ -27,7 +27,12 @@ import VegaSelect from './VegaSelect.vue'
 import { Option, Props, VegaSelectProps } from '../props/VegaSelectProps.ts'
 
 const props = withDefaults(
-  defineProps<Props<number | string> & { storageKey: string, default?: string | null | Array<string | number | Option<string | number>> }>(),
+  defineProps<
+    Props<number | string> & {
+      storageKey: string
+      default?: string | null | Array<string | number | Option<string | number>>
+    }
+  >(),
   {
     ...VegaSelectProps,
     default: null,
@@ -47,7 +52,15 @@ function onSelect(item: Option<number | string> | string | number) {
   emitSelected(item)
 }
 
-function localStorageSave(payload: Option<number | string | null> | string | number | null | Array<null | undefined | string | number | Option<string | number>>) {
+function localStorageSave(
+  payload:
+    | Option<number | string>
+    | string
+    | number
+    | null
+    | undefined
+    | Array<string | number | Option<string | number>>,
+) {
   if (payload) {
     storage.storageSave(payload)
   }

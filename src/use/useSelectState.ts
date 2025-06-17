@@ -1,7 +1,16 @@
 import { computed, Ref, ref } from 'vue'
 
 // to achieve shared state between instances, we need to move the variable outside the composite function
-const state: { id: string; value: Ref<Option<number | string> | string | number | null | Array<string | number | Option<string | number>>> }[] = []
+const state: {
+  id: string
+  value: Ref<
+    | Option<number | string>
+    | string
+    | number
+    | null
+    | Array<string | number | Option<string | number>>
+  >
+}[] = []
 
 export default function useSelectState(
   id: string,
@@ -21,12 +30,14 @@ export default function useSelectState(
       return ''
     }
     if (Array.isArray(selected.value)) {
-      return selected.value.map(function(item) {
-        if (typeof item === 'object' && labelField) {
-          return String(item[labelField])
-        }
-        return String(item)
-      }).toString();
+      return selected.value
+        .map(function (item) {
+          if (typeof item === 'object' && labelField) {
+            return String(item[labelField])
+          }
+          return String(item)
+        })
+        .toString()
     }
     if (typeof selected.value === 'object' && labelField) {
       return String(selected.value[labelField])
@@ -39,7 +50,7 @@ export default function useSelectState(
       return null
     }
     if (Array.isArray(selected.value)) {
-      return selected.value.map(item => {
+      return selected.value.map((item) => {
         if (typeof item === 'object' && valueField) {
           return item[valueField]
         }

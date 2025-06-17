@@ -1,7 +1,12 @@
 <template>
   <div class="vega-sidebar-toggle" @click="onClick" v-if="displayed">
     <slot :show="show">
-      <vega-icon-arrow :color="iconColor" :initial-rotate="initialRotate" :rotate="rotate" :transition="false" />
+      <vega-icon-arrow
+        :color="iconColor"
+        :initial-rotate="initialRotate"
+        :rotate="rotate"
+        :transition="false"
+      />
     </slot>
   </div>
 </template>

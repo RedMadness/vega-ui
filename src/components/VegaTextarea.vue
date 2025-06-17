@@ -65,14 +65,17 @@ function setAutoHeight() {
   const target = ref.value as HTMLTextAreaElement
   target.style.height = target.scrollHeight + 'px'
   requestAnimationFrame(() => {
-    target.style.height = (target.scrollHeight) + 'px';
-  });
+    target.style.height = target.scrollHeight + 'px'
+  })
 }
 
 onMounted(() => setAutoHeight())
-watch(() => props.modelValue, () => {
-  setAutoHeight()
-})
+watch(
+  () => props.modelValue,
+  () => {
+    setAutoHeight()
+  },
+)
 </script>
 
 <style scoped>
@@ -129,8 +132,8 @@ watch(() => props.modelValue, () => {
   width: v-bind(width);
 }
 
-input[type=number]::-webkit-inner-spin-button,
-input[type=number]::-webkit-outer-spin-button {
+input[type='number']::-webkit-inner-spin-button,
+input[type='number']::-webkit-outer-spin-button {
   -webkit-appearance: none;
   opacity: 0;
 }
