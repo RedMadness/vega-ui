@@ -27,19 +27,13 @@
 </template>
 
 <script setup lang="ts">
-import { Props, VegaInputProps } from '../props/VegaInputProps.ts'
+import { VegaTextareaDefaults } from '../props/VegaTextareaProps'
+import { VegaInputProps } from '../props/VegaInputProps'
 
 const props = withDefaults(
-  defineProps<
-    Props & {
-      type?: 'text' | 'password' | 'date' | 'email' | 'number' | 'url'
-      clearable?: boolean
-      min?: number
-      max?: number
-    }
-  >(),
+  defineProps<VegaInputProps>(),
   {
-    ...VegaInputProps,
+    ...VegaTextareaDefaults,
     type: 'text',
     clearable: true,
   },

@@ -1,15 +1,9 @@
-export interface ApiResponse<T> {
-  data: {
-    data: T[]
-    meta: {
-      total: number
-    }
-  }
-}
+import { ApiResponse } from './ApiResponse'
+
 export interface Option<T> {
   [key: string]: T
 }
-export interface Props<T> {
+export interface VegaSelectProps<T> {
   label?: string
   searchable?: boolean
   searchQueryKey?: string
@@ -62,7 +56,7 @@ export interface Props<T> {
   dropdownCloseOnSelect?: boolean
 }
 
-export const VegaSelectProps = {
+export const VegaSelectDefaults = {
   options: () => [],
   searchable: false,
   searchPersist: false,

@@ -63,82 +63,11 @@ import VegaLoading from './VegaLoading.vue'
 import VegaTooltip from './VegaTooltip.vue'
 import vClickOutside from '../directives/clickOutside'
 import VegaIconCheck from './VegaIconCheck.vue'
+import { VegaDropdownDefaults, VegaDropdownProps } from '../props/VegaDropdownProps'
+import { Option } from '../props/VegaSelectProps'
+import { ApiResponse } from '../props/ApiResponse'
 
-export interface Option<T> {
-  [key: string]: T
-}
-
-interface ApiResponse<T> {
-  data: {
-    data: T[]
-    meta: {
-      total: number
-    }
-  }
-}
-
-export interface Props<T> {
-  options?: Array<Option<T> | string | number>
-  valueField?: string
-  labelField?: string
-  tooltipField?: string
-  backgroundColor?: string
-  hoverColor?: string
-  textColor?: string
-  hoverTextColor?: string
-  borderColor?: string
-  borderRadius?: string
-  fontSize?: string
-  optionPadding?: string
-  transitionDuration?: string
-  infiniteScroll?: boolean
-  noOptionsMessage?: string
-  remoteHandler?: (
-    params: object,
-  ) => Promise<ApiResponse<Option<string | number> | string | number>>
-  responseHandler?: (
-    response: ApiResponse<Option<string | number> | string | number>,
-  ) => Array<Option<T> | string | number>
-  filters?: object
-  width?: string
-  offsetLeft?: number
-  offsetTop?: number
-  zIndex?: number
-  hideIfEmpty?: boolean
-  scrollbarColor?: string
-  itemHeight?: number
-  autoPosition?: boolean
-  itemSelectedColor?: string
-  closeOnSelect?: boolean
-  disabled?: boolean
-}
-
-const props = withDefaults(defineProps<Props<number | string>>(), {
-  options: () => [],
-  valueField: 'value',
-  labelField: 'label',
-  backgroundColor: 'var(--vega-secondary)',
-  hoverColor: 'ver(--vega-primary)',
-  textColor: 'inherit',
-  hoverTextColor: 'inherit',
-  borderColor: 'var(--vega-border-color)',
-  borderRadius: '4px',
-  fontSize: 'inherit',
-  optionPadding: '8px 12px',
-  transitionDuration: '0.3s',
-  infiniteScroll: false,
-  noOptionsMessage: 'No options available',
-  width: '300px',
-  offsetLeft: 0,
-  offsetTop: 8,
-  zIndex: 1,
-  scrollbarColor: 'var(--vega-border-color)',
-  itemHeight: 34,
-  autoPosition: false,
-  itemSelectedColor: 'var(--vega-primary)',
-  closeOnSelect: true,
-  disabled: false,
-})
+const props = withDefaults(defineProps<VegaDropdownProps<number | string>>(), VegaDropdownDefaults)
 
 const emits = defineEmits(['open', 'select', 'close'])
 const model = defineModel<

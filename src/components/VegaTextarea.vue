@@ -21,10 +21,10 @@
 </template>
 
 <script setup lang="ts">
-import { Props, VegaInputProps } from '../props/VegaInputProps.ts'
+import { VegaTextareaProps, VegaTextareaDefaults } from '../props/VegaTextareaProps'
 import { onMounted, useTemplateRef, watch } from 'vue'
 
-const props = withDefaults(defineProps<Props>(), VegaInputProps)
+const props = withDefaults(defineProps<VegaTextareaProps>(), VegaTextareaDefaults)
 const ref = useTemplateRef('textarea')
 
 defineOptions({

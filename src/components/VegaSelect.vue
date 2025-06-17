@@ -82,9 +82,9 @@ import { ref, computed, watch, nextTick } from 'vue'
 import VegaInput from './VegaInput.vue'
 import VegaDropdown from './VegaDropdown.vue'
 import VegaIconArrow from './VegaIconArrow.vue'
-import { Option, Props, VegaSelectProps } from '../props/VegaSelectProps.ts'
+import { Option, VegaSelectProps, VegaSelectDefaults } from '../props/VegaSelectProps'
 
-const props = withDefaults(defineProps<Props<number | string>>(), VegaSelectProps)
+const props = withDefaults(defineProps<VegaSelectProps<number | string>>(), VegaSelectDefaults)
 
 const model = defineModel<
   | Option<string | number>

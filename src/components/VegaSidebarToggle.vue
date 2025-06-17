@@ -12,7 +12,7 @@
 </template>
 
 <script setup lang="ts">
-import useSidebarState from '../use/useSidebarState.ts'
+import useSidebarState from '../use/useSidebarState'
 import VegaIconArrow from './VegaIconArrow.vue'
 import { computed } from 'vue'
 

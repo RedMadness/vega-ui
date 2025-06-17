@@ -7,10 +7,9 @@
 
 <script setup lang="ts">
 import { ref } from 'vue'
+import { VegaTooltipProps } from '../props/VegaTooltipProps'
 
-defineProps({
-  text: String,
-})
+defineProps<VegaTooltipProps>()
 
 const x = ref('0px')
 const y = ref('0px')

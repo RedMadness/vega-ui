@@ -22,22 +22,15 @@
 </template>
 
 <script lang="ts" setup>
-import useSelectState from '../use/useSelectState.ts'
+import useSelectState from '../use/useSelectState'
 import VegaSelect from './VegaSelect.vue'
-import { Option, Props, VegaSelectProps } from '../props/VegaSelectProps.ts'
+import { VegaSelectStorageProps } from '../props/VegaSelectStorageProps'
+import { Option, VegaSelectDefaults } from '../props/VegaSelectProps'
 
-const props = withDefaults(
-  defineProps<
-    Props<number | string> & {
-      storageKey: string
-      default?: string | null | Array<string | number | Option<string | number>>
-    }
-  >(),
-  {
-    ...VegaSelectProps,
-    default: null,
-  },
-)
+const props = withDefaults(defineProps<VegaSelectStorageProps>(), {
+  ...VegaSelectDefaults,
+  default: null,
+})
 
 const emits = defineEmits(['selected', 'clear', 'changed'])
 const storage = useSelectState(props.storageKey, null, null, props.default)

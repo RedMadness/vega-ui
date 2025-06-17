@@ -15,41 +15,10 @@
 </template>
 
 <script setup lang="ts">
-import { computed, PropType } from 'vue'
+import { computed } from 'vue'
+import { VegaCheckboxDefaults, VegaCheckboxProps } from '../props/VegaCheckboxProps'
 
-const props = defineProps({
-  modelValue: [Boolean, String, Number],
-  checkedValue: {
-    type: [Boolean, String, Number],
-    default: true,
-  },
-  uncheckedValue: {
-    type: [Boolean, String, Number],
-    default: false,
-  },
-  checkedColor: {
-    type: String,
-    default: 'var(--vega-primary)',
-  },
-  borderColor: {
-    type: String,
-    default: 'var(--vega-border-color)',
-  },
-  label: String,
-  labelPosition: {
-    type: String as PropType<'top' | 'bottom' | 'left' | 'right'>,
-    default: 'right',
-  },
-  labelGap: {
-    type: String,
-    default: '6px',
-  },
-  checkboxSize: {
-    type: String,
-    default: '16px',
-  },
-  readonly: Boolean,
-})
+const props = withDefaults(defineProps<VegaCheckboxProps>(), VegaCheckboxDefaults)
 const emit = defineEmits(['update:modelValue'])
 
 const checked = computed(() => props.modelValue === props.checkedValue)

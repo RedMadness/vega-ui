@@ -3,11 +3,10 @@
 </template>
 
 <script setup lang="ts">
-export interface Props {
-  color?: string
-  scale?: number
-}
-withDefaults(defineProps<Props>(), {
+
+import { VegaLoadingProps } from '../props/VegaLoadingProps'
+
+withDefaults(defineProps<VegaLoadingProps>(), {
   color: 'var(--vega-primary)',
   scale: 1,
 })

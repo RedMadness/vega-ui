@@ -39,7 +39,7 @@
 </template>
 
 <script setup lang="ts">
-import useSidebarState from '../use/useSidebarState.ts'
+import useSidebarState from '../use/useSidebarState'
 import VegaSidebarToggle from './VegaSidebarToggle.vue'
 
 export interface Props {

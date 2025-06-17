@@ -48,12 +48,10 @@
 </template>
 
 <script setup lang="ts">
-export interface Props {
-  fontSize?: string
-  padding?: string
-}
 
-withDefaults(defineProps<Props>(), {
+import { VegaLoremIpsumProps } from '../props/VegaLoremIpsumProps'
+
+withDefaults(defineProps<VegaLoremIpsumProps>(), {
   fontSize: '20px',
   padding: '0',
 })
