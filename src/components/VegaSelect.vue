@@ -56,7 +56,7 @@
           :height="height"
           :text-align="textAlign"
           :delay-debounce="delayDebounce"
-          :clearable="clearable"
+          :clearable="clearable && !readonly"
           @clear="onClear"
           @update:model-value="onSearch"
         >
