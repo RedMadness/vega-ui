@@ -120,7 +120,7 @@ const selectedText = computed(() => {
         }
         return String(item)
       })
-      .toString()
+      .join(', ')
   }
   if (typeof model.value === 'object') {
     return String(model.value[props.labelField])
