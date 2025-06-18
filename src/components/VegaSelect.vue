@@ -1,5 +1,5 @@
 <template>
-  <div class="select-container">
+  <div class="vega-select-container">
     <div v-if="$slots.label || label">
       <slot name="label">{{ label }}</slot>
     </div>
@@ -210,10 +210,11 @@ function emitClear() {
 </script>
 
 <style scoped>
-.select-container {
+.vega-select-container {
   position: relative;
   display: flex;
   flex-direction: column;
   gap: 8px;
+  width: v-bind(width);
 }
 </style>
