@@ -160,6 +160,9 @@ input[type='number']::-webkit-outer-spin-button {
   -webkit-appearance: none;
   opacity: 0;
 }
+input[type=number] {
+  -moz-appearance: textfield;
+}
 
 .clear-button {
   cursor: pointer;
