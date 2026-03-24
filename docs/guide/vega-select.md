@@ -125,13 +125,14 @@ The component emits the following events:
 
 The component provides several slots that allow for the insertion of custom content at various points within the component. These slots enable you to enhance functionality and tailor the appearance to better fit the design of your user interface.
 
-| Slot Name    | Description                                                                                                     |
-|--------------|-----------------------------------------------------------------------------------------------------------------|
-| `label`      | Use this slot to insert custom label content above the input field, such as an icon or additional text.         |
-| `trigger`    | Used to insert custom trigger content, such as a button or input field, that opens the dropdown.                |
-| `clear-icon` | Slot for adding a custom icon for the clear action in the input component.                                      |
-| `prefix`     | Slot for adding content before the input field content, typically used for icons or labels.                     |
-| `postfix`    | Slot for adding content after the input field content. Includes dynamic adjustment when the dropdown is opened. |
+| Slot Name    | Slot Props           | Description                                                                                                     |
+|--------------|----------------------|-----------------------------------------------------------------------------------------------------------------|
+| `label`      | `-`                  | Use this slot to insert custom label content above the input field, such as an icon or additional text.         |
+| `trigger`    | `-`                  | Used to insert custom trigger content, such as a button or input field, that opens the dropdown.                |
+| `clear-icon` | `-`                  | Slot for adding a custom icon for the clear action in the input component.                                      |
+| `prefix`     | `-`                  | Slot for adding content before the input field content, typically used for icons or labels.                     |
+| `postfix`    | `-`                  | Slot for adding content after the input field content. Includes dynamic adjustment when the dropdown is opened. |
+| `option`     | `{ option: Object }` | Slot for inserting custom content for each option within the dropdown list                                      |
 
 <script setup>
 import VegaSelect from '../../src/components/VegaSelect.vue'

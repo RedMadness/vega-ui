@@ -73,6 +73,11 @@
           </template>
         </vega-input>
       </template>
+      <template #option="{ option }">
+        <slot v-if="$slots.option" name="option" :option="option">
+          {{ option }}
+        </slot>
+      </template>
     </vega-dropdown>
   </div>
 </template>

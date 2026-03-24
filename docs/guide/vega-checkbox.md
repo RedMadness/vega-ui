@@ -53,4 +53,8 @@ const isChecked = ref(false)
 
 ## Slots
 
-The component does not use any named slots directly, but allows customization through props and CSS.
+The component provides slots that allow for the insertion of custom content at various points within the component.
+
+| Slot Name | Description                                             |
+|-----------|---------------------------------------------------------|
+| `label`   | Slot for inserting a custom label above the input.      |

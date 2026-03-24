@@ -95,8 +95,9 @@ The component emits the following events:
 
 The component provides slots that allow for the insertion of custom content at various points within the component.
 
-| Slot Name | Description                                                                                                                                                               |
-|-----------|---------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
-| `trigger` | Slot for inserting custom content used to trigger the dropdown. This slot is typically used for custom buttons or toggle elements that control the dropdown's visibility. |
+| Slot Name | Slot Props           | Description                                                                                                                                                               |
+|-----------|----------------------|---------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| `option`  | `{ option: Object }` | Slot for inserting custom content for each option within the dropdown list                                                                                                |
+| `trigger` | `-`                  | Slot for inserting custom content used to trigger the dropdown. This slot is typically used for custom buttons or toggle elements that control the dropdown's visibility. |
 
 

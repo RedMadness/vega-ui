@@ -31,14 +31,16 @@
           :class="{ selected: checkSelected(option), highlighted: index === highlightedIndex }"
           @mousedown.left="onSelect(option)"
         >
-          <div>
-            <vega-tooltip v-if="tooltipField" :text="getOptionTooltip(option)">
-              {{ getOptionText(option) }}
-            </vega-tooltip>
-            <template v-else>
-              {{ getOptionText(option) }}
-            </template>
-          </div>
+          <slot name="option" :option="option">
+            <div>
+              <vega-tooltip v-if="tooltipField" :text="getOptionTooltip(option)">
+                {{ getOptionText(option) }}
+              </vega-tooltip>
+              <template v-else>
+                {{ getOptionText(option) }}
+              </template>
+            </div>
+          </slot>
           <vega-icon-check
             v-if="checkSelected(option)"
             class="check-icon"

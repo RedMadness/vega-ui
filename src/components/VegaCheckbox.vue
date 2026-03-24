@@ -10,7 +10,9 @@
       />
       <span class="vega-checkbox-actual" />
     </span>
-    <span class="vega-checkbox-label">{{ label }}</span>
+    <span class="vega-checkbox-label">
+          <slot name="label">{{ label }}</slot>
+    </span>
   </label>
 </template>
 
