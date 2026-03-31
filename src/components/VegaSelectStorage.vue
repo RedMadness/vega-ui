@@ -9,7 +9,7 @@
     <template #clear-icon>
       <slot name="clear-icon"></slot>
     </template>
-    <template #label>
+    <template #label v-if="$slots.label || label">
       <slot name="label"></slot>
     </template>
     <template #postfix>
