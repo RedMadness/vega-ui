@@ -29,7 +29,7 @@
           :key="getOptionValue(option)"
           class="dropdown-item"
           :class="{ selected: checkSelected(option), highlighted: index === highlightedIndex }"
-          @mousedown.left="onSelect(option)"
+          @click="onSelect(option)"
         >
           <slot name="option" :option="option">
             <div>
