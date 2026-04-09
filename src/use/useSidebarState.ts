@@ -10,7 +10,7 @@ export default function useSidebarState(key: string) {
     state.push(value)
   }
 
-  const show = value.value
+  const show: Ref<boolean, boolean> = value.value
 
   onMounted(() => {
     show.value = localStorage.getItem(key) === '1'
