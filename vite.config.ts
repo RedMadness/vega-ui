@@ -6,6 +6,10 @@ import dts from 'vite-plugin-dts'
 
 export default defineConfig({
   server: {
+    watch: {
+      usePolling: true,      // Обязательно для Docker
+      interval: 100,
+    },
     host: true,
     port: 5173,
   },

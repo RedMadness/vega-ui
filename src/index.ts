@@ -11,6 +11,7 @@ export { default as VegaLoading } from './components/VegaLoading.vue'
 export { default as VegaTooltip } from './components/VegaTooltip.vue'
 export { default as VegaDropdown } from './components/VegaDropdown.vue'
 export { default as VegaCheckbox } from './components/VegaCheckbox.vue'
+export { default as VegaTable } from './components/VegaTable.vue'
 
 export { default as useSidebarState } from './use/useSidebarState'
 export { default as useSelectState } from './use/useSelectState'

@@ -1,6 +1,6 @@
 {
   "name": "vega-ui",
-  "version": "0.6.19",
+  "version": "0.6.20",
   "description": "Vue 3 UI library for rapid prototyping.",
   "keywords": [
     "vue",
@@ -20,6 +20,7 @@
   "types": "./dist/index.d.ts",
   "exports": {
     ".": {
+      "types": "./dist/index.d.ts",
       "import": "./dist/vega.js"
     },
     "./dist/style.css": "./dist/style.css"

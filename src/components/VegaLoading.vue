@@ -16,7 +16,7 @@ withDefaults(defineProps<VegaLoadingProps>(), {
 .loader {
   width: calc(30px * v-bind(scale));
   height: calc(30px * v-bind(scale));
-  border: 5px solid #fff;
+  border: 2px solid #c6c7c9;
   border-bottom-color: v-bind(color);
   border-radius: 50%;
   display: inline-block;

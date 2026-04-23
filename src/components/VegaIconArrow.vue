@@ -26,6 +26,7 @@ export interface Props {
   rotate?: string
   transition?: boolean
   initialRotate?: number
+  cursor?: string
 }
 
 withDefaults(defineProps<Props>(), {
@@ -33,13 +34,14 @@ withDefaults(defineProps<Props>(), {
   rotate: '90deg',
   transition: true,
   initialRotate: 0,
+  cursor: 'pointer',
 })
 </script>
 
 <style scoped>
 svg {
   display: block;
-  cursor: pointer;
+  cursor: v-bind(cursor);
   transform: rotate(v-bind(rotate));
 }
 .transition {

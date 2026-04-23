@@ -2,6 +2,7 @@
   --vega-primary: var(--vega-blue);
   --vega-secondary: var(--vega-white);
   --vega-text-color: var(--vega-black);
+  --vega-text-white-color: var(--vega-white);
   --vega-border-color: var(--vega-gray);
 
   --vega-black: #2a2a35;

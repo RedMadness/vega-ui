@@ -97,10 +97,13 @@ const page = ref(1)
 const perPage = ref(25)
 const isOpen = ref(false)
 const highlightedIndex = ref(-1)
+
 /** Is it possible to download additional options from the server? */
 const hasNextPage = computed(() => optionsRemote.value?.length < total.value)
+
 /** Options obtained by remote query. */
 const optionsRemote = ref<(Option<string | number> | string | number)[]>([])
+
 /** Final list of options */
 const optionsList = computed(() => {
   return [
@@ -108,6 +111,7 @@ const optionsList = computed(() => {
     ...optionsRemote.value,
   ]
 })
+
 const forceHided = computed(() => {
   if (props.hideIfEmpty && optionsList.value.length === 0 && isOpen.value) {
     return true

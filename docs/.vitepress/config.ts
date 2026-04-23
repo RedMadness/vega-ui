@@ -39,6 +39,7 @@ export default defineConfig({
             { text: 'Select Storage', link: '/guide/vega-select-storage' },
             ] },
           { text: 'Tooltip', link: '/guide/vega-tooltip' },
+          { text: 'Table', link: '/guide/vega-table' },
         ]
       }
     ],
