@@ -157,7 +157,7 @@ export interface TableProps {
 
   /**
    * Table container width.
-   * @default '100%'
+   * @default 'auto'
    */
   width?: string
 
@@ -321,7 +321,7 @@ const props = withDefaults(defineProps<TableProps>(), {
   headerCellMinWidth: 200,
   headerSticky: true,
   headerHeight: 'auto',
-  width: '100%',
+  width: 'auto',
   height: '100%',
   border: '1px solid var(--vega-border-color)',
   cellBorder: '1px solid var(--vega-border-color)',
@@ -449,7 +449,7 @@ function getStickyClasses(column: Column<Row>) {
 
 function getStickyStyles(column: Column<Row>) {
   return {
-    width: getColumnWidth(column) + 'px',
+    minWidth: getColumnWidth(column) + 'px',
     left: column.fixed === 'left'
       ? `${leftStickyOffsets.value[column.key as string]}px`
       : undefined,
@@ -547,7 +547,6 @@ onMounted(init)
 }
 
 table {
-  table-layout: fixed;
   border-collapse: separate;
   border-spacing: 0;
   border: v-bind(border);
