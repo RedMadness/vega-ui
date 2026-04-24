@@ -38,7 +38,7 @@ const columns: Column<User>[] = [
   { key: 'name', label: 'Name', sortable: true },
   { key: 'email', label: 'Email', sortable: true },
   { key: 'status', label: 'Status' },
-  { key: 'balance', label: 'Balance', sortable: true, width: '120px' },
+  { key: 'balance', label: 'Balance', sortable: true, width: 120 },
 ]
 
 const fetchUsers = async (params: object) => {
@@ -77,14 +77,14 @@ const summaryData = {
 | `headerBackground`                    | `string`                                                      | `var(--vega-primary)`                | Background color of the table header.                                                                                                 |
 | `headerTextColor`                     | `string`                                                      | `var(--vega-text-white-color)`       | Text color of the table header.                                                                                                       |
 | `headerCellPadding`                   | `string`                                                      | `"20px"`                             | Padding inside header cells.                                                                                                          |
-| `headerCellMinWidth`                  | `string`                                                      | `"200px"`                            | Minimum width of header cells.                                                                                                        |
+| `headerCellMinWidth`                  | `number`                                                      | `"200"`                              | Minimum width of header cells.                                                                                                        |
 | `headerSticky`                        | `boolean`                                                     | `true`                               | If `true`, the header sticks to the top of the container on scroll.                                                                   |
 | `headerHeight`                        | `string`                                                      | `"auto"`                             | Height of the header row.                                                                                                             |
-| `width`                               | `string`                                                      | `"auto"`                             | Width of the table container.                                                                                                         |
+| `width`                               | `string`                                                      | `"100%"`                             | Width of the table container.                                                                                                         |
 | `height`                              | `string`                                                      | `"100%"`                             | Height of the table container. Note: wrapper height is calculated as `height - 65px` to account for pagination.                       |
 | `border`                              | `string`                                                      | `1px solid var(--vega-border-color)` | Border style for the outer table container.                                                                                           |
 | `cellBorder`                          | `string`                                                      | `1px solid var(--vega-border-color)` | Border style for individual cells (`th`, `td`).                                                                                       |
-| `bodyBackground`                      | `string`                                                      | `"none"`                             | Background color of the table body (`tbody`).                                                                                         |
+| `bodyBackground`                      | `string`                                                      | `"var(--vega-secondary)"`            | Background color of the table body (`tbody`).                                                                                         |
 | `bodyTextColor`                       | `string`                                                      | `var(--vega-text-color)`             | Text color of the table body.                                                                                                         |
 | `bodyCellPadding`                     | `string`                                                      | `"20px"`                             | Padding inside body cells.                                                                                                            |
 | `rowKey`                              | `string`                                                      | `"id"`                               | Property name to use as unique key for rows. Falls back to array index if not found or not primitive.                                 |
@@ -112,11 +112,12 @@ const summaryData = {
 
 ```ts
 export interface Column<T> {
-  key: keyof T           // Unique identifier for the column, used for sorting and data access
-  label: string          // Text displayed in the header cell
-  sortable?: boolean     // If true, shows sort icon and enables sorting by this column
-  sortBy?: string        // Optional custom key to use for sorting (e.g., API field name)
-  width?: string         // Optional CSS width value for the column (e.g., "150px", "20%")
+  key: keyof T             // Unique identifier for the column, used for sorting and data access
+  label: string            // Text displayed in the header cell
+  sortable?: boolean       // If true, shows sort icon and enables sorting by this column
+  sortBy?: string          // Optional custom key to use for sorting (e.g., API field name)
+  width?: number           // Optional CSS width value for the column in px
+  fixed?: 'left' | 'right' // Fixes the column to the left or right side of the table.
 }
 ```
 
