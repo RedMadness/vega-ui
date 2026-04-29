@@ -44,55 +44,60 @@ Code above will give you a following result:
 
 ## Props
 
-| Prop Name                      | Type                       | Default Value                      | Description                                                    |
-|--------------------------------|----------------------------|------------------------------------|----------------------------------------------------------------|
-| `background-color`             | `string`                   | `"none"`                           | Background color of the input field.                           |
-| `background-color-dropdown`    | `string`                   | `'transparent'`                    | Background color of the dropdown.                              |
-| `border-color`                 | `string`                   | `"var(--vega-border-color)"`       | Color of the input border.                                     |
-| `border-color-dropdown`        | `string`                   | `'var(--vega-border-color)'`       | Border color of the dropdown.                                  |
-| `border-radius`                | `string`                   | `"4px"`                            | Border radius of the input field.                              |
-| `border-radius-dropdown`       | `string`                   | `'4px'`                            | Border radius of the dropdown container.                       |
-| `clearable`                    | `boolean`                  | `true`                             | Whether to show a clear button in the input field.             |
-| `delay-debounce`               | `number`                   | `300`                              | Delay in milliseconds for debouncing input events.             |
-| `dropdown-auto-position`       | `boolean`                  | `false`                            | Automatically positions the dropdown based on available space. |
-| `dropdown-close-no-select`     | `boolean`                  | `true`                             | Closes the dropdown when an option is selected.                |
-| `dropdown-item-height`         | `number`                   | `34`                               | Height of each dropdown item in pixels.                        |
-| `dropdown-item-selected-color` | `string`                   | `var(--vega-primary)`              | Color of the selected dropdown item.                           |
-| `dropdown-scrollbar-color`     | `string`                   | `'var(--vega-border-color)'`       | Scrollbar color for the dropdown.                              |
-| `dropdown-z-index`             | `number`                   | `1`                                | Z-index of the dropdown menu.                                  |
-| `filters`                      | `object`                   |                                    | Optional filters for remote data fetching.                     |
-| `font-color`                   | `string`                   | `"var(--vega-text-color)"`         | Text color of the input field.                                 |
-| `font-size`                    | `string`                   | `"inherit"`                        | Font size of the input text.                                   |
-| `font-size-dropdown`           | `string`                   | `'inherit'`                        | Font size of the text in the dropdown.                         |
-| `focus-border-color`           | `string`                   | `"var(--vega-border-color)"`       | Border color when the input is focused.                        |
-| `hide-empty-dropdown`          | `boolean`                  | `false`                            | Hides the dropdown when there are no options available.        |
-| `hover-border-color`           | `string`                   | `"var(--vega-border-color)"`       | Border color when the input is hovered.                        |
-| `hover-color-dropdown`         | `string`                   | `'transparent'`                    | Background color of the option when hovered.                   |
-| `infinite-scroll`              | `boolean`                  | `false`                            | Enables infinite scrolling for the dropdown options.           |
-| `label`                        | `string`                   | `''`                               | Label displayed above the input field.                         |
-| `label-field`                  | `string`                   | `'label'`                          | Field in the option object that contains the display label.    |
-| `model-value`                  | `string`, `number`, `null` | `""`                               | Value bound to the input via v-model.                          |
-| `no-options-message`           | `string`                   | `'No options available'`           | Message shown when there are no options to display.            |
-| `not-empty`                    | `boolean`                  | `false`                            | Selects the first option by default if set to true.            |
-| `option-padding-dropdown`      | `string`                   | `'8px 12px'`                       | Padding inside each dropdown option.                           |
-| `options`                      | `array`                    | `[]`                               | Array of selectable options (can be objects or primitives).    |
-| `padding`                      | `string`                   | `"10px"`                           | Padding inside the input field.                                |
-| `placeholder`                  | `string`                   | `""`                               | Placeholder text displayed when the input is empty.            |
-| `placeholder-color`            | `string`                   | `"var(--vega-gray)"`               | Color of the placeholder text.                                 |
-| `readonly`                     | `boolean`                  | `false`                            | Makes the input field read-only if set to true.                |
-| `remote-handler`               | `function`                 |                                    | Function to fetch options remotely based on query parameters.  |
-| `response-handler`             | `function`                 | `(response) => response.data.data` | Function to process the remote API response.                   |
-| `search-persist`               | `boolean`                  | `false`                            | Retains search input value when reopening the dropdown.        |
-| `search-query-key`             | `string`                   | `search`                           | Key used for search queries in remote requests.                |
-| `searchable`                   | `boolean`                  | `false`                            | Allows user to filter options by typing in the input field.    |
-| `text-align`                   | `string`                   | `"left"`                           | Text alignment within the input field.                         |
-| `text-color-dropdown`          | `string`                   | `'inherit'`                        | Text color of the options in the dropdown.                     |
-| `tooltip-field`                | `string`                   |                                    | Optional field in the option object for tooltip text.          |
-| `transition-duration-dropdown` | `string`                   | `'0.3s'`                           | Duration of transition effects in the dropdown.                |
-| `value-field`                  | `string`                   | `'value'`                          | Field in the option object that contains the value to submit.  |
-| `width`                        | `string`                   | `"100%"`                           | Width of the input field.                                      |
-| `height`                       | `string`                   | `"auto"`                           | Height of the input field.                                     |
+## Props
 
+| Prop Name                      | Type                       | Default Value                      | Description                                                                 |
+|--------------------------------|----------------------------|------------------------------------|-----------------------------------------------------------------------------|
+| `background-color`             | `string`                   | `'var(--vega-secondary)'`          | Background color of the input field.                                        |
+| `background-color-dropdown`    | `string`                   | `'var(--vega-secondary)'`          | Background color of the dropdown container.                                 |
+| `border-color`                 | `string`                   | `'var(--vega-border-color)'`       | Border color of the input field.                                            |
+| `border-color-dropdown`        | `string`                   | `'var(--vega-border-color)'`       | Border color of the dropdown container.                                     |
+| `border-radius`                | `string`                   | `'4px'`                            | Border radius of the input field.                                           |
+| `border-radius-dropdown`       | `string`                   | `'4px'`                            | Border radius of the dropdown container.                                    |
+| `clearable`                    | `boolean`                  | `true`                             | Shows clear button inside the input.                                        |
+| `delay-debounce`               | `number`                   | `600`                              | Debounce delay for input/search updates (ms).                               |
+| `dropdown-auto-position`       | `boolean`                  | `false`                            | Enables automatic dropdown repositioning.                                   |
+| `dropdown-close-on-select`     | `boolean`                  | `true`                             | Closes dropdown after selecting an option.                                  |
+| `dropdown-item-height`         | `number`                   | `34`                               | Height of each dropdown item (not actively used in logic).                  |
+| `dropdown-item-selected-color` | `string`                   | `'var(--vega-primary)'`            | Color of selected dropdown option.                                          |
+| `dropdown-max-width`           | `string`                   | —                                  | Maximum width of the dropdown.                                              |
+| `dropdown-min-width`           | `string`                   | —                                  | Minimum width of the dropdown.                                              |
+| `dropdown-placement`           | `string`                   | `'bottom-start'`                   | Dropdown placement relative to trigger element.                             |
+| `dropdown-scrollbar-color`     | `string`                   | `'var(--vega-border-color)'`       | Scrollbar color of the dropdown.                                            |
+| `dropdown-z-index`             | `number`                   | `1`                                | Z-index of the dropdown container.                                          |
+| `filters`                      | `object`                   | —                                  | Additional params passed to remote handler (merged with search query).      |
+| `focus-border-color`           | `string`                   | `'var(--vega-border-color)'`       | Border color when input is focused.                                         |
+| `font-color`                   | `string`                   | `'var(--vega-text-color)'`         | Text color of the input field.                                              |
+| `font-size`                    | `string`                   | `'inherit'`                        | Font size of the input field.                                               |
+| `font-size-dropdown`           | `string`                   | `'inherit'`                        | Font size inside dropdown.                                                  |
+| `font-weight`                  | `string`                   | —                                  | Font weight of the input text.                                              |
+| `height`                       | `string`                   | `'auto'`                           | Height of the input field.                                                  |
+| `hide-empty-dropdown`          | `boolean`                  | `false`                            | Hides dropdown when there are no options.                                   |
+| `hover-border-color`           | `string`                   | `'var(--vega-border-color)'`       | Border color on hover.                                                      |
+| `hover-color-dropdown`         | `string`                   | `'var(--vega-primary)'`            | Background color of option on hover.                                        |
+| `hover-text-color-dropdown`    | `string`                   | —                                  | Text color of option on hover.                                              |
+| `infinite-scroll`              | `boolean`                  | `false`                            | Enables infinite scroll for dropdown (requires remote handler).             |
+| `label`                        | `string`                   | `''`                               | Label displayed above the input.                                            |
+| `label-field`                  | `string`                   | `'label'`                          | Field used to display option label.                                         |
+| `no-options-message`           | `string`                   | `'No options available'`           | Message shown when no options are available.                                |
+| `not-empty`                    | `boolean`                  | `false`                            | Automatically selects first option if model is empty.                       |
+| `option-padding-dropdown`      | `string`                   | `'8px 12px'`                       | Padding inside dropdown options.                                            |
+| `options`                      | `array`                    | `[]`                               | List of selectable options.                                                 |
+| `padding`                      | `string`                   | `'10px'`                           | Padding inside input field.                                                 |
+| `placeholder`                  | `string`                   | `'Select value'`                   | Placeholder text.                                                           |
+| `placeholder-color`            | `string`                   | `'var(--vega-gray)'`               | Color of placeholder text.                                                  |
+| `readonly`                     | `boolean`                  | `false`                            | Makes input read-only and disables dropdown interaction.                    |
+| `remote-handler`               | `function`                 | —                                  | Async function to fetch options from server.                                |
+| `response-handler`             | `function`                 | `(res) => res.data.data`           | Transforms API response into options.                                       |
+| `search-persist`               | `boolean`                  | `false`                            | Keeps search value after reopening dropdown.                                |
+| `search-query-key`             | `string`                   | `'search'`                         | Key used for search query in API requests.                                  |
+| `searchable`                   | `boolean`                  | `false`                            | Enables typing/search inside input.                                         |
+| `text-align`                   | `string`                   | `'left'`                           | Text alignment inside input field.                                          |
+| `text-color-dropdown`          | `string`                   | —                                  | Text color of dropdown options.                                             |
+| `tooltip-field`                | `string`                   | —                                  | Field used for tooltip text in options.                                     |
+| `transition-duration-dropdown` | `string`                   | `'0.3s'`                           | Duration of dropdown animation.                                             |
+| `value-field`                  | `string`                   | `'value'`                          | Field used as option value.                                                 |
+| `width`                        | `string`                   | `'100%'`                           | Width of the input field.                                                   |
 ### API Response Format
 
 The `remoteHandler` function should expect the following response format from the server:

@@ -4,7 +4,7 @@
       <slot name="label">{{ label }}</slot>
     </div>
     <vega-dropdown
-      v-model="model"
+      :model-value="model"
       :options="options"
       :value-field="valueField"
       :label-field="labelField"
@@ -23,7 +23,8 @@
       :remote-handler="remoteHandler"
       :response-handler="responseHandler"
       :filters="filters"
-      :width="width"
+      :max-width="dropdownMaxWidth"
+      :min-width="dropdownMinWidth"
       :hide-if-empty="hideEmptyDropdown"
       :scrollbar-color="dropdownScrollbarColor"
       :auto-position="dropdownAutoPosition"
@@ -32,9 +33,11 @@
       :z-index="dropdownZIndex"
       :close-on-select="dropdownCloseOnSelect"
       :disabled="readonly"
+      :placement="dropdownPlacement"
       @select="onSelect"
       @open="onOpen"
       @close="onClose"
+      @clear="onClear"
     >
       <template #trigger>
         <vega-input

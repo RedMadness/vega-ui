@@ -16,7 +16,7 @@ export interface Props {
 }
 
 withDefaults(defineProps<Props>(), {
-  color: '#B5C7D3',
+  color: 'var(--vega-gray)',
   asc: true,
   active: false,
 })

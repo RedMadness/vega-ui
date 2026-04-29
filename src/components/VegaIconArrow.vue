@@ -30,7 +30,7 @@ export interface Props {
 }
 
 withDefaults(defineProps<Props>(), {
-  color: '#B5C7D3',
+  color: 'var(--vega-gray)',
   rotate: '90deg',
   transition: true,
   initialRotate: 0,

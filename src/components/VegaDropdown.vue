@@ -13,54 +13,78 @@
     >
       <slot name="trigger" />
     </div>
-    <div
-      ref="dropdown"
-      class="dropdown"
-      v-show="!forceHided"
-      :class="{ open: isOpen }"
-      @scroll="handleScroll"
-      tabindex="-1"
-      @keydown.tab="close"
-      @keydown.esc="close"
-    >
-      <slot>
-        <div
-          v-for="(option, index) in optionsList"
-          :key="getOptionValue(option)"
-          class="dropdown-item"
-          :class="{ selected: checkSelected(option), highlighted: index === highlightedIndex }"
-          @click="onSelect(option)"
-        >
-          <slot name="option" :option="option">
-            <div>
-              <vega-tooltip v-if="tooltipField" :text="getOptionTooltip(option)">
-                {{ getOptionText(option) }}
-              </vega-tooltip>
-              <template v-else>
-                {{ getOptionText(option) }}
-              </template>
-            </div>
-          </slot>
-          <vega-icon-check
-            v-if="checkSelected(option)"
-            class="check-icon"
-            :color="itemSelectedColor"
+    <teleport to="body">
+      <div
+        ref="dropdown"
+        class="dropdown"
+        v-if="isOpen && !forceHided"
+        :class="{ open: isOpen }"
+        :style="floatingStyles"
+        tabindex="-1"
+        @keydown.tab="close"
+        @keydown.esc="close"
+      >
+        <!-- SEARCH -->
+        <div v-if="showSearch" class="vega-dropdown-search">
+          <vega-input
+            v-model="search"
+            clearable
+            @clear="search = ''"
+            padding="0 10px"
+            :background-color="backgroundColor"
+            :font-color="textColor"
+            :border-color="'none'"
+            :hover-border-color="'none'"
+            :focus-border-color="'none'"
           />
         </div>
-        <div ref="loaderRef" />
-        <div v-if="loading && isOpen" class="loading">
-          <vega-loading :scale="0.6" />
+
+        <!-- SELECTED -->
+        <div v-if="showSelected && model" class="vega-dropdown-selected">
+          <span class="text">{{ selectedValueLabel }}</span>
+          <div class="clear-icon" @click="onClear">&#10005;</div>
         </div>
-        <div v-if="!optionsList.length && !loading && isOpen" class="dropdown-no-items">
-          {{ noOptionsMessage }}
+
+        <!-- OPTIONS -->
+        <div class="vega-dropdown-options" @scroll="handleScroll">
+          <div
+            v-for="(option, index) in optionsList"
+            :key="getOptionValue(option)"
+            class="dropdown-item"
+            :class="{ selected: checkSelected(option), highlighted: index === highlightedIndex }"
+            @click="onSelect(option)"
+          >
+            <slot name="option" :option="option">
+              <div>
+                <vega-tooltip v-if="tooltipField" :text="getOptionTooltip(option)">
+                  {{ getOptionText(option) }}
+                </vega-tooltip>
+                <template v-else>
+                  {{ getOptionText(option) }}
+                </template>
+              </div>
+            </slot>
+            <vega-icon-check
+              v-if="checkSelected(option)"
+              class="check-icon"
+              :color="itemSelectedColor"
+            />
+          </div>
+          <div ref="loaderRef" />
+          <div v-if="loading && isOpen" class="loading">
+            <vega-loading :scale="0.6" />
+          </div>
+          <div v-if="!optionsList.length && !loading && isOpen" class="dropdown-no-items">
+            {{ noOptionsMessage }}
+          </div>
         </div>
-      </slot>
-    </div>
+      </div>
+    </teleport>
   </div>
 </template>
 
 <script setup lang="ts">
-import { computed, nextTick, onMounted, ref, useTemplateRef, watch } from 'vue'
+import { computed, nextTick, ref, useTemplateRef, watch } from 'vue'
 import VegaLoading from './VegaLoading.vue'
 import VegaTooltip from './VegaTooltip.vue'
 import vClickOutside from '../directives/clickOutside'
@@ -68,10 +92,12 @@ import VegaIconCheck from './VegaIconCheck.vue'
 import { VegaDropdownDefaults, VegaDropdownProps } from '../props/VegaDropdownProps'
 import { Option } from '../props/VegaSelectProps'
 import { ApiResponse } from '../props/ApiResponse'
+import { autoUpdate, flip, offset, shift, useFloating } from '@floating-ui/vue'
+import VegaInput from './VegaInput.vue'
 
 const props = withDefaults(defineProps<VegaDropdownProps<number | string>>(), VegaDropdownDefaults)
 
-const emits = defineEmits(['open', 'select', 'close'])
+const emit = defineEmits(['open', 'select', 'close', 'clear'])
 const model = defineModel<
   | null
   | undefined
@@ -79,16 +105,22 @@ const model = defineModel<
   | number
   | Option<string | number>
   | Array<null | undefined | string | number | Option<string | number>>
+  | Record<string, unknown>
 >()
 
 const dropdown = ref<HTMLElement | null>(null)
 const trigger = useTemplateRef('vega-dropdown-trigger')
-const top = ref('0')
-const left = ref('0')
-const maxHeight = 200
-const offsetTopPx = computed(() => props.offsetTop + 'px')
-const offsetLeftPx = computed(() => props.offsetLeft + 'px')
+const { floatingStyles } = useFloating(trigger, dropdown, {
+  placement: props.placement,
+  whileElementsMounted: autoUpdate,
+  middleware: [
+    offset(props.offsetTop),
+    shift(),
+    flip(),
+  ]
+});
 
+const search = ref('')
 const loading = ref(false)
 const reachedBottom = ref(false)
 const reachedTop = ref(false)
@@ -119,7 +151,12 @@ const forceHided = computed(() => {
   return false
 })
 
-onMounted(() => updateCoordinates())
+const selectedValueLabel = computed(() => {
+  if (!model.value || Array.isArray(model.value))
+    return '???'
+
+  return getOptionText(model.value)
+})
 
 function toggleOpenState() {
   if (isOpen.value) {
@@ -134,27 +171,40 @@ function open() {
     highlightedIndex.value = -1
     isOpen.value = true
     callApi()
-    emits('open')
-    updateCoordinates()
+    emit('open')
   }
 }
 
-const onSelect = (item: Option<number | string> | string | number) => {
-  emits('select', item)
+function onSelect(item: Option<number | string> | string | number) {
+  emit('select', item)
   if (props.closeOnSelect) {
     close()
   }
 }
 
-function onClickOutside() {
-  close()
+function onClear() {
+  emit('clear')
+}
+
+function onClickOutside(event: MouseEvent)
+{
+  const target = event.target as HTMLElement
+
+  // ignore click within teleported dropdown
+  if (dropdown.value?.contains(target)) {
+    return
+  }
+
+  if (isOpen.value === true) {
+    close()
+  }
 }
 
 function close() {
   if (isOpen.value === true) {
     isOpen.value = false
     resetRemote()
-    emits('close')
+    emit('close')
   }
 }
 
@@ -205,15 +255,15 @@ function resetScrollState() {
   reachedBottom.value = reachedTop.value = false
 }
 
-function getOptionValue(option: Option<number | string> | string | number) {
+function getOptionValue(option: Option<number | string> | string | number | Record<string, unknown>) {
   if (typeof option === 'object') {
-    return option[props.valueField]
+    return option[props.valueField] as string
   }
 
   return option
 }
 
-function getOptionText(option: Option<number | string> | string | number) {
+function getOptionText(option: Option<number | string> | string | number | Record<string, unknown>) {
   if (typeof option === 'object') {
     return option[props.labelField]
   }
@@ -253,38 +303,16 @@ function checkSelected(option: Option<number | string> | string | number) {
   return selected
 }
 
-function updateCoordinates() {
-  // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-  // @ts-expect-error
-  const positionTrigger = trigger.value.getBoundingClientRect()
-
-  // calculating dropdown height
-  const dropdownHeight =
-    optionsList.value.length * props.itemHeight > maxHeight
-      ? maxHeight
-      : optionsList.value.length * props.itemHeight
-
-  // place the dropdown at the bottom if there is enough space.
-  // otherwise, place it at top of the trigger element
-  // works only if "auto-position" prop is true
-  if (props.autoPosition && positionTrigger.bottom + dropdownHeight > window.innerHeight) {
-    top.value = positionTrigger.top - dropdownHeight - props.offsetTop * 2 + 'px'
-  } else {
-    top.value = positionTrigger.bottom + 'px'
-  }
-
-  left.value = positionTrigger.left + 'px'
-}
-
 async function callApi() {
   if (props.remoteHandler) {
     loading.value = true
 
     await props
       .remoteHandler({
-        ...props.filters,
         page: page.value,
         per_page: perPage.value,
+        search: search.value,
+        ...props.filters,
       })
       .then((response) => {
         if (isOpen.value) {
@@ -292,7 +320,6 @@ async function callApi() {
           optionsRemote.value = [...optionsRemote.value, ...data]
           total.value = response.data.meta?.total || 0
           highlightedIndex.value = -1
-          updateCoordinates()
         }
       })
       .catch((error) => {
@@ -355,28 +382,61 @@ watch(
     callApi()
   },
 )
+
+watch(
+  () => search.value,
+  () => {
+    resetRemote()
+    callApi()
+  },
+)
 </script>
 
 <style scoped>
 .dropdown {
-  position: fixed;
-  top: calc(v-bind(offsetTopPx) + v-bind(top));
-  left: calc(v-bind(offsetLeftPx) + v-bind(left));
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
   box-shadow: 0 3px 6px 0 rgba(0, 0, 0, 0.15);
   border: v-bind(borderColor) 1px solid;
   border-radius: v-bind(borderRadius);
-  width: v-bind(width);
-
+  max-width: v-bind(maxWidth);
+  min-width: v-bind(minWidth);
   z-index: v-bind(zIndex);
-
   box-sizing: border-box;
-  max-height: 0;
   opacity: 0;
   transition: opacity v-bind(transitionDuration) ease-in-out;
-  overflow: auto;
   color: v-bind(textColor);
   font-size: v-bind(fontSize);
+  background-color: v-bind(wrapperBackgroundColor);
+  padding: v-bind(wrapperPadding);
+}
+
+.vega-dropdown-selected {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background-color: v-bind(itemSelectedColor);
+  border-radius: 4px;
+  padding: 2px 6px;
+  .text {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    color: var(--vega-text-white-color);
+  }
+  .clear-icon {
+    cursor: pointer;
+    color: var(--vega-text-white-color);
+  }
+}
+
+.vega-dropdown-options {
+  box-sizing: border-box;
   background-color: v-bind(backgroundColor);
+
+  max-height: v-bind(maxHeight + 'px');
+  overflow: auto;
   scrollbar-color: v-bind(scrollbarColor) v-bind(backgroundColor);
   scrollbar-width: thin;
 }
@@ -414,7 +474,6 @@ watch(
 }
 
 .dropdown.open {
-  max-height: v-bind(maxHeight + 'px');
   opacity: 1;
 }
 
