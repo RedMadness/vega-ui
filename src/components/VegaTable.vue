@@ -1,6 +1,11 @@
 <template>
   <div class="vega-table-wrapper">
-    <div class="vega-table-container" :class="{ 'scroll-locked': loading }" @scroll="handleScroll">
+    <div
+      class="vega-table-container"
+      :class="{ 'scroll-locked': loading }"
+      @scroll="handleScroll"
+      ref="containerRef"
+    >
       <table :class="{ loading }">
         <thead>
           <tr>
@@ -15,12 +20,44 @@
             >
               <div class="header-cell-container">
                 <div>{{ column.label }}</div>
-                <vega-icon-sort
-                  v-if="column.sortable"
-                  :asc="sortDesc"
-                  :active="sortBy === (column.sortBy ?? column.key)"
-                  @click="handleSortChange(column)"
-                />
+                <div class="header-cell-group">
+                  <vega-dropdown
+                    v-if="column.filter"
+                    :model-value="selectedFilters[column.filter.key]"
+                    :remote-handler="column.filter.remoteHandler"
+                    :label-field="column.filter.labelField"
+                    :value-field="column.filter.valueField"
+                    :background-color="filterBackgroundColor"
+                    :border-color="filterBorderColor"
+                    :hover-color="filterItemHoverBackgroundColor"
+                    :max-height="300"
+                    :max-width="'400px'"
+                    :show-search="true"
+                    :show-selected="true"
+                    :close-on-select="false"
+                    :text-color="filterItemTextColor"
+                    :item-selected-color="filterItemSelectedColor"
+                    :wrapper-background-color="filterWrapperBackgroundColor"
+                    :wrapper-padding="filterWrapperPadding"
+                    @select="(payload) => onFilterSelected(payload, column)"
+                    @clear="selectedFilters[column.filter.key] = null"
+                  >
+                    <template #trigger>
+                      <div class="vega-table-icon-wrapper">
+                        <vega-icon-filter :size="'20px'" />
+                        <div v-if="selectedFilters[column.filter.key]" class="mark" />
+                      </div>
+                    </template>
+                  </vega-dropdown>
+                  <div class="vega-table-icon-wrapper">
+                    <vega-icon-sort
+                      v-if="column.sortable"
+                      :asc="sortDesc"
+                      :active="sortBy === (column.sortBy ?? column.key)"
+                      @click="handleSortChange(column)"
+                    />
+                  </div>
+                </div>
               </div>
             </th>
           </tr>
@@ -93,6 +130,9 @@ import useGetPropertyByPath from '../use/useGetPropertyByPath'
 import VegaIconSort from './VegaIconSort.vue'
 import VegaLoading from './VegaLoading.vue'
 import VegaPagination from './VegaPagination.vue'
+import VegaIconFilter from './VegaIconFilter.vue'
+import VegaDropdown from './VegaDropdown.vue'
+import { Option } from '../props/VegaSelectProps'
 
 type Row = Record<string, unknown>
 
@@ -103,6 +143,14 @@ export interface Column<T> {
   sortBy?: string
   width?: number
   fixed?: 'left' | 'right'
+  filter?: Filter
+}
+
+export interface Filter {
+  key: string,
+  remoteHandler: (params: object) => Promise<ApiResponse<Option<string | number> | string | number>>
+  labelField?: string
+  valueField?: string
 }
 
 export interface TableProps {
@@ -311,6 +359,20 @@ export interface TableProps {
    * Custom text for first summary column (e.g., "Total:"). Overrides `summary` for first column.
    */
   summaryFirstColumnText?: string
+
+  filterBackgroundColor?: string
+
+  filterWrapperBackgroundColor?: string
+
+  filterWrapperPadding?: string
+
+  filterBorderColor?: string
+
+  filterItemTextColor?: string
+
+  filterItemSelectedColor?: string
+
+  filterItemHoverBackgroundColor?: string
 }
 
 const props = withDefaults(defineProps<TableProps>(), {
@@ -347,6 +409,8 @@ const props = withDefaults(defineProps<TableProps>(), {
   summaryBackgroundColor: 'var(--vega-secondary)',
   summaryTextColor: 'var(--vega-text-color)',
   summaryFirstColumnText: undefined,
+  filterWrapperPadding: '6px',
+  filterItemTextColor: 'var(--vega-text-color)',
 })
 
 defineExpose({ refresh: fetchData })
@@ -360,9 +424,27 @@ const total = ref(1)
 const pageCurrent = ref(1)
 const isAtLeftEdge = ref(true)
 const isAtRightEdge = ref(false)
+const containerRef = ref<HTMLElement>()
+const selectedFilters = ref<Record<string, Row | null>>({})
 
 // Combined local and remote data
 const combinedData = computed(() => [...props.data, ...remoteData.value])
+const combinedFilters = computed(() => {
+  return { ...props.filters, ...selectedFilterValues.value }
+})
+const selectedFilterValues = computed(() => {
+  const result: Row = {}
+  props.columns.forEach(column => {
+    if (!column.filter) return
+    const filterValue = selectedFilters.value[column.filter?.key]
+    const valueField = column.filter.valueField
+    if (!filterValue || valueField === undefined) return
+
+    result[column.filter.key] = filterValue[valueField]
+  })
+
+  return result
+})
 
 function fetchData() {
   if (!props.remoteHandler) return
@@ -374,6 +456,7 @@ function fetchData() {
     sort_by: sortBy.value,
     sort_desc: sortDesc.value ? 1 : 0,
     ...props.filters,
+    ...selectedFilterValues.value,
   }).then(response => {
     // Allow external hook to process response
     props.responseHandler?.(response)
@@ -400,6 +483,12 @@ const handleSortChange = (column: Column<Row>) => {
   }
 
   fetchData()
+}
+
+function onFilterSelected(payload: Record<string, unknown>, column: Column<Row>) {
+  if (!column.filter) return
+
+  selectedFilters.value[column.filter.key] = payload
 }
 
 function getRowKey(row: Row, index: number): string|number {
@@ -511,8 +600,12 @@ function handleScroll(event: Event) {
   isAtRightEdge.value = el.scrollLeft + el.clientWidth >= el.scrollWidth - 1
 }
 
+onMounted(() => {
+  isAtRightEdge.value = (containerRef.value?.scrollWidth ?? 0) <= (containerRef.value?.offsetWidth ?? 0)
+})
+
 watch(
-  () => props.filters,
+  () => combinedFilters,
   () => {
     pageCurrent.value = 1
     fetchData()
@@ -540,6 +633,7 @@ onMounted(init)
   height: v-bind(height);
   background-color: v-bind(bodyBackground);
   scrollbar-width: thin;
+  scrollbar-gutter: stable;
 
   &.scroll-locked {
     overflow: hidden;
@@ -599,6 +693,34 @@ th {
     align-items: center;
     flex-direction: row;
     justify-content: space-between;
+    gap: 6px;
+    .header-cell-group {
+      display: flex;
+      flex-direction: row;
+      align-items: center;
+      justify-content: center;
+    }
+    .vega-table-icon-wrapper {
+      position: relative;
+      display: flex;
+      width: 24px;
+      height: 24px;
+      align-items: center;
+      justify-content: center;
+      &:hover {
+        background-color: rgba(255, 255, 255, 0.1);
+        cursor: pointer;
+      }
+      .mark {
+        position: absolute;
+        left: 5px;
+        bottom: 5px;
+        width: 6px;
+        height: 6px;
+        border-radius: 3px;
+        background: #ec4206;
+      }
+    }
   }
   &.vega-table-sticky-right {
     position: sticky;
