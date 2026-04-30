@@ -118,6 +118,16 @@ export interface Column<T> {
   sortBy?: string          // Optional custom key to use for sorting (e.g., API field name)
   width?: number           // Optional CSS width value for the column in px
   fixed?: 'left' | 'right' // Fixes the column to the left or right side of the table.
+  filter?: Filter
+}
+
+export interface Filter {
+  key: string
+  remoteHandler?: (params: object) => Promise<ApiResponse<Record<string, unknown>>>
+  labelField?: string
+  valueField?: string
+  options?: Record<string, unknown>[] | string[]
+  searchable?: boolean
 }
 ```
 

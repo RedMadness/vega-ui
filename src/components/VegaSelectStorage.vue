@@ -25,7 +25,7 @@
 import useSelectState from '../use/useSelectState'
 import VegaSelect from './VegaSelect.vue'
 import { VegaSelectStorageProps } from '../props/VegaSelectStorageProps'
-import { Option, VegaSelectDefaults } from '../props/VegaSelectProps'
+import { VegaSelectDefaults } from '../props/VegaSelectProps'
 
 const props = withDefaults(defineProps<VegaSelectStorageProps>(), {
   ...VegaSelectDefaults,
@@ -41,18 +41,18 @@ const onClear = () => {
   emitClear()
 }
 
-function onSelect(item: Option<number | string> | string | number) {
+function onSelect(item: Record<string, unknown> | string | number) {
   emitSelected(item)
 }
 
 function localStorageSave(
   payload:
-    | Option<number | string>
+    | Record<string, unknown>
     | string
     | number
     | null
     | undefined
-    | Array<string | number | Option<string | number>>,
+    | Array<string | number | Record<string, unknown>>,
 ) {
   if (payload) {
     storage.storageSave(payload)
@@ -64,7 +64,7 @@ function localStorageClear() {
   storage.storageClear()
 }
 
-function emitSelected(payload: Option<number | string> | string | number) {
+function emitSelected(payload: Record<string, unknown> | string | number) {
   emits('selected', payload)
 }
 

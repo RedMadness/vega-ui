@@ -88,16 +88,16 @@ import { ref, computed, watch, nextTick } from 'vue'
 import VegaInput from './VegaInput.vue'
 import VegaDropdown from './VegaDropdown.vue'
 import VegaIconArrow from './VegaIconArrow.vue'
-import { Option, VegaSelectProps, VegaSelectDefaults } from '../props/VegaSelectProps'
+import { VegaSelectProps, VegaSelectDefaults } from '../props/VegaSelectProps'
 
-const props = withDefaults(defineProps<VegaSelectProps<number | string>>(), VegaSelectDefaults)
+const props = withDefaults(defineProps<VegaSelectProps>(), VegaSelectDefaults)
 
 const model = defineModel<
-  | Option<string | number>
+  | Record<string, unknown>
   | string
   | number
   | null
-  | Array<string | number | Option<string | number>>
+  | Array<string | number | Record<string, unknown>>
 >()
 const emits = defineEmits(['selected', 'clear'])
 
@@ -164,7 +164,7 @@ const onClear = () => {
   emitClear()
 }
 
-function onSelect(item: Option<number | string> | string | number) {
+function onSelect(item: Record<string, unknown> | string | number) {
   // Multiselect handling
   if (Array.isArray(model.value)) {
     const index = model.value.findIndex((el) => getValue(el) === getValue(item))
@@ -198,15 +198,15 @@ if (props.notEmpty) {
   )
 }
 
-function getValue(item: Option<number | string> | string | number) {
+function getValue(item: Record<string, unknown> | string | number) {
   if (typeof item === 'object') {
-    return item[props.valueField]
+    return item[props.valueField] as string
   }
 
-  return item
+  return item as string
 }
 
-function emitSelected(item: Option<number | string> | string | number) {
+function emitSelected(item: Record<string, unknown> | string | number) {
   emits('selected', Array.isArray(model.value) ? model.value.map((item) => getValue(item)) : item)
 }
 

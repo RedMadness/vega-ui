@@ -1,6 +1,6 @@
-import type { VegaSelectProps, Option } from './VegaSelectProps'
+import type { VegaSelectProps } from './VegaSelectProps'
 
-export interface VegaSelectStorageProps<TValue = string | number> extends VegaSelectProps<TValue> {
+export interface VegaSelectStorageProps extends VegaSelectProps {
   /**
    * Storage key
    */
@@ -9,5 +9,5 @@ export interface VegaSelectStorageProps<TValue = string | number> extends VegaSe
   /**
    * Default value
    */
-  default?: string | null | Array<string | number | Option<string | number>>
+  default?: string | null | Array<string | number | Record<string, unknown>>
 }

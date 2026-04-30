@@ -1,10 +1,7 @@
 import { ApiResponse } from './ApiResponse'
 import { DropdownPlacement } from './VegaDropdownProps'
 
-export interface Option<T> {
-  [key: string]: T
-}
-export interface VegaSelectProps<T> {
+export interface VegaSelectProps {
   /**
    * Background color of the input field
    * @default 'var(--vega-secondary)'
@@ -204,7 +201,7 @@ export interface VegaSelectProps<T> {
    * Available options list
    * @see Option
    */
-  options?: Array<Option<T> | string | number>
+  options?: Array<Record<string, unknown> | string | number>
 
   /**
    * Padding inside input field
@@ -236,7 +233,7 @@ export interface VegaSelectProps<T> {
    */
   remoteHandler?: (
     params: object,
-  ) => Promise<ApiResponse<Option<string | number> | string | number>>
+  ) => Promise<ApiResponse<Record<string, unknown>>>
 
   /**
    * Transforms API response into options
@@ -244,8 +241,8 @@ export interface VegaSelectProps<T> {
    * @see Option
    */
   responseHandler?: (
-    response: ApiResponse<Option<string | number> | string | number>,
-  ) => Array<Option<T> | string | number>
+    response: ApiResponse<Record<string, unknown> | string | number>,
+  ) => Array<Record<string, unknown> | string | number>
 
   /**
    * Keeps search value after dropdown reopen

@@ -25,6 +25,7 @@
                     v-if="column.filter"
                     :model-value="selectedFilters[column.filter.key]"
                     :remote-handler="column.filter.remoteHandler"
+                    :options="column.filter.options"
                     :label-field="column.filter.labelField"
                     :value-field="column.filter.valueField"
                     :background-color="filterBackgroundColor"
@@ -32,13 +33,14 @@
                     :hover-color="filterItemHoverBackgroundColor"
                     :max-height="300"
                     :max-width="'400px'"
-                    :show-search="true"
+                    :show-search="column.filter.searchable"
                     :show-selected="true"
-                    :close-on-select="false"
                     :text-color="filterItemTextColor"
                     :item-selected-color="filterItemSelectedColor"
                     :wrapper-background-color="filterWrapperBackgroundColor"
                     :wrapper-padding="filterWrapperPadding"
+                    :search-placeholder-color="filterSearchPlaceholderColor"
+                    :search-placeholder-text="filterSearchPlaceholderText"
                     @select="(payload) => onFilterSelected(payload, column)"
                     @clear="selectedFilters[column.filter.key] = null"
                   >
@@ -132,7 +134,6 @@ import VegaLoading from './VegaLoading.vue'
 import VegaPagination from './VegaPagination.vue'
 import VegaIconFilter from './VegaIconFilter.vue'
 import VegaDropdown from './VegaDropdown.vue'
-import { Option } from '../props/VegaSelectProps'
 
 type Row = Record<string, unknown>
 
@@ -147,10 +148,12 @@ export interface Column<T> {
 }
 
 export interface Filter {
-  key: string,
-  remoteHandler: (params: object) => Promise<ApiResponse<Option<string | number> | string | number>>
+  key: string
+  remoteHandler?: (params: object) => Promise<ApiResponse<Record<string, unknown>>>
   labelField?: string
   valueField?: string
+  options?: Record<string, unknown>[] | string[]
+  searchable?: boolean
 }
 
 export interface TableProps {
@@ -373,6 +376,10 @@ export interface TableProps {
   filterItemSelectedColor?: string
 
   filterItemHoverBackgroundColor?: string
+
+  filterSearchPlaceholderColor?: string
+
+  filterSearchPlaceholderText?: string
 }
 
 const props = withDefaults(defineProps<TableProps>(), {
@@ -411,6 +418,8 @@ const props = withDefaults(defineProps<TableProps>(), {
   summaryFirstColumnText: undefined,
   filterWrapperPadding: '6px',
   filterItemTextColor: 'var(--vega-text-color)',
+  filterSearchPlaceholderColor: 'var(--vega-text-color)',
+  filterSearchPlaceholderText: 'Search...',
 })
 
 defineExpose({ refresh: fetchData })
@@ -429,18 +438,21 @@ const selectedFilters = ref<Record<string, Row | null>>({})
 
 // Combined local and remote data
 const combinedData = computed(() => [...props.data, ...remoteData.value])
+
 const combinedFilters = computed(() => {
   return { ...props.filters, ...selectedFilterValues.value }
 })
+
 const selectedFilterValues = computed(() => {
   const result: Row = {}
   props.columns.forEach(column => {
     if (!column.filter) return
-    const filterValue = selectedFilters.value[column.filter?.key]
-    const valueField = column.filter.valueField
-    if (!filterValue || valueField === undefined) return
 
-    result[column.filter.key] = filterValue[valueField]
+    const filterData = selectedFilters.value[column.filter?.key]
+    const valueField = column.filter.valueField
+    if (!filterData || valueField === undefined) return
+
+    result[column.filter.key] = useGetPropertyByPath(filterData, valueField)
   })
 
   return result

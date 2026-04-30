@@ -1,4 +1,3 @@
-import { Option } from './VegaSelectProps'
 import { ApiResponse } from './ApiResponse'
 
 export type DropdownPlacement =
@@ -7,7 +6,7 @@ export type DropdownPlacement =
   | 'left' | 'left-start' | 'left-end'
   | 'right' | 'right-start' | 'right-end'
 
-export interface VegaDropdownProps<T> {
+export interface VegaDropdownProps {
   /**
    * Background color of the options list container
    * @default 'var(--vega-secondary)'
@@ -130,7 +129,7 @@ export interface VegaDropdownProps<T> {
    * Static list of selectable options. Merged with remote data if provided
    * @see Option
    */
-  options?: Array<Option<T> | string | number>
+  options?: Array<Record<string, unknown> | string | number>
 
   /**
    * Preferred dropdown placement relative to trigger (Floating UI)
@@ -145,7 +144,7 @@ export interface VegaDropdownProps<T> {
    */
   remoteHandler?: (
     params: object,
-  ) => Promise<ApiResponse<Option<string | number> | string | number>>
+  ) => Promise<ApiResponse<Record<string, unknown>>>
 
   /**
    * Transforms API response into options array
@@ -153,8 +152,8 @@ export interface VegaDropdownProps<T> {
    * @see Option
    */
   responseHandler?: (
-    response: ApiResponse<Option<string | number> | string | number>,
-  ) => Array<Option<T> | string | number>
+    response: ApiResponse<Record<string, unknown>>,
+  ) => Array<Record<string, unknown> | string | number>
 
   /**
    * Scrollbar color inside dropdown (Firefox-compatible)
@@ -213,6 +212,18 @@ export interface VegaDropdownProps<T> {
    * @default 1
    */
   zIndex?: number
+
+  /**
+   * Search placeholder icon and text color
+   * @default 'var(--vega-text-color)'
+   */
+  searchPlaceholderColor?: string
+
+  /**
+   * Search placeholder text
+   * @default 'Search...'
+   */
+  searchPlaceholderText?: string
 }
 
 export const VegaDropdownDefaults = {
@@ -231,6 +242,7 @@ export const VegaDropdownDefaults = {
   infiniteScroll: true,
   noOptionsMessage: 'No options available',
   maxWidth: '300px',
+  minWidth: '100px',
   offsetLeft: 0,
   offsetTop: 8,
   zIndex: 1,
@@ -243,4 +255,6 @@ export const VegaDropdownDefaults = {
   showSelected: false,
   wrapperBackgroundColor: 'var(--vega-border-color)',
   wrapperPadding: undefined,
+  searchPlaceholderColor: 'var(--vega-text-color)',
+  searchPlaceholderText: 'Search...',
 }

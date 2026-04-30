@@ -5,7 +5,7 @@
       :class="{ 'disabled': pageCurrent == pageFirst }"
       @click="goToPage(pageCurrent - 1)"
     >
-      <vega-icon-arrow :cursor="'unset'" />
+      <vega-icon-arrow :cursor="'unset'" :color="itemTextColor" />
     </button>
     <template v-if="pagesOverflow">
       <button
@@ -62,7 +62,7 @@
       :class="{ 'disabled': pageCurrent == pageLast }"
       @click="goToPage(pageCurrent + 1)"
     >
-      <vega-icon-arrow :rotate="'-90deg'" :cursor="'unset'" />
+      <vega-icon-arrow :rotate="'-90deg'" :cursor="'unset'" :color="itemTextColor" />
     </button>
   </div>
 </template>

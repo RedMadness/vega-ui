@@ -36,7 +36,13 @@
             :border-color="'none'"
             :hover-border-color="'none'"
             :focus-border-color="'none'"
-          />
+            :placeholder-color="searchPlaceholderColor"
+            :placeholder="searchPlaceholderText"
+          >
+            <template #prefix>
+              <vega-icon-search :color="searchPlaceholderColor" style="padding-right: 6px" />
+            </template>
+          </vega-input>
         </div>
 
         <!-- SELECTED -->
@@ -90,12 +96,13 @@ import VegaTooltip from './VegaTooltip.vue'
 import vClickOutside from '../directives/clickOutside'
 import VegaIconCheck from './VegaIconCheck.vue'
 import { VegaDropdownDefaults, VegaDropdownProps } from '../props/VegaDropdownProps'
-import { Option } from '../props/VegaSelectProps'
 import { ApiResponse } from '../props/ApiResponse'
 import { autoUpdate, flip, offset, shift, useFloating } from '@floating-ui/vue'
 import VegaInput from './VegaInput.vue'
+import useGetPropertyByPath from '../use/useGetPropertyByPath'
+import VegaIconSearch from './VegaIconSearch.vue'
 
-const props = withDefaults(defineProps<VegaDropdownProps<number | string>>(), VegaDropdownDefaults)
+const props = withDefaults(defineProps<VegaDropdownProps>(), VegaDropdownDefaults)
 
 const emit = defineEmits(['open', 'select', 'close', 'clear'])
 const model = defineModel<
@@ -103,9 +110,8 @@ const model = defineModel<
   | undefined
   | string
   | number
-  | Option<string | number>
-  | Array<null | undefined | string | number | Option<string | number>>
   | Record<string, unknown>
+  | Array<null | undefined | string | number | Record<string, unknown>>
 >()
 
 const dropdown = ref<HTMLElement | null>(null)
@@ -134,12 +140,12 @@ const highlightedIndex = ref(-1)
 const hasNextPage = computed(() => optionsRemote.value?.length < total.value)
 
 /** Options obtained by remote query. */
-const optionsRemote = ref<(Option<string | number> | string | number)[]>([])
+const optionsRemote = ref<(Record<string, unknown> | string | number)[]>([])
 
 /** Final list of options */
 const optionsList = computed(() => {
   return [
-    ...(props.options as (Option<string | number> | string | number)[]),
+    ...(props.options as (Record<string, unknown> | string | number)[]),
     ...optionsRemote.value,
   ]
 })
@@ -175,7 +181,7 @@ function open() {
   }
 }
 
-function onSelect(item: Option<number | string> | string | number) {
+function onSelect(item: Record<string, unknown> | string | number) {
   emit('select', item)
   if (props.closeOnSelect) {
     close()
@@ -203,6 +209,7 @@ function onClickOutside(event: MouseEvent)
 function close() {
   if (isOpen.value === true) {
     isOpen.value = false
+    search.value = ''
     resetRemote()
     emit('close')
   }
@@ -255,23 +262,23 @@ function resetScrollState() {
   reachedBottom.value = reachedTop.value = false
 }
 
-function getOptionValue(option: Option<number | string> | string | number | Record<string, unknown>) {
+function getOptionValue(option: Record<string, unknown> | string | number) {
   if (typeof option === 'object') {
-    return option[props.valueField] as string
+    return useGetPropertyByPath(option, props.valueField) as string
   }
 
   return option
 }
 
-function getOptionText(option: Option<number | string> | string | number | Record<string, unknown>) {
+function getOptionText(option: Record<string, unknown> | string | number) {
   if (typeof option === 'object') {
-    return option[props.labelField]
+    return useGetPropertyByPath(option, props.labelField)
   }
 
   return option
 }
 
-function getOptionTooltip(option: Option<number | string> | string | number) {
+function getOptionTooltip(option: Record<string, unknown> | string | number) {
   if (typeof option === 'object' && props.tooltipField) {
     return String(option[props.tooltipField])
   }
@@ -279,7 +286,7 @@ function getOptionTooltip(option: Option<number | string> | string | number) {
   return ''
 }
 
-function checkSelected(option: Option<number | string> | string | number) {
+function checkSelected(option: Record<string, unknown> | string | number) {
   if (model.value === null || model.value === undefined) {
     return false
   }
@@ -331,7 +338,7 @@ async function callApi() {
   }
 }
 
-function transformResponse(response: ApiResponse<string | number | Option<string | number>>) {
+function transformResponse(response: ApiResponse<Record<string, unknown>>) {
   if (props.responseHandler) {
     return props.responseHandler(response)
   }

@@ -4,11 +4,11 @@ import { computed, Ref, ref } from 'vue'
 const state: {
   id: string
   value: Ref<
-    | Option<number | string>
+    | Record<string, unknown>
     | string
     | number
     | null
-    | Array<string | number | Option<string | number>>
+    | Array<string | number | Record<string, unknown>>
   >
 }[] = []
 
@@ -16,7 +16,7 @@ export default function useSelectState(
   id: string,
   valueField: string | null = null,
   labelField: string | null = null,
-  defaultValue: string | null | Array<string | number | Option<string | number>> = null,
+  defaultValue: string | null | Array<string | number | Record<string, unknown>> = null,
 ) {
   let storageItem = state.find((item) => item.id === id)
   if (storageItem === undefined) {
@@ -95,8 +95,4 @@ function isJSON(payload: string) {
     return false
   }
   return true
-}
-
-interface Option<T> {
-  [key: string]: T
 }
