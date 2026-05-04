@@ -150,6 +150,7 @@ export interface Column<T> {
 
 export interface Filter {
   key: string
+  storageKey?: string
   remoteHandler?: (params: object) => Promise<ApiResponse<Record<string, unknown>>>
   labelField?: string
   valueField?: string
@@ -417,7 +418,7 @@ const props = withDefaults(defineProps<TableProps>(), {
   filterItemTextColor: 'var(--vega-text-color)',
   filterSearchPlaceholderColor: 'var(--vega-text-color)',
   filterSearchPlaceholderText: 'Search...',
-  storageKey: 'vega-table',
+  storageKey: 'filter',
 })
 
 defineExpose({ refresh: fetchData })
@@ -442,15 +443,15 @@ const tableFilters = computed(() => {
 
   filterableColumns.value
     .forEach(column => {
-      const key = column.filter!.key
-      const value = useSelectState(`${props.storageKey}-${key}`).selected.value
+      const columnKey = column.filter?.storageKey ?? column.filter!.key
+      const value = useSelectState(`${props.storageKey}-${columnKey}`).selected.value
 
       if (
         value !== null &&
         typeof value === 'object' &&
         !Array.isArray(value)
       ) {
-        data[key] = value
+        data[column.filter!.key] = value
       }
     })
 
@@ -517,8 +518,9 @@ const handleSortChange = (column: Column<Row>) => {
 
 function setFilterValue(payload: Record<string, unknown> | null, column: Column<Row>) {
   if (!column.filter) return
+  const columnKey = column.filter?.storageKey ?? column.filter!.key
 
-  useSelectState(`${props.storageKey}-${column.filter.key}`).selected.value = payload
+  useSelectState(`${props.storageKey}-${columnKey}`).selected.value = payload
 }
 
 function getRowKey(row: Row, index: number): string|number {
