@@ -18,27 +18,47 @@ export default function useSelectState(
   labelField: string | null = null,
   defaultValue: string | null | Array<string | number | Record<string, unknown>> = null,
 ) {
-  let selected = state.get(id)
+  let currentState = state.get(id)
 
-  if (!selected) {
+  if (!currentState) {
     const initial = localStorage.getItem(id)
 
-    selected = ref(
+    currentState = ref(
       initial === null
         ? defaultValue
-        : (isJSON(initial) ? JSON.parse(initial) : initial),
+        : (isJSON(initial) ? JSON.parse(initial) : initial)
     )
 
-    state.set(id, selected)
-
+    state.set(id, currentState)
   }
 
+  if (!currentState) {
+    throw new Error(`State for ${id} not initialized`)
+  }
+
+  const selected = computed({
+    get() {
+      return currentState.value ?? null
+    },
+    set(value): void {
+      if (value === null || value === undefined) {
+        currentState.value = null
+        storageClear()
+        return
+      }
+      currentState.value = value
+      storageSave(value)
+    }
+  })
+
   const selectedText = computed(() => {
-    if (selected.value === null) {
+    const value = selected.value
+    if (value === null) {
       return ''
     }
-    if (Array.isArray(selected.value)) {
-      return selected.value
+
+    if (Array.isArray(value)) {
+      return value
         .map(function (item) {
           if (typeof item === 'object' && labelField) {
             return String(item[labelField])
@@ -47,19 +67,21 @@ export default function useSelectState(
         })
         .toString()
     }
-    if (typeof selected.value === 'object' && labelField) {
-      return String(selected.value[labelField])
+    if (typeof value === 'object' && labelField) {
+      return String(value[labelField])
     }
 
-    return String(selected.value === undefined ? '' : selected.value)
+    return String(value === undefined ? '' : value)
   })
 
   const selectedValue = computed(() => {
-    if (selected.value === null) {
+    const value = selected.value
+
+    if (value === null) {
       return null
     }
-    if (Array.isArray(selected.value)) {
-      return selected.value.map((item) => {
+    if (Array.isArray(value)) {
+      return value.map((item) => {
         if (typeof item === 'object' && valueField) {
           return item[valueField]
         }
@@ -67,11 +89,11 @@ export default function useSelectState(
         return item
       })
     }
-    if (typeof selected.value === 'object' && valueField) {
-      return selected.value[valueField]
+    if (typeof value === 'object' && valueField) {
+      return value[valueField]
     }
 
-    return selected.value
+    return value
   })
 
   function storageSave(payload: object | string | number) {

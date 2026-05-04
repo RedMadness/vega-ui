@@ -41,8 +41,8 @@
                     :wrapper-padding="filterWrapperPadding"
                     :search-placeholder-color="filterSearchPlaceholderColor"
                     :search-placeholder-text="filterSearchPlaceholderText"
-                    @select="(payload) => onFilterSelected(payload, column)"
-                    @clear="tableFilters[column.filter.key] = null"
+                    @select="(payload) => setFilterValue(payload, column)"
+                    @clear="() => setFilterValue(null, column)"
                   >
                     <template #trigger>
                       <div class="vega-table-icon-wrapper">
@@ -134,7 +134,7 @@ import VegaLoading from './VegaLoading.vue'
 import VegaPagination from './VegaPagination.vue'
 import VegaIconFilter from './VegaIconFilter.vue'
 import VegaDropdown from './VegaDropdown.vue'
-import useTableState from '../use/useTableState'
+import useSelectState from '../use/useSelectState'
 
 type Row = Record<string, unknown>
 
@@ -432,10 +432,30 @@ const pageCurrent = ref(1)
 const isAtLeftEdge = ref(true)
 const isAtRightEdge = ref(false)
 const containerRef = ref<HTMLElement>()
-const { tableFilters, storageSave } = useTableState(props.storageKey, props.columns)
 
 // Combined local and remote data
 const combinedData = computed(() => [...props.data, ...remoteData.value])
+
+const filterableColumns = computed(() => props.columns.filter(c => c.filter?.key))
+const tableFilters = computed(() => {
+  const data: Record<string, Record<string, unknown> | null> = {}
+
+  filterableColumns.value
+    .forEach(column => {
+      const key = column.filter!.key
+      const value = useSelectState(`${props.storageKey}-${key}`).selected.value
+
+      if (
+        value !== null &&
+        typeof value === 'object' &&
+        !Array.isArray(value)
+      ) {
+        data[key] = value
+      }
+    })
+
+  return data
+})
 
 const combinedFilters = computed(() => {
   return { ...props.filters, ...selectedFilterValues.value }
@@ -495,10 +515,10 @@ const handleSortChange = (column: Column<Row>) => {
   fetchData()
 }
 
-function onFilterSelected(payload: Record<string, unknown>, column: Column<Row>) {
+function setFilterValue(payload: Record<string, unknown> | null, column: Column<Row>) {
   if (!column.filter) return
 
-  tableFilters.value[column.filter.key] = payload
+  useSelectState(`${props.storageKey}-${column.filter.key}`).selected.value = payload
 }
 
 function getRowKey(row: Row, index: number): string|number {
@@ -617,7 +637,6 @@ onMounted(() => {
 watch(
   () => combinedFilters,
   () => {
-    storageSave()
     pageCurrent.value = 1
     fetchData()
   },

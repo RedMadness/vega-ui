@@ -33,11 +33,9 @@ const props = withDefaults(defineProps<VegaSelectStorageProps>(), {
 })
 
 const emits = defineEmits(['selected', 'clear', 'changed'])
-const storage = useSelectState(props.storageKey, null, null, props.default)
-const selected = storage.selected
+const { selected } = useSelectState(props.storageKey, null, null, props.default)
 
 const onClear = () => {
-  localStorageClear()
   emitClear()
 }
 
@@ -54,14 +52,7 @@ function localStorageSave(
     | undefined
     | Array<string | number | Record<string, unknown>>,
 ) {
-  if (payload) {
-    storage.storageSave(payload)
-  }
   emits('changed', payload)
-}
-
-function localStorageClear() {
-  storage.storageClear()
 }
 
 function emitSelected(payload: Record<string, unknown> | string | number) {
