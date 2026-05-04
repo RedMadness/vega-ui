@@ -1,16 +1,16 @@
 import { computed, Ref, ref } from 'vue'
 
 // to achieve shared state between instances, we need to move the variable outside the composite function
-const state: {
-  id: string
-  value: Ref<
+const state = new Map<
+  string,
+  Ref<
     | Record<string, unknown>
     | string
     | number
     | null
     | Array<string | number | Record<string, unknown>>
   >
-}[] = []
+>()
 
 export default function useSelectState(
   id: string,
@@ -18,13 +18,21 @@ export default function useSelectState(
   labelField: string | null = null,
   defaultValue: string | null | Array<string | number | Record<string, unknown>> = null,
 ) {
-  let storageItem = state.find((item) => item.id === id)
-  if (storageItem === undefined) {
-    storageItem = { id: id, value: ref(defaultValue) }
-    state.push(storageItem)
+  let selected = state.get(id)
+
+  if (!selected) {
+    const initial = localStorage.getItem(id)
+
+    selected = ref(
+      initial === null
+        ? defaultValue
+        : (isJSON(initial) ? JSON.parse(initial) : initial),
+    )
+
+    state.set(id, selected)
+
   }
 
-  const selected = storageItem.value
   const selectedText = computed(() => {
     if (selected.value === null) {
       return ''
@@ -45,6 +53,7 @@ export default function useSelectState(
 
     return String(selected.value === undefined ? '' : selected.value)
   })
+
   const selectedValue = computed(() => {
     if (selected.value === null) {
       return null
@@ -64,13 +73,6 @@ export default function useSelectState(
 
     return selected.value
   })
-
-  const data = localStorage.getItem(id)
-  if (data === null) {
-    selected.value = defaultValue
-  } else {
-    selected.value = isJSON(data) ? JSON.parse(data) : data
-  }
 
   function storageSave(payload: object | string | number) {
     if (typeof payload === 'object' || Array.isArray(payload)) {

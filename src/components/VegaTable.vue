@@ -23,7 +23,7 @@
                 <div class="header-cell-group">
                   <vega-dropdown
                     v-if="column.filter"
-                    :model-value="selectedFilters[column.filter.key]"
+                    :model-value="tableFilters[column.filter.key]"
                     :remote-handler="column.filter.remoteHandler"
                     :options="column.filter.options"
                     :label-field="column.filter.labelField"
@@ -42,12 +42,12 @@
                     :search-placeholder-color="filterSearchPlaceholderColor"
                     :search-placeholder-text="filterSearchPlaceholderText"
                     @select="(payload) => onFilterSelected(payload, column)"
-                    @clear="selectedFilters[column.filter.key] = null"
+                    @clear="tableFilters[column.filter.key] = null"
                   >
                     <template #trigger>
                       <div class="vega-table-icon-wrapper">
                         <vega-icon-filter :size="'20px'" />
-                        <div v-if="selectedFilters[column.filter.key]" class="mark" />
+                        <div v-if="tableFilters[column.filter.key]" class="mark" />
                       </div>
                     </template>
                   </vega-dropdown>
@@ -134,6 +134,7 @@ import VegaLoading from './VegaLoading.vue'
 import VegaPagination from './VegaPagination.vue'
 import VegaIconFilter from './VegaIconFilter.vue'
 import VegaDropdown from './VegaDropdown.vue'
+import useTableState from '../use/useTableState'
 
 type Row = Record<string, unknown>
 
@@ -363,6 +364,8 @@ export interface TableProps {
    */
   summaryFirstColumnText?: string
 
+  storageKey?: string
+
   filterBackgroundColor?: string
 
   filterWrapperBackgroundColor?: string
@@ -399,11 +402,7 @@ const props = withDefaults(defineProps<TableProps>(), {
   bodyCellPadding: '20px',
   rowHoverBackgroundColor: 'var(--vega-border-color)',
   rowKey: 'id',
-  rowClassName: undefined,
-  remoteHandler: undefined,
-  sortDefaultKey: undefined,
   sortDefaultDesc: false,
-  filters: undefined,
   paginationPerPage: 25,
   paginationBorderColor: 'var(--vega-border-color)',
   paginationBackgroundColor: 'var(--vega-secondary)',
@@ -412,14 +411,13 @@ const props = withDefaults(defineProps<TableProps>(), {
   paginationItemTextColor: 'var(--vega-text-color)',
   paginationItemActiveTextColor: 'var(--vega-text-white-color)',
   emptyDataMessage: 'No data found.',
-  summary: undefined,
   summaryBackgroundColor: 'var(--vega-secondary)',
   summaryTextColor: 'var(--vega-text-color)',
-  summaryFirstColumnText: undefined,
   filterWrapperPadding: '6px',
   filterItemTextColor: 'var(--vega-text-color)',
   filterSearchPlaceholderColor: 'var(--vega-text-color)',
   filterSearchPlaceholderText: 'Search...',
+  storageKey: 'vega-table',
 })
 
 defineExpose({ refresh: fetchData })
@@ -434,7 +432,7 @@ const pageCurrent = ref(1)
 const isAtLeftEdge = ref(true)
 const isAtRightEdge = ref(false)
 const containerRef = ref<HTMLElement>()
-const selectedFilters = ref<Record<string, Row | null>>({})
+const { tableFilters, storageSave } = useTableState(props.storageKey, props.columns)
 
 // Combined local and remote data
 const combinedData = computed(() => [...props.data, ...remoteData.value])
@@ -448,7 +446,7 @@ const selectedFilterValues = computed(() => {
   props.columns.forEach(column => {
     if (!column.filter) return
 
-    const filterData = selectedFilters.value[column.filter?.key]
+    const filterData = tableFilters.value[column.filter.key]
     const valueField = column.filter.valueField
     if (!filterData || valueField === undefined) return
 
@@ -500,7 +498,7 @@ const handleSortChange = (column: Column<Row>) => {
 function onFilterSelected(payload: Record<string, unknown>, column: Column<Row>) {
   if (!column.filter) return
 
-  selectedFilters.value[column.filter.key] = payload
+  tableFilters.value[column.filter.key] = payload
 }
 
 function getRowKey(row: Row, index: number): string|number {
@@ -619,6 +617,7 @@ onMounted(() => {
 watch(
   () => combinedFilters,
   () => {
+    storageSave()
     pageCurrent.value = 1
     fetchData()
   },
