@@ -25,6 +25,7 @@
                     v-if="column.filter"
                     :model-value="tableFilters[column.filter.key]"
                     :remote-handler="column.filter.remoteHandler"
+                    :filters="column.filter.queryParams"
                     :options="column.filter.options"
                     :label-field="column.filter.labelField"
                     :value-field="column.filter.valueField"
@@ -156,6 +157,7 @@ export interface Filter {
   valueField?: string
   options?: Record<string, unknown>[] | string[]
   searchable?: boolean
+  queryParams?: Record<string, unknown>
 }
 
 export interface TableProps {
@@ -486,8 +488,8 @@ function fetchData() {
     page: pageCurrent.value,
     sort_by: sortBy.value,
     sort_desc: sortDesc.value ? 1 : 0,
+    filters: selectedFilterValues.value,
     ...props.filters,
-    ...selectedFilterValues.value,
   }).then(response => {
     // Allow external hook to process response
     props.responseHandler?.(response)
