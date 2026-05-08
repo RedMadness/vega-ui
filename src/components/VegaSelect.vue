@@ -89,6 +89,7 @@ import VegaInput from './VegaInput.vue'
 import VegaDropdown from './VegaDropdown.vue'
 import VegaIconArrow from './VegaIconArrow.vue'
 import { VegaSelectProps, VegaSelectDefaults } from '../props/VegaSelectProps'
+import useGetPropertyByPath from '../use/useGetPropertyByPath'
 
 const props = withDefaults(defineProps<VegaSelectProps>(), VegaSelectDefaults)
 
@@ -122,14 +123,14 @@ const selectedText = computed(() => {
     return model.value
       .map(function (item) {
         if (typeof item === 'object') {
-          return String(item[props.labelField])
+          return useGetPropertyByPath(item, props.labelField) as string
         }
         return String(item)
       })
       .join(', ')
   }
   if (typeof model.value === 'object') {
-    return String(model.value[props.labelField])
+    return useGetPropertyByPath(model.value, props.labelField) as string
   }
 
   return String(model.value)
