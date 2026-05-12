@@ -439,11 +439,10 @@ const containerRef = ref<HTMLElement>()
 // Combined local and remote data
 const combinedData = computed(() => [...props.data, ...remoteData.value])
 
-const filterableColumns = computed(() => props.columns.filter(c => c.filter?.key))
 const tableFilters = computed(() => {
   const data: Record<string, Record<string, unknown> | null> = {}
 
-  filterableColumns.value
+  props.columns.filter(c => c.filter?.key)
     .forEach(column => {
       const columnKey = column.filter?.storageKey ?? column.filter!.key
       const value = useSelectState(`${props.storageKey}-${columnKey}`).selected.value
@@ -460,11 +459,7 @@ const tableFilters = computed(() => {
   return data
 })
 
-const combinedFilters = computed(() => {
-  return { ...props.filters, ...selectedFilterValues.value }
-})
-
-const selectedFilterValues = computed(() => {
+const selectedTableFilterValues = computed(() => {
   const result: Row = {}
   props.columns.forEach(column => {
     if (!column.filter) return
@@ -479,6 +474,10 @@ const selectedFilterValues = computed(() => {
   return result
 })
 
+const combinedFilters = computed(() => {
+  return { ...props.filters, ...selectedTableFilterValues.value }
+})
+
 function fetchData() {
   if (!props.remoteHandler) return
 
@@ -488,8 +487,7 @@ function fetchData() {
     page: pageCurrent.value,
     sort_by: sortBy.value,
     sort_desc: sortDesc.value ? 1 : 0,
-    filters: selectedFilterValues.value,
-    ...props.filters,
+    filters: combinedFilters.value,
   }).then(response => {
     // Allow external hook to process response
     props.responseHandler?.(response)
