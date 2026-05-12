@@ -461,7 +461,7 @@ const tableFilters = computed(() => {
   return data
 })
 
-const selectedTableFilterValues = computed(() => {
+const tableFilterValues = computed(() => {
   const result: Row = {}
   props.columns.forEach(column => {
     if (!column.filter) return
@@ -480,7 +480,7 @@ const requestParams = computed(() => {
   return {
     filters: {
       ...props.filters,
-      ...selectedTableFilterValues.value,
+      ...tableFilterValues.value,
     },
     ...props.remoteHandlerParams,
   }

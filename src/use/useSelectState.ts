@@ -1,4 +1,5 @@
 import { computed, Ref, ref } from 'vue'
+import useGetPropertyByPath from './useGetPropertyByPath'
 
 // to achieve shared state between instances, we need to move the variable outside the composite function
 const state = new Map<
@@ -61,14 +62,14 @@ export default function useSelectState(
       return value
         .map(function (item) {
           if (typeof item === 'object' && labelField) {
-            return String(item[labelField])
+            return useGetPropertyByPath(item, labelField) as string
           }
           return String(item)
         })
         .toString()
     }
     if (typeof value === 'object' && labelField) {
-      return String(value[labelField])
+      return useGetPropertyByPath(value, labelField) as string
     }
 
     return String(value === undefined ? '' : value)
@@ -83,14 +84,14 @@ export default function useSelectState(
     if (Array.isArray(value)) {
       return value.map((item) => {
         if (typeof item === 'object' && valueField) {
-          return item[valueField]
+          return useGetPropertyByPath(item, valueField) as string
         }
 
         return item
       })
     }
     if (typeof value === 'object' && valueField) {
-      return value[valueField]
+      return useGetPropertyByPath(value, valueField) as string
     }
 
     return value
