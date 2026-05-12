@@ -276,6 +276,8 @@ export interface TableProps {
    */
   remoteHandler?: (params: object) => Promise<ApiResponse<Row>>
 
+  remoteHandlerParams?: Record<string, unknown>
+
   /**
    * Callback after successful remote fetch, before data assignment.
    */
@@ -291,11 +293,6 @@ export interface TableProps {
    * @default false
    */
   sortDefaultDesc?: boolean
-
-  /**
-   * Additional filters for remote requests. Changing filters resets to page 1.
-   */
-  filters?: Record<string, unknown>
 
   /**
    * Items per page in pagination.
@@ -368,6 +365,11 @@ export interface TableProps {
   summaryFirstColumnText?: string
 
   storageKey?: string
+
+  /**
+   * Additional filters for remote requests. Changing filters resets to page 1.
+   */
+  filters?: Record<string, unknown>
 
   filterBackgroundColor?: string
 
@@ -474,8 +476,12 @@ const selectedTableFilterValues = computed(() => {
   return result
 })
 
-const combinedFilters = computed(() => {
-  return { ...props.filters, ...selectedTableFilterValues.value }
+const requestParams = computed(() => {
+  return {
+    ...props.filters,
+    ...selectedTableFilterValues.value,
+    ...props.remoteHandlerParams,
+  }
 })
 
 function fetchData() {
@@ -488,7 +494,7 @@ function fetchData() {
     per_page: props.paginationPerPage,
     sort_by: sortBy.value,
     sort_desc: sortDesc.value ? 1 : 0,
-    filters: combinedFilters.value,
+    ...requestParams.value
   }).then(response => {
     // Allow external hook to process response
     props.responseHandler?.(response)
@@ -638,7 +644,7 @@ onMounted(() => {
 })
 
 watch(
-  () => combinedFilters,
+  () => requestParams,
   () => {
     pageCurrent.value = 1
     fetchData()
