@@ -478,8 +478,10 @@ const selectedTableFilterValues = computed(() => {
 
 const requestParams = computed(() => {
   return {
-    ...props.filters,
-    ...selectedTableFilterValues.value,
+    filters: {
+      ...props.filters,
+      ...selectedTableFilterValues.value,
+    },
     ...props.remoteHandlerParams,
   }
 })
