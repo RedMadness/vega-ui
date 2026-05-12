@@ -485,6 +485,7 @@ function fetchData() {
 
   props.remoteHandler({
     page: pageCurrent.value,
+    per_page: props.paginationPerPage,
     sort_by: sortBy.value,
     sort_desc: sortDesc.value ? 1 : 0,
     filters: combinedFilters.value,
