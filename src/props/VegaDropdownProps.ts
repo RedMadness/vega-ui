@@ -209,7 +209,7 @@ export interface VegaDropdownProps {
 
   /**
    * Controls stacking order of the dropdown
-   * @default 1
+   * @default 3
    */
   zIndex?: number
 
@@ -245,7 +245,7 @@ export const VegaDropdownDefaults = {
   minWidth: '100px',
   offsetLeft: 0,
   offsetTop: 8,
-  zIndex: 1,
+  zIndex: 3,
   scrollbarColor: 'var(--vega-border-color)',
   itemSelectedColor: 'var(--vega-primary)',
   closeOnSelect: true,
