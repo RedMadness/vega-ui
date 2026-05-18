@@ -52,9 +52,8 @@
                       </div>
                     </template>
                   </vega-dropdown>
-                  <div class="vega-table-icon-wrapper">
+                  <div v-if="column.sortable" class="vega-table-icon-wrapper">
                     <vega-icon-sort
-                      v-if="column.sortable"
                       :asc="sortDesc"
                       :active="sortBy === (column.sortBy ?? column.key)"
                       @click="handleSortChange(column)"
@@ -646,7 +645,7 @@ onMounted(() => {
 })
 
 watch(
-  () => requestParams,
+  requestParams,
   () => {
     pageCurrent.value = 1
     fetchData()
